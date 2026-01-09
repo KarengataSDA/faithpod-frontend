@@ -1,44 +1,34 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-//import { AuthService } from 'src/app/shared/services/auth.service';
-import { AuthService } from '../../shared/services/auth.service';
-import { TenantService } from '../../shared/services/tenant.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-login-page',
-    templateUrl: './login-page.component.html',
-    styleUrls: ['./login-page.component.scss'],
+    selector: 'app-central-admin-login',
+    templateUrl: './central-admin-login.component.html',
+    styleUrls: ['./central-admin-login.component.scss'],
     standalone: false
 })
-export class LoginPageComponent implements OnInit, OnDestroy {
+export class CentralAdminLoginComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   form: FormGroup;
   loginError: string = '';
   showPassword = false;
   isLoading: boolean = false;
-  isCentralAdmin: boolean = false;
 
   constructor(
     private router: Router,
-    private authService: AuthService,
-    private tenantService: TenantService,
     private http: HttpClient,
     private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    // Check if we're on root domain (central admin) or subdomain (tenant)
-    const tenant = this.tenantService.getTenantFromSubdomain();
-    this.isCentralAdmin = tenant === null;
-
     this.form = this.formBuilder.group({
-      email: '',
-      password: '',
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
   }
 
@@ -47,37 +37,16 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
+    if (this.form.invalid) {
+      Object.keys(this.form.controls).forEach(key => {
+        this.form.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
     this.isLoading = true;
     this.loginError = '';
 
-    if (this.isCentralAdmin) {
-      // Central admin login
-      this.centralAdminLogin();
-    } else {
-      // Tenant member login
-      this.tenantLogin();
-    }
-  }
-
-  private tenantLogin(): void {
-    this.authService
-      .login(this.form.getRawValue())
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(this.handleError.bind(this))
-      )
-      .subscribe({
-        next: () => {
-          this.isLoading = false;
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err) => {
-         this.isLoading = false
-        },
-      });
-  }
-
-  private centralAdminLogin(): void {
     const apiUrl = `http://127.0.0.1:${environment.apiPort}/api/login`;
 
     this.http
@@ -93,7 +62,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
           sessionStorage.setItem('central_admin_token', response.token);
           sessionStorage.setItem('central_admin_user', JSON.stringify(response.user));
           // Navigate to tenants page
-          this.router.navigate(['/tenants']);
+          this.router.navigate(['/central-admin/tenants']);
         },
         error: () => {
           this.isLoading = false;
@@ -107,14 +76,15 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       errorMessage = `Client-side error: ${error.error.message}`;
     } else {
       if (error.status === 0) {
-        errorMessage =
-          'Unable to connect to connect to the server. Please check your network connection or try again later.';
+        this.loginError =
+          'Unable to connect to the server. Please check your network connection or try again later.';
       } else if (error.status === 401) {
         this.loginError = 'Email or Password is incorrect. Please try again.';
       } else if (error.status === 403) {
-        this.loginError = 'Your email address is not verified';
+        this.loginError = 'Your account has been disabled or you do not have permission.';
       } else {
         errorMessage = `Server side error: ${error.status} - ${error.message}`;
+        this.loginError = 'Login failed. Please try again.';
       }
     }
     console.error(errorMessage);

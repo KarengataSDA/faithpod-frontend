@@ -8,6 +8,9 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { VerificationNoticeComponent } from './verification-notice/verification-notice.component';
 import { UnauthorizedComponent } from '../components/pages/unauthorized/unauthorized.component';
+import { CentralAdminRegisterComponent } from './central-admin-register/central-admin-register.component';
+import { CentralAdminLoginComponent } from './central-admin-login/central-admin-login.component';
+import { TenantManagementComponent } from './tenant-management/tenant-management.component';
 
 const routes: Routes = [
   {
@@ -19,6 +22,15 @@ const routes: Routes = [
       {path: 'reset-password', component: ResetPasswordComponent},
       {path: 'terms', component: TermsComponent},
       {path: 'verification-notice', component: VerificationNoticeComponent}
+    ]
+  },
+  // Central Admin routes (accessible only on root domain)
+  { path: 'tenants', component: TenantManagementComponent },
+  {
+    path: 'central-admin', children: [
+      { path: 'register', component: CentralAdminRegisterComponent },
+      { path: 'login', component: CentralAdminLoginComponent },
+      { path: 'tenants', component: TenantManagementComponent }
     ]
   }
 ];

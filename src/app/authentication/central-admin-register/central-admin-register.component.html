@@ -1,0 +1,130 @@
+<div class="page-style1 light-mode default-sidebar error-page1">
+  <div class="img-card bg-primary">
+      <div class="page">
+          <div class="container">
+              <div class="row">
+                  <div class="col mx-auto">
+                      <div class="row justify-content-center">
+                          <div class="col-md-7 col-lg-5">
+                              <div class="card card-group mb-0">
+                                  <div class="card p-4">
+                                      <div class="card-body">
+                                          <form [formGroup]="form" (submit)="submit()">
+                                              <div class="text-center title-style mb-6">
+                                                  <h1 class="mb-2">Central Admin Registration</h1>
+                                                  <hr>
+                                                  <p class="text-muted">Create your central admin account</p>
+                                              </div>
+
+                                              <div class="alert alert-danger" *ngIf="registerError">
+                                                {{registerError}}
+                                              </div>
+
+                                              <div class="input-group mb-3">
+                                                <a
+                                                  href="javascript:void(0)"
+                                                  class="input-group-text bg-white text-muted"
+                                                >
+                                                  <i
+                                                    class="zmdi zmdi-account text-muted"
+                                                    aria-hidden="true"
+                                                  ></i>
+                                                </a>
+                                                <input
+                                                  type="text"
+                                                  class="input100 border-start-0 form-control ms-0"
+                                                  placeholder="Full Name"
+                                                  formControlName="name"
+                                                  [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+                                                >
+                                              </div>
+                                              <div class="text-danger mb-2" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                                                Name is required
+                                              </div>
+
+                                              <div class="input-group mb-3">
+                                                <a
+                                                  href="javascript:void(0)"
+                                                  class="input-group-text bg-white text-muted"
+                                                >
+                                                  <i
+                                                    class="zmdi zmdi-email text-muted"
+                                                    aria-hidden="true"
+                                                  ></i>
+                                                </a>
+                                                <input
+                                                  type="email"
+                                                  class="input100 border-start-0 form-control ms-0"
+                                                  placeholder="Email"
+                                                  formControlName="email"
+                                                  [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+                                                >
+                                              </div>
+                                              <div class="text-danger mb-2" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+                                                <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+                                                <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
+                                              </div>
+
+                                              <div class="input-group mb-3">
+                                                <a class="input-group-text bg-white text-muted" (click)="togglePassword()">
+                                                  <i [ngClass]="{'zmdi zmdi-eye-off text-muted': !showPassword, 'mdi mdi-eye text-muted': showPassword}" aria-hidden="true"></i>
+                                                </a>
+                                                <input
+                                                  type="{{ showPassword ? 'text' : 'password' }}"
+                                                  class="input100 border-start-0 form-control ms-0"
+                                                  placeholder="Password"
+                                                  formControlName="password"
+                                                  [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+                                                >
+                                              </div>
+                                              <div class="text-danger mb-2" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+                                                <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
+                                                <span *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+                                              </div>
+
+                                              <div class="input-group mb-4">
+                                                <a class="input-group-text bg-white text-muted" (click)="togglePasswordConfirmation()">
+                                                  <i [ngClass]="{'zmdi zmdi-eye-off text-muted': !showPasswordConfirmation, 'mdi mdi-eye text-muted': showPasswordConfirmation}" aria-hidden="true"></i>
+                                                </a>
+                                                <input
+                                                  type="{{ showPasswordConfirmation ? 'text' : 'password' }}"
+                                                  class="input100 border-start-0 form-control ms-0"
+                                                  placeholder="Confirm Password"
+                                                  formControlName="password_confirmation"
+                                                  [class.is-invalid]="form.get('password_confirmation')?.invalid && form.get('password_confirmation')?.touched"
+                                                >
+                                              </div>
+                                              <div class="text-danger mb-2" *ngIf="form.get('password_confirmation')?.invalid && form.get('password_confirmation')?.touched">
+                                                <span *ngIf="form.get('password_confirmation')?.errors?.['required']">Password confirmation is required</span>
+                                                <span *ngIf="form.get('password_confirmation')?.errors?.['passwordMismatch']">Passwords do not match</span>
+                                              </div>
+
+                                              <div class="row">
+                                                  <div class="col-12">
+                                                      <button type="submit" class="btn btn-lg btn-primary btn-block" [disabled]="isLoading">
+                                                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+                                                        <span *ngIf="!isLoading">Register</span>
+                                                      </button>
+                                                  </div>
+                                              </div>
+                                              <div class="text-center pt-3">
+                                                <p class="text-dark mb-0">
+                                                  Already have an account?<a
+                                                    routerLink="/central-admin/login"
+                                                    class=" ms-1"
+                                                    >Sign In</a
+                                                  >
+                                                </p>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

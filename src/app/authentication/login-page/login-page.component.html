@@ -13,9 +13,9 @@
                                           <ng-template ngbNavContent>
                                               <form [formGroup]="form" (submit)="submit()">
                                                   <div class="text-center title-style mb-6">
-                                                      <h1 class="mb-2">Login</h1>
+                                                      <h1 class="mb-2">{{ isCentralAdmin ? 'Central Admin Login' : 'Login' }}</h1>
                                                       <hr>
-                                                      <p class="text-muted">Sign In to your account</p>
+                                                      <p class="text-muted">{{ isCentralAdmin ? 'Sign in to manage tenants' : 'Sign In to your account' }}</p>
                                                   </div>
 
                                                   <div class="alert alert-danger" *ngIf="loginError">
@@ -53,7 +53,7 @@
                                                       </div>
                                                   </div>
                                                   <div class="text-center pt-3">
-                                                    <p class="text-dark mb-0">
+                                                    <p class="text-dark mb-0" *ngIf="!isCentralAdmin">
                                                       Not a member?<a
                                                         routerLink="/auth/register"
                                                         class=" ms-1"
