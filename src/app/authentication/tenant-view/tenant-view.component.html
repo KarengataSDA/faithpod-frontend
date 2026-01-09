@@ -75,7 +75,7 @@
               </p>
             </div>
 
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label fw-bold text-muted">Brand Color</label>
               <p class="fs-4">
                 <span *ngIf="tenant.brand_color">
@@ -85,6 +85,32 @@
                   </span>
                 </span>
                 <span *ngIf="!tenant.brand_color" class="text-muted">Not set</span>
+              </p>
+            </div>
+
+            <div class="col-md-4 mb-4">
+              <label class="form-label fw-bold text-muted">Accent Color</label>
+              <p class="fs-4">
+                <span *ngIf="tenant.accent_color">
+                  {{tenant.accent_color}}
+                  <span class="badge" [style.background-color]="tenant.accent_color"
+                        style="width: 40px; height: 25px; display: inline-block; margin-left: 10px; border: 1px solid #ddd;">
+                  </span>
+                </span>
+                <span *ngIf="!tenant.accent_color" class="text-muted">Not set</span>
+              </p>
+            </div>
+
+            <div class="col-md-4 mb-4">
+              <label class="form-label fw-bold text-muted">Background Color</label>
+              <p class="fs-4">
+                <span *ngIf="tenant.background_color">
+                  {{tenant.background_color}}
+                  <span class="badge" [style.background-color]="tenant.background_color"
+                        style="width: 40px; height: 25px; display: inline-block; margin-left: 10px; border: 1px solid #ddd;">
+                  </span>
+                </span>
+                <span *ngIf="!tenant.background_color" class="text-muted">Not set</span>
               </p>
             </div>
 

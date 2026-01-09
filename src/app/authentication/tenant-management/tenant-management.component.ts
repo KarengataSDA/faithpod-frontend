@@ -13,6 +13,8 @@ interface Tenant {
   domains?: Array<{ domain: string }>;
   created_at?: string;
   brand_color?: string;
+  accent_color?: string;
+  background_color?: string;
   logo?: string;
 }
 

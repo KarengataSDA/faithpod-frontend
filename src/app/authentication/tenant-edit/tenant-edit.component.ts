@@ -14,6 +14,8 @@ interface Tenant {
   domains?: Array<{ domain: string }>;
   created_at?: string;
   brand_color?: string;
+  accent_color?: string;
+  background_color?: string;
   logo?: string;
 }
 
@@ -46,6 +48,8 @@ export class TenantEditComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       domain: ['', Validators.required],
       brand_color: [''],
+      accent_color: [''],
+      background_color: [''],
       logo: ['']
     });
 
@@ -89,6 +93,8 @@ export class TenantEditComponent implements OnInit, OnDestroy {
               email: this.tenant.email,
               domain: this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : '',
               brand_color: this.tenant.brand_color || '',
+              accent_color: this.tenant.accent_color || '',
+              background_color: this.tenant.background_color || '',
               logo: this.tenant.logo || ''
             });
           }
