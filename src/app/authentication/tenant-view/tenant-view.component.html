@@ -1,0 +1,120 @@
+<div class="page-wrapper">
+  <div class="page-header d-print-none">
+    <div class="container-xl">
+      <div class="row g-2 align-items-center">
+        <div class="col">
+          <div class="page-pretitle">Tenant Management</div>
+          <h2 class="page-title">Tenant Details</h2>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-secondary me-2" (click)="goBack()">
+            <i class="zmdi zmdi-arrow-left me-2"></i>
+            Back to List
+          </button>
+          <button class="btn btn-primary" (click)="editTenant()" *ngIf="tenant">
+            <i class="zmdi zmdi-edit me-2"></i>
+            Edit Tenant
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container-xl">
+
+      <!-- Error Message -->
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{errorMessage}}
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading tenant details...</p>
+      </div>
+
+      <!-- Tenant Details -->
+      <div class="card" *ngIf="!isLoading && tenant">
+        <div class="card-header">
+          <h3 class="card-title">{{tenant.name}}</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Tenant ID</label>
+              <p class="fs-4">{{tenant.id}}</p>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Organization Name</label>
+              <p class="fs-4">{{tenant.name}}</p>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Email Address</label>
+              <p class="fs-4">
+                <a [href]="'mailto:' + tenant.email">{{tenant.email}}</a>
+              </p>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Domain</label>
+              <p class="fs-4">
+                <span *ngIf="tenant.domains && tenant.domains.length > 0">
+                  <a [href]="'http://' + tenant.domains[0].domain" target="_blank">
+                    {{tenant.domains[0].domain}}
+                    <i class="zmdi zmdi-open-in-new ms-1"></i>
+                  </a>
+                </span>
+                <span *ngIf="!tenant.domains || tenant.domains.length === 0" class="text-muted">
+                  Not configured
+                </span>
+              </p>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Brand Color</label>
+              <p class="fs-4">
+                <span *ngIf="tenant.brand_color">
+                  {{tenant.brand_color}}
+                  <span class="badge" [style.background-color]="tenant.brand_color"
+                        style="width: 40px; height: 25px; display: inline-block; margin-left: 10px; border: 1px solid #ddd;">
+                  </span>
+                </span>
+                <span *ngIf="!tenant.brand_color" class="text-muted">Not set</span>
+              </p>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Logo</label>
+              <p class="fs-4">
+                <span *ngIf="tenant.logo">
+                  <img [src]="tenant.logo" alt="Tenant Logo" style="max-height: 60px; max-width: 200px;"
+                       class="border rounded p-1"
+                       (error)="handleImageError($event)">
+                  <br>
+                  <small><a [href]="tenant.logo" target="_blank">{{tenant.logo}}</a></small>
+                </span>
+                <span *ngIf="!tenant.logo" class="text-muted">Not set</span>
+              </p>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-bold text-muted">Created At</label>
+              <p class="fs-4">
+                <span *ngIf="tenant.created_at">
+                  {{tenant.created_at | date: 'full'}}
+                </span>
+                <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,159 @@
+<div class="page-wrapper">
+  <div class="page-header d-print-none">
+    <div class="container-xl">
+      <div class="row g-2 align-items-center">
+        <div class="col">
+          <div class="page-pretitle">Tenant Management</div>
+          <h2 class="page-title">Edit Tenant</h2>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-secondary" (click)="cancel()">
+            <i class="zmdi zmdi-arrow-left me-2"></i>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container-xl">
+
+      <!-- Error Message -->
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{errorMessage}}
+      </div>
+
+      <!-- Success Message -->
+      <div class="alert alert-success" *ngIf="successMessage">
+        {{successMessage}}
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading tenant details...</p>
+      </div>
+
+      <!-- Edit Form -->
+      <div class="card" *ngIf="!isLoading && tenant">
+        <div class="card-header">
+          <h3 class="card-title">Update Tenant Information</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="editTenantForm" (ngSubmit)="updateTenant()">
+            <div class="row">
+              <!-- Organization Name -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label required">Organization Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="name"
+                  placeholder="Enter organization name"
+                  [class.is-invalid]="editTenantForm.get('name')?.invalid && editTenantForm.get('name')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="editTenantForm.get('name')?.invalid && editTenantForm.get('name')?.touched">
+                  Organization name is required.
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label required">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  placeholder="Enter email address"
+                  [class.is-invalid]="editTenantForm.get('email')?.invalid && editTenantForm.get('email')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="editTenantForm.get('email')?.invalid && editTenantForm.get('email')?.touched">
+                  <span *ngIf="editTenantForm.get('email')?.errors?.['required']">Email is required.</span>
+                  <span *ngIf="editTenantForm.get('email')?.errors?.['email']">Please enter a valid email.</span>
+                </div>
+              </div>
+
+              <!-- Domain -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label required">Domain</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="domain"
+                  placeholder="e.g., demo.example.com"
+                  [class.is-invalid]="editTenantForm.get('domain')?.invalid && editTenantForm.get('domain')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="editTenantForm.get('domain')?.invalid && editTenantForm.get('domain')?.touched">
+                  Domain is required.
+                </div>
+              </div>
+
+              <!-- Brand Color -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Brand Color</label>
+                <div class="input-group">
+                  <input
+                    type="color"
+                    class="form-control form-control-color"
+                    formControlName="brand_color"
+                    title="Choose brand color"
+                    style="max-width: 60px;"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="brand_color"
+                    placeholder="#000000"
+                  />
+                </div>
+                <small class="form-hint">Choose a brand color for this tenant.</small>
+              </div>
+
+              <!-- Logo URL -->
+              <div class="col-12 mb-3">
+                <label class="form-label">Logo URL</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  formControlName="logo"
+                  placeholder="https://example.com/logo.png"
+                />
+                <small class="form-hint">Enter the URL of the tenant's logo image.</small>
+
+                <!-- Logo Preview -->
+                <div *ngIf="editTenantForm.get('logo')?.value" class="mt-2">
+                  <label class="form-label">Logo Preview:</label>
+                  <div>
+                    <img
+                      [src]="editTenantForm.get('logo')?.value"
+                      alt="Logo Preview"
+                      style="max-height: 80px; max-width: 250px;"
+                      class="border rounded p-2"
+                      (error)="handleImageError($event)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="isUpdating">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="editTenantForm.invalid || isUpdating">
+                <span *ngIf="isUpdating" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i *ngIf="!isUpdating" class="zmdi zmdi-save me-2"></i>
+                {{ isUpdating ? 'Updating...' : 'Update Tenant' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

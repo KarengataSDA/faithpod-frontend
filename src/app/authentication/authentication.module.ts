@@ -14,6 +14,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { CentralAdminRegisterComponent } from './central-admin-register/central-admin-register.component';
 import { CentralAdminLoginComponent } from './central-admin-login/central-admin-login.component';
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
+import { TenantViewComponent } from './tenant-view/tenant-view.component';
+import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { TenantManagementComponent } from './tenant-management/tenant-management
     ResetPasswordComponent,
     CentralAdminRegisterComponent,
     CentralAdminLoginComponent,
-    TenantManagementComponent
+    TenantManagementComponent,
+    TenantViewComponent,
+    TenantEditComponent
   ],
   imports: [
     CommonModule,

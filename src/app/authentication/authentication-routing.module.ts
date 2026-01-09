@@ -11,6 +11,8 @@ import { UnauthorizedComponent } from '../components/pages/unauthorized/unauthor
 import { CentralAdminRegisterComponent } from './central-admin-register/central-admin-register.component';
 import { CentralAdminLoginComponent } from './central-admin-login/central-admin-login.component';
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
+import { TenantViewComponent } from './tenant-view/tenant-view.component';
+import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
 
 const routes: Routes = [
   {
@@ -25,7 +27,9 @@ const routes: Routes = [
     ]
   },
   // Central Admin routes (accessible only on root domain)
-  { path: 'tenants', component: TenantManagementComponent }
+  { path: 'tenants', component: TenantManagementComponent },
+  { path: 'tenants/view/:id', component: TenantViewComponent },
+  { path: 'tenants/edit/:id', component: TenantEditComponent }
 ];
 
 @NgModule({
