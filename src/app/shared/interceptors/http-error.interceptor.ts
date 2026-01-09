@@ -48,20 +48,25 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               'Unable to connect to the server. Please check your network connection or try again later.';
           } else if(error.status === 401) {
             errorMessage = 'Email or password is incorrect. Please try again.'
+          } else if(error.status === 422) {
+            // Validation errors - let the component handle this
+            return throwError(() => error);
           } else {
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
           }
         }
 
-        // alert(errorMessage)
-        Swal.fire({
-          icon: 'error',
-          title: errorMessage,
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3500,
-        });
+        // Only show alert if we have an error message
+        if (errorMessage) {
+          Swal.fire({
+            icon: 'error',
+            title: errorMessage,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3500,
+          });
+        }
 
         return throwError(() => error);
       })

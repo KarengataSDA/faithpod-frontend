@@ -102,23 +102,32 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Client-side error: ${error.error.message}`;
+      this.loginError = `Client-side error: ${error.error.message}`;
     } else {
       if (error.status === 0) {
-        errorMessage =
-          'Unable to connect to connect to the server. Please check your network connection or try again later.';
+        this.loginError =
+          'Unable to connect to the server. Please check your network connection or try again later.';
       } else if (error.status === 401) {
         this.loginError = 'Email or Password is incorrect. Please try again.';
       } else if (error.status === 403) {
         this.loginError = 'Your email address is not verified';
+      } else if (error.status === 422) {
+        // Validation errors
+        if (error.error.errors) {
+          const errors = Object.values(error.error.errors).flat();
+          this.loginError = (errors as string[]).join(' ');
+        } else if (error.error.message) {
+          this.loginError = error.error.message;
+        } else {
+          this.loginError = 'Please check your input and try again.';
+        }
       } else {
-        errorMessage = `Server side error: ${error.status} - ${error.message}`;
+        this.loginError = 'An error occurred. Please try again.';
       }
     }
-    console.error(errorMessage);
-    return throwError(() => errorMessage);
+    console.error('Login error:', error);
+    return throwError(() => error);
   }
 
   ngOnDestroy() {
