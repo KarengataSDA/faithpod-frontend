@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CredentialsInterceptor } from './authentication/credentials.interceptor';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { AuthInterceptor } from './shared/services/auth-interceptor.service';
+import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
 
 @NgModule({ declarations: [AppComponent],
     bootstrap: [AppComponent],
@@ -33,7 +34,22 @@ import { AuthInterceptor } from './shared/services/auth-interceptor.service';
         ColorPickerService,
         {
             provide: HTTP_INTERCEPTORS,
+            useClass: TenantInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: CredentialsInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptor,
             multi: true,
         },
         provideHttpClient(withInterceptorsFromDi()),

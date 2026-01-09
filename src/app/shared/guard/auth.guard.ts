@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { AuthService } from "../services/auth.service";
+import { TenantService } from "../services/tenant.service";
 import { Observable } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 import { of } from "rxjs";
@@ -10,14 +11,26 @@ import { of } from "rxjs";
 })
 
 export class AuthGuard implements CanActivate {
-    constructor(private authService: AuthService, private router: Router) {} 
+    constructor(
+        private authService: AuthService,
+        private tenantService: TenantService,
+        private router: Router
+    ) {} 
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
         const requiredPermission = route.data['permission'];
-        
+
+        // Check tenant validity first
+        if (!this.tenantService.isValidTenant()) {
+            console.warn('Invalid tenant context, redirecting to login');
+            this.authService.clearAuthState();
+            this.router.navigate(['/auth/login']);
+            return of(false);
+        }
+
         // Check if user is authenticated
         if (!this.authService.isLoggedIn()) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
             return of(false);
         }
 

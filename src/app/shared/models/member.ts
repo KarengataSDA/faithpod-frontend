@@ -20,6 +20,7 @@ export interface Member {
   prayercell: Prayercell;
   membershiptype: Membership
   contributions: Contribution[];
+  tenant_id?: string;
 
 }
 

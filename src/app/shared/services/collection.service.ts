@@ -8,8 +8,8 @@ import {
   Contribution,
   ContributionCategory
 } from '../models/collection';
-import { environment } from 'src/environments/environment';
 import { CacheService } from './cache.service';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +17,30 @@ import { CacheService } from './cache.service';
 export class CollectionService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = environment.apiUrl;
-  private apiURL = `${environment.apiUrl}` + '/contributions';
-  private apiSendMail = `${environment.apiUrl}` + '/sendGmail/';
-  private apiDeleteContribution = `${environment.apiUrl}` + '/destroy-contributions/';
-  private addContributionCategory = `${environment.apiUrl}` + '/add-user-contributions';
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
+
+  get apiURL(): string {
+    return `${this.baseUrl}/contributions`;
+  }
+
+  get apiSendMail(): string {
+    return `${this.baseUrl}/sendGmail/`;
+  }
+
+  get apiDeleteContribution(): string {
+    return `${this.baseUrl}/destroy-contributions/`;
+  }
+
+  get addContributionCategory(): string {
+    return `${this.baseUrl}/add-user-contributions`;
+  }
 
   private readonly CACHE_KEY_COLLECTIONS = 'collections';
   private readonly CACHE_KEY_CONTRIBUTIONS = 'contributions';

@@ -3,9 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Membership } from 'src/app/shared/models/membership';
-import { environment } from 'src/environments/environment';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,14 @@ export class MembershipTypeService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
   private localStorageService = inject(LocalStorageService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = environment.apiUrl;
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
   private readonly CACHE_KEY = 'membership_types';
   private readonly CACHE_KEY_COUNT = 'membership_count';
   private readonly STORAGE_KEY = 'membership_types';

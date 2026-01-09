@@ -3,9 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Prayercell } from '../models/prayercell';
-import { environment } from 'src/environments/environment';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,14 @@ export class PrayercellService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
   private localStorageService = inject(LocalStorageService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = environment.apiUrl;
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
   private readonly CACHE_KEY = 'prayercells';
   private readonly STORAGE_KEY = 'prayercells';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data

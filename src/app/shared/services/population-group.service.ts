@@ -2,10 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { PopulationGroup } from 'src/app/shared/models/population-group';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,14 @@ export class PopulationGroupService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
   private localStorageService = inject(LocalStorageService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = environment.apiUrl;
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
   private readonly CACHE_KEY = 'population_groups';
   private readonly STORAGE_KEY = 'population_groups';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data

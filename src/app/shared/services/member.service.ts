@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { Member } from '../models/member';
 import { environment } from 'src/environments/environment';
 import { CacheService } from './cache.service';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +13,18 @@ import { CacheService } from './cache.service';
 export class MemberService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = environment.apiUrl;
   private readonly CACHE_KEY_MEMBERS = 'members';
   private readonly CACHE_KEY_GENDER = 'gender_count';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
 
   getAll(): Observable<any> {
     return this.cacheService.get(

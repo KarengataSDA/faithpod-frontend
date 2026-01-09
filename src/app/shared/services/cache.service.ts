@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of, shareReplay } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { TenantService } from './tenant.service';
 
 export interface CacheEntry<T> {
   data: Observable<T>;
@@ -11,8 +12,18 @@ export interface CacheEntry<T> {
   providedIn: 'root'
 })
 export class CacheService {
+  private tenantService = inject(TenantService);
   private cache = new Map<string, CacheEntry<any>>();
   private defaultTTL = 5 * 60 * 1000;
+
+  /**
+   * Get tenant-scoped cache key
+   * Prevents data leakage between tenants
+   */
+  private getScopedKey(key: string): string {
+    const tenantId = this.tenantService.getTenantId();
+    return tenantId ? `${tenantId}_${key}` : key;
+  }
 
   get<T>(
     key: string,
@@ -20,7 +31,8 @@ export class CacheService {
     ttl: number = this.defaultTTL,
     useShareReplay: boolean = false
   ): Observable<T> {
-    const cached = this.cache.get(key);
+    const scopedKey = this.getScopedKey(key);
+    const cached = this.cache.get(scopedKey);
     const now = Date.now();
 
     if (cached && (now - cached.timestamp) < ttl) {
@@ -30,13 +42,13 @@ export class CacheService {
     const data$ = useShareReplay
       ? source.pipe(
           shareReplay({ bufferSize: 1, refCount: false }),
-          tap(() => this.updateTimestamp(key))
+          tap(() => this.updateTimestamp(scopedKey))
         )
       : source.pipe(
-          tap(() => this.updateTimestamp(key))
+          tap(() => this.updateTimestamp(scopedKey))
         );
 
-    this.cache.set(key, {
+    this.cache.set(scopedKey, {
       data: data$,
       timestamp: now
     });
@@ -52,14 +64,22 @@ export class CacheService {
   }
 
   clear(key: string): void {
-    this.cache.delete(key);
+    const scopedKey = this.getScopedKey(key);
+    this.cache.delete(scopedKey);
   }
 
   clearPattern(pattern: string | RegExp): void {
+    const tenantId = this.tenantService.getTenantId();
     const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern;
 
     Array.from(this.cache.keys())
-      .filter(key => regex.test(key))
+      .filter(key => {
+        // Only clear keys for current tenant
+        if (tenantId && !key.startsWith(`${tenantId}_`)) {
+          return false;
+        }
+        return regex.test(key);
+      })
       .forEach(key => this.cache.delete(key));
   }
 
@@ -67,8 +87,24 @@ export class CacheService {
     this.cache.clear();
   }
 
+  /**
+   * Clear all cache entries for current tenant
+   */
+  clearCurrentTenant(): void {
+    const tenantId = this.tenantService.getTenantId();
+    if (!tenantId) {
+      this.clearAll();
+      return;
+    }
+
+    Array.from(this.cache.keys())
+      .filter(key => key.startsWith(`${tenantId}_`))
+      .forEach(key => this.cache.delete(key));
+  }
+
   has(key: string, ttl: number = this.defaultTTL): boolean {
-    const cached = this.cache.get(key);
+    const scopedKey = this.getScopedKey(key);
+    const cached = this.cache.get(scopedKey);
     if (!cached) return false;
 
     const now = Date.now();

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { PaybillTransaction } from '../models/paybill-transaction';
 import { CacheService } from './cache.service';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,14 @@ import { CacheService } from './cache.service';
 export class PaybillTransactionService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = "https://api.karengatasda.org/api";
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
   private readonly CACHE_KEY = 'paybill_transactions';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes for transaction data
 

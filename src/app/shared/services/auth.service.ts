@@ -4,26 +4,39 @@ import { catchError, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from 'src/app/shared/models/user';
 import { environment } from 'src/environments/environment';
+import { TenantService } from './tenant.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient)
-  baseUrl = environment.apiUrl
+  private tenantService = inject(TenantService)
   private userPermissions: string[] = []
 
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null)
-  public currentUser$: Observable<User | null>  = this.currentUserSubject.asObservable() 
+  public currentUser$: Observable<User | null>  = this.currentUserSubject.asObservable()
+
+  /**
+   * Get dynamic base URL from tenant service
+   */
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  } 
 
   login(data: any): Observable<any> {
-    return this.http.post(this.baseUrl + '/login', data, {withCredentials: true}).pipe(
+    return this.http.post(this.baseUrl + '/members/login', data, {withCredentials: true}).pipe(
       tap((response: any) => {
         // Store token in sessionStorage instead of localStorage for better security
         // sessionStorage is cleared when the browser tab is closed
         sessionStorage.setItem('token', response.token)
-        sessionStorage.setItem('user', JSON.stringify(response.user))
-        this.setUser(response.user)
+        // Backend returns 'member' instead of 'user' for tenant auth
+        const user = response.member || response.user;
+        sessionStorage.setItem('user', JSON.stringify(user))
+        this.setUser(user)
+
+        // Initialize tenant context from subdomain
+        this.initializeTenantContext()
       })
     );
   }
@@ -31,7 +44,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     const hasToken = !!this.getToken();
     const hasUser = !!this.currentUserSubject.value;
-    return hasToken && hasUser;
+    const hasTenant = this.tenantService.isValidTenant();
+    return hasToken && hasUser && hasTenant;
   }
 
   getToken(): string | null {
@@ -40,6 +54,9 @@ export class AuthService {
   }
 
   initializeAuthState(): void {
+    // Initialize tenant context first
+    this.initializeTenantContext();
+
     const token = this.getToken();
     const user = sessionStorage.getItem('user') || localStorage.getItem('user');
 
@@ -98,20 +115,23 @@ export class AuthService {
     localStorage.removeItem('user');
     localStorage.removeItem('permissions');
     this.currentUserSubject.next(null);
+
+    // Clear tenant context
+    this.tenantService.clearTenant();
   }
 
   register(data:any): Observable<User> {
-    return this.http.post<User>(this.baseUrl + '/register', data).pipe(
+    return this.http.post<User>(this.baseUrl + '/members/register', data).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(error)
       })
     );
   }
 
-  
+
 
   user(): Observable<User> {
-    return this.http.get<User>(this.baseUrl + '/user').pipe(
+    return this.http.get<User>(this.baseUrl + '/members/me').pipe(
       tap((user: User) => {
         this.setUser(user)
       })
@@ -119,15 +139,23 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(this.baseUrl + '/logout', {}, { withCredentials: true}).pipe(
+    return this.http.post<void>(this.baseUrl + '/members/logout', {}, { withCredentials: true}).pipe(
       tap(() => {
         this.clearAuthState();
       })
     )
   }
 
+  /**
+   * Initialize tenant context from subdomain
+   * Should be called on app startup and after login
+   */
+  initializeTenantContext(): void {
+    this.tenantService.initializeTenantContext();
+  }
+
   updateInfo(data: any): Observable<User> {
-    return this.http.put<User>(this.baseUrl + '/users/info', data).pipe(
+    return this.http.put<User>(this.baseUrl + '/members/update-info', data).pipe(
       tap((user: User) => {
         this.setUser(user)
       })
@@ -135,7 +163,7 @@ export class AuthService {
   }
 
   updatePassword(data: any): Observable<User> {
-    return this.http.put<User>(this.baseUrl + '/users/password', data)
+    return this.http.put<User>(this.baseUrl + '/members/update-password', data)
   }
 
   private setUser(user: User): void {
