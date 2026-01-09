@@ -84,7 +84,7 @@ export class TenantEditComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          this.tenant = response.data || response;
+          this.tenant = response;
 
           // Populate form with tenant data
           if (this.tenant) {

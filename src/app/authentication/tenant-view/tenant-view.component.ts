@@ -67,7 +67,7 @@ export class TenantViewComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          this.tenant = response.data || response;
+          this.tenant = response;
         },
         error: (err) => {
           this.isLoading = false;

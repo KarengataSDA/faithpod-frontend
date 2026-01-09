@@ -77,7 +77,7 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          this.tenants = response.data || response;
+          this.tenants = response;
         },
         error: (err) => {
           this.isLoading = false;

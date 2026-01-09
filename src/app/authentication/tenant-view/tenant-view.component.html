@@ -132,7 +132,7 @@
               <label class="form-label fw-bold text-muted">Created At</label>
               <p class="fs-4">
                 <span *ngIf="tenant.created_at">
-                  {{tenant.created_at | date: 'full'}}
+                  {{tenant.created_at | date: 'MMM d, y, h:mm:ss a'}}
                 </span>
                 <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
               </p>
