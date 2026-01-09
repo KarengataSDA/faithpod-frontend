@@ -1,0 +1,136 @@
+<app-page-header
+  [title]="'Members'"
+  [items]="['Members']"
+  [active_item]="'Members List'"
+></app-page-header>
+
+<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_user')">
+  <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/members/create-member">
+    <i class="fe fe-plus"></i>  Add Member
+  </a>
+</div>
+
+<!-- row opened -->
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <div>
+          <h6 class="main-content-label mb-1">Members</h6>
+          <p class="text-muted card-sub-title">List of all Church Members.</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="">
+          <form action="" class="ngb-table">
+            <div class="form-group form-inline">
+              Search
+              <input class="form-control ms-2" type="text" (input)="onSearchChange($event)" />
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped border">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Member No</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email Address</th>
+                    <th>Phone Number</th>
+                    <th>Role</th>
+                    <th>Membership</th>
+                    <th *ngIf="authService.hasPermission('can_view_users')">Actions</th>
+                  </tr>
+                </thead>
+                  <tbody *ngIf="isLoading">
+                  <tr *ngFor="let item of [1,2,3,4,5,6]">
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                  </tr>
+                </tbody>
+
+                <tbody *ngIf="!isLoading">
+                  <tr *ngFor="let member of paginatedMembers; let i = index">
+                    <td>{{(currentPage -1 ) * pageSize + i + 1}}</td>
+                    <!-- <th>{{ member.membership_number ? 'KSDA-' + member.membership_number : 'No Number' }}</th> -->
+                    <th>{{ member.membership_number ?  member.membership_number : 'No Number' }}</th>
+                    <td>{{member.first_name}}</td>
+                    <td>{{ member.last_name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.phone_number }}</td>
+                    <td>{{member.role.name}}</td>
+                    <td>
+                      <span
+                        class="badge  rounded-pill p-2 px-3"
+                        [ngClass]="{
+                          ' bg-success-transparent text-success': member?.membershiptype?.name === 'visitor',
+                          ' bg-warning-transparent text-warning': member?.membershiptype?.name === 'member',
+                          ' bg-danger-transparent text-danger': member?.membershiptype?.name === 'sabbath'
+                        }"
+                        >{{member?.membershiptype?.name}}</span
+                      >
+                    </td>
+                    <td>
+                      <div class="g-2">
+                        <a 
+                        *ngIf="authService.hasPermission('can_view_users')"
+                          routerLink="view/{{ member.id }}"
+                          class="btn text-primary btn-sm"
+                          data-bs-toggle="tooltip"
+                          routerLink="edit-member"
+                          ngbTooltip="Edit"
+                          ><span class="fe fe-eye fs-14"></span
+                        ></a>
+
+                        <a 
+                        *ngIf="authService.hasPermission('can_edit_user')"
+                        routerLink="edit/{{ member.id }}"
+                        class="btn text-primary btn-sm"
+                       
+                        ><span class="fe fe-edit fs-14"></span
+                      ></a>
+                        <a 
+                        *ngIf="authService.hasPermission('can_delete_user')"
+                          (click)="deleteMember(member.id)"
+                          class="btn text-danger btn-sm"
+                          data-bs-toggle="tooltip"
+                          ngbTooltip="Delete"
+                          ><span class="fe fe-trash-2 fs-14"></span
+                        ></a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px;">
+                <div>
+                  <p>showing {{(currentPage - 1 ) * pageSize + 1}} to {{(currentPage - 1) * pageSize + paginatedMembers.length}} of {{totalLength}} members</p>
+                </div>
+                <div>
+                    <ul class="pagination">
+                        <li class="page-item page-prev" [class.disabled]="currentPage === 1">
+                            <a class="page-link"  (click)="onPageChange(currentPage - 1)" tabindex="-1">Prev</a>
+                        </li>
+                        <li *ngFor="let page of [].constructor(totalPages); let index = index" class="page-item" [class.active]="currentPage === index + 1">
+                          <a class="page-link" (click)="onPageChange(index + 1)">{{index + 1}}</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage == totalPages">
+                            <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

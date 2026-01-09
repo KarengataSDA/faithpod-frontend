@@ -1,0 +1,14 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th *ngFor="let col of [].constructor(columns)"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of [].constructor(rows)">
+            <td *ngFor="let col of[].constructor(columns)">
+                <div class="skeleton-box"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>

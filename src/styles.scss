@@ -1,0 +1,106 @@
+
+//@ng-select
+@import "@ng-select/ng-select/themes/default.theme.css";
+//dropzone
+@import "dropzone/dist/min/dropzone.min.css";
+//@angular/material
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+//animate.css
+@import "../node_modules/animate.css/animate.min.css";
+//angular-calendar
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+// angular-notifier
+@import "../node_modules/angular-notifier/styles/core.css";
+@import "../node_modules/angular-notifier/styles/themes/theme-material.css";
+@import "../node_modules/angular-notifier/styles/types/type-info.css";
+@import "../node_modules/angular-notifier/styles/types/type-default.css";
+@import "../node_modules/angular-notifier/styles/types/type-error.css";
+@import "../node_modules/angular-notifier/styles/types/type-success.css";
+@import "../node_modules/angular-notifier/styles/types/type-warning.css";
+
+// ngx-bar-rating
+@import "../node_modules/ngx-bar-rating/themes/br-default-theme.scss";
+@import "../node_modules/ngx-bar-rating/themes/br-horizontal-theme.scss";
+@import "../node_modules/ngx-bar-rating/themes/br-vertical-theme.scss";
+@import "../node_modules/ngx-bar-rating/themes/br-movie-theme.scss";
+@import "../node_modules/ngx-bar-rating/themes/br-square-theme.scss";
+
+// ngx toastr
+@import "../node_modules/ngx-toastr/toastr";
+
+// Font
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+//leaflet
+@import "../node_modules/leaflet/dist/leaflet.css";
+
+// custom css/scss links
+@import "./assets/css/style.css";
+@import "./assets/css/plugins.css";
+@import "./assets/css/icons.css";
+@import "./assets/switcher/css/switcher.css";
+@import "./assets/switcher/demo.css";
+@import "./assets/scss/variables";
+
+@media (max-width: 991px) {
+  .dark-header {
+    .responsive-navbar .navbar-collapse {
+      background-color: #2a2a4a;
+      border-block-end: 1px solid $border-dark;
+      .nav-link.icon {
+        color: #d5d7df !important;
+      }
+    }
+    .app-header .header-right-icons .responsive-navbar .nav-link.icon {
+      color: #d5d7df !important;
+    }
+    .app-sidebar__toggle {
+      color: #d5d7df !important;
+    }
+  }
+  .color-header {
+    .responsive-navbar .navbar-collapse {
+      background-color: var(--primary-bg-color) !important;
+      .nav-link.icon {
+        color: #d5d7df !important;
+      }
+    }
+    .app-header .header-right-icons .responsive-navbar .nav-link.icon {
+      color: #d5d7df !important;
+    }
+    .app-sidebar__toggle {
+      color: #d5d7df !important;
+    }
+  }
+  .gradient-header {
+    .app-sidebar__toggle {
+      color: #d5d7df !important;
+    }
+  }
+}
+
+.main-chat-contacts-wrapper .lSSlideOuter,
+.main-chat-contacts-wrapper .lSSlideWrapper {
+  overflow: auto;
+}
+
+.is-expanded {
+  .side-menu__item {
+    color: var(--primary);
+  }
+}
+
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+  pointer-events: none;
+}
+.mat-mdc-option:focus.mdc-list-item,
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item ,.mat-mdc-option:hover:not(.mdc-list-item--disabled){
+  background-color: #f0f0f5 !important;
+}
+.dark-mode {
+  .mat-mdc-option:focus.mdc-list-item,
+  .mat-mdc-option.mat-mdc-option-active.mdc-list-item ,.mat-mdc-option:hover:not(.mdc-list-item--disabled){
+    background-color: #1a1a3c !important;
+  }
+}

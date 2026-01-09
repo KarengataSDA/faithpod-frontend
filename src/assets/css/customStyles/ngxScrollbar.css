@@ -1,0 +1,361 @@
+:root {
+    --primary-rgb: 108, 95, 252;
+    --primary-bg-color: rgb(var(--primary-rgb));
+    --primary-bg-hover: rgb(var(--primary-rgb), 0.9);
+    --primary-bg-border: rgb(var(--primary-rgb));
+    --primary01: rgba(var(--primary-rgb), 0.1);
+    --primary02: rgba(var(--primary-rgb), 0.2);
+    --primary03: rgba(var(--primary-rgb), 0.3);
+    --primary04: rgba(var(--primary-rgb), 0.4);
+    --primary05: rgba(var(--primary-rgb), 0.5);
+    --primary06: rgba(var(--primary-rgb), 0.6);
+    --primary07: rgba(var(--primary-rgb), 0.7);
+    --primary08: rgba(var(--primary-rgb), 0.8);
+    --primary09: rgba(var(--primary-rgb), 0.9);
+    --primary005: rgba(var(--primary-rgb), 0.05);
+    --dark-body: #292e4a;
+    --dark-border: #30314e;
+    --transparent-primary: #6c5ffc;
+    --transparent-bg-rgb: 88, 76, 217;
+    --transparent-body: rgb(var(--transparent-bg-rgb));
+    --transparent-theme: rgba(0, 0, 0, 0.2);
+    --transparent-border: rgba(255, 255, 255, 0.1);
+    --blue: #1a1a3c;
+    --dark-primary-hover: #233ac5;
+    --primary-transparentcolor: #eaedf7;
+    --darkprimary-transparentcolor: #2b356e;
+    --transparentprimary-transparentcolor: rgba(255, 255, 255, 0.05);
+    --float-right: right;
+    --float-left: left;
+    --indigo: #4b0082;
+    --purple: #6f42c1;
+    --pink: #fc5296;
+    --orange: #fd7e14;
+    --yellow: #FBB034;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #ffffff;
+    --gray: #6c757d;
+    --gray-dark: #343a40;
+    --primary: #6c5ffc;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/*Color variables*/
+/*Gradient variables*/
+/*white variables*/
+/*black variables*/
+/*float variables*/
+/*shadow variables*/
+/*Dark Theme Variables*/
+/*Transparent variables*/
+.horizontal .horizontal-main .ng-scrollbar-wrapper[_ngcontent-ng-c1997982448],
+.horizontal .horizontal-main .ng-scroll-viewport-wrapper[_ngcontent-ng-c1997982448],
+.horizontal .horizontal-main .ng-scroll-layer[_ngcontent-ng-c1997982448],
+.horizontal .horizontal-main .ng-scroll-viewport {
+    position: static !important;
+    inset: auto;
+}
+
+.horizontal .horizontal-main .ng-scroll-viewport {
+    contain: inherit;
+}
+
+.rtl ng-scrollbar .ng-scrollbar-wrapper {
+    direction: rtl;
+}
+
+.rtl .scrollbar-control {
+    left: 0 !important;
+    right: unset !important;
+}
+
+.dark-mode .cal-month-view .cal-header .cal-cell {
+    padding: 10px 0;
+    background-color: #1a1a3c !important;
+}
+
+.colorPicker-section input {
+    width: 20%;
+    border-color: rgba(27, 0, 0, 0.1);
+    color: #fff;
+    border-style: solid;
+}
+
+.country-selector .input-group-btn>.btn {
+    height: auto;
+    border-color: rgb(36, 196, 180);
+}
+
+.country-selector .mdc-text-field--outlined {
+    height: 39px !important;
+    overflow: visible;
+}
+
+.country-selector .mdc-notched-outline {
+    top: -0.5px;
+    left: 13px;
+    border-color: #e9edf4;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.country-selector .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.country-selector .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.country-selector .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+    border-color: #e9edf4;
+}
+
+.country-selector .mdc-button .mdc-button__label {
+    top: -8px;
+    /* width: 19px; */
+}
+
+.country-selector .country-selector-flag {
+    top: -15px;
+}
+
+.country-selector .country-selector-code {
+    font-size: 12px;
+    position: relative;
+    top: 8px;
+}
+
+.owl-carousel .owl-nav .owl-next {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    right: -1px;
+    top: 44%;
+}
+
+.owl-carousel .owl-nav .owl-prev {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    left: -1px;
+    top: 44%;
+}
+
+.owl-carousel .carousel-container-padding-right {
+    top: -7px;
+    position: absolute;
+    font-size: 27px;
+    color: white;
+}
+
+.owl-carousel .carousel-container-padding {
+    top: -7px;
+    position: absolute;
+    font-size: 27px;
+    padding: 0px;
+    color: white;
+}
+
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
+    background-color: rgba(108, 95, 252, 0.05);
+}
+
+.dark-mode .list-group-item-action:hover,
+.dark-mode .list-group-item-action:focus,
+.dark-mode .list-group-item-action:active {
+    background-color: #1e2448;
+}
+
+.fullwidth-primary-ribbons .bar span:nth-child(2) {
+    border-color: var(--primary09) var(--primary09) var(--primary09) transparent;
+}
+
+.fullwidth-primary-ribbons .bar span:nth-child(4) {
+    border-color: var(--primary09) transparent var(--primary09) var(--primary09);
+}
+
+@media (max-width: 767px) {
+    .carousel-caption {
+        display: block;
+    }
+}
+
+.sub-slide.is-expanded a.sub-side-menu__item {
+    color: var(--primary-bg-color) !important;
+}
+
+@media (min-width: 992px) {
+    .scrollable-layout .main-sidemenu {
+        padding-top: 0px !important;
+    }
+}
+
+.cdk-overlay-container {
+    z-index: 9999;
+}
+
+.cdk-global-overlay-wrapper {
+    background-color: black;
+}
+
+#cdk-overlay-0 {
+    height: 300px;
+}
+
+.rtl .breadcrumb-style3 .breadcrumb-item1+.breadcrumb-item1::before,
+.rtl .breadcrumb-style2 .breadcrumb-item1+.breadcrumb-item1::before,
+.rtl .handle-counter .counter-plus,
+.rtl .handle-counter .counter-minus,
+.rtl div.dt-datetime div.dt-datetime-iconRight,
+.rtl div.dt-datetime div.dt-datetime-iconLeft {
+    transform: rotate(180deg);
+}
+
+.rtl .owl-carousel .owl-nav .owl-next {
+    right: 98%;
+}
+
+.rtl .mat-mdc-form-field-subscript-wrapper {
+    right: 105px;
+}
+
+@media (max-width: 400px) {
+
+    .btn-lg,
+    .btn-group-lg>.btn {
+        font-size: 0.7rem !important;
+    }
+
+    .toast {
+        font-size: 11px;
+        width: 100%;
+    }
+}
+
+.offcanvas {
+    visibility: inherit;
+    opacity: 1;
+}
+
+.modal-content .modal-header .close span {
+    color: #fff;
+}
+
+.rtl app-header .input-group> :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-left-radius: 7px !important;
+    border-bottom-left-radius: 7px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.country-selector[_ngcontent-ng-c4150375230] {
+    opacity: 1 !important;
+}
+
+.country-selector[_ngcontent-ng-c4150375230] {
+    top: -18px !important;
+}
+
+.dark-mode app-basic-angular-table table,
+.dark-mode app-stickyheader table,
+.dark-mode app-add-remove-data table,
+.dark-mode app-sorting-filter-pagination-table table,
+.dark-mode app-selection-table table {
+    background-color: var(--dark-body);
+}
+
+.dark-mode app-basic-angular-table table thead tr th,
+.dark-mode app-stickyheader table thead tr th,
+.dark-mode app-add-remove-data table thead tr th,
+.dark-mode app-sorting-filter-pagination-table table thead tr th,
+.dark-mode app-selection-table table thead tr th {
+    color: white;
+}
+
+.dark-mode app-basic-angular-table table tbody tr td,
+.dark-mode app-stickyheader table tbody tr td,
+.dark-mode app-add-remove-data table tbody tr td,
+.dark-mode app-sorting-filter-pagination-table table tbody tr td,
+.dark-mode app-selection-table table tbody tr td {
+    color: white;
+}
+
+.dark-mode app-basic-angular-table mat-paginator,
+.dark-mode app-basic-angular-table .mdc-text-field--filled:not(.mdc-text-field--disabled),
+.dark-mode app-stickyheader mat-paginator,
+.dark-mode app-stickyheader .mdc-text-field--filled:not(.mdc-text-field--disabled),
+.dark-mode app-add-remove-data mat-paginator,
+.dark-mode app-add-remove-data .mdc-text-field--filled:not(.mdc-text-field--disabled),
+.dark-mode app-sorting-filter-pagination-table mat-paginator,
+.dark-mode app-sorting-filter-pagination-table .mdc-text-field--filled:not(.mdc-text-field--disabled),
+.dark-mode app-selection-table mat-paginator,
+.dark-mode app-selection-table .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: var(--dark-body);
+    color: white;
+}
+
+.dark-mode .angular-editor-toolbar {
+    background-color: var(--dark-body) !important;
+}
+
+.dark-mode .angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button {
+    background-color: var(--dark-body) !important;
+    color: white;
+}
+
+.dark-mode .ae-font .ae-picker-label {
+    background-color: var(--dark-body) !important;
+    color: white;
+}
+
+.dark-mode ngx-dropzone-preview {
+    background-color: var(--dark-body);
+    background-image: none;
+}
+
+.mdc-button {
+    background: transparent !important;
+}
+
+.mdc-button:active {
+    background: transparent !important;
+}
+
+.mdc-button:hover {
+    background: transparent !important;
+}
+
+.mat-mdc-button,
+.mat-mdc-outlined-button {
+    --mat-mdc-button-persistent-ripple-color: transparent !important;
+    --mat-mdc-button-ripple-color: transparent !important;
+}
+
+.mat-mdc-form-field-infix {
+    width: 210px !important;
+}
+
+input[_ngcontent-ng-c4150375230]:not(.country-search) {
+    top: -7px;
+}
+
+#leaflet1 {
+    z-index: 0;
+}
+
+/*# sourceMappingURL=ngxScrollbar.css.map */

@@ -1,0 +1,108 @@
+<app-page-header [title]="'Edit Profile'" [items]="['Pages']" [active_item]="'Edit Profile'"></app-page-header>
+
+<div class="row">
+    <div class="col-xl-4">
+        <form [formGroup]="passwordForm" (submit)="passwordSubmit()">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Edit Password</div>
+            </div>
+            <div class="card-body">
+                <div class="text-center chat-image mb-5">
+                    <!-- <div class="avatar avatar-xxl chat-profile mb-3 brround">
+                        <a class="" routerLink="/pages/profile"><img alt="avatar" src="./assets/images/users/profile.png" class="brround"></a>
+                    </div> -->
+                    <div class="avatar avatar-xxl chat-profile mb-3 brround">
+                    <span  style="height: 50px; width: 50px;" class=" brround bg-primary me-3">
+                        <h2 style="margin-top: 25px; margin-left: 0px; font-weight: bold;" >{{getInitials()}}</h2>
+                      </span>
+                    </div>
+                    <div class="main-chat-msg-name">
+                        <a routerLink="/pages/profile">
+                            <h5 class="mb-1 text-dark fw-semibold">{{user?.first_name}} {{user?.last_name}}</h5>
+                        </a>
+                        <p class="text-muted mt-0 mb-0 pt-0 fs-14"> {{user?.role?.name}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <div class="wrap-input100 input-group" >
+                        <a  class="input-group-text bg-white text-muted">
+                            <i class="zmdi zmdi-eye" aria-hidden="true"></i>
+                        </a>
+                        <input formControlName="password" class="input100 form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="wrap-input100  input-group" id="Password-toggle2">
+                        <a class="input-group-text bg-white text-muted">
+                            <i class="zmdi zmdi-eye" aria-hidden="true"></i>
+                        </a>
+                        <input formControlName="password_confirm" class="input100 form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="submit" class="btn ms-2 btn-primary">Update</button>
+                <a href="javascript:void(0)" class="btn ms-2 btn-danger">Cancel</a>
+            </div>
+
+        </div>
+    </form>
+    </div>
+    <div class="col-xl-8">
+        <form [formGroup]="infoForm" (submit)="infoSubmit()">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Edit Profile</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                            <label>First Name</label>
+                            <input formControlName="first_name" [(ngModel)]="user.first_name" type="text" class="form-control" id="exampleInputname">
+                        </div>
+                        <div class="form-group">
+                            <label >Middle Name</label>
+                            <input formControlName="middle_name" [(ngModel)]="user.middle_name" type="text" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputname1">Last Name</label>
+                            <input formControlName="last_name" type="text" [(ngModel)]="user.last_name" class="form-control" >
+                        </div>
+
+                        <div class="custom-controls-stacked form-group d-flex">
+                            <label class="custom-control custom-radio me-5">
+                                    <input type="radio" class="custom-control-input" formControlName="gender" name="gender" [(ngModel)]="user.gender"  value="male" [checked]="user.gender === 'male'">
+                                    <span class="custom-control-label">Male</span>
+                            </label>
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="gender" formControlName="gender" [(ngModel)]="user.gender"  value="female" [checked]="user.gender === 'female'">
+                                <span class="custom-control-label">Female</span>
+                        </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">Date of Birth</label>
+                            <input formControlName="date_of_birth" type="date" [(ngModel)]="user.date_of_birth" class="form-control" (dateChange)="formatDate()" [max]="maxDate">
+                        </div>
+                   
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input formControlName="email" type="email" [(ngModel)]="user.email" class="form-control" readonly >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputnumber">Phone Number</label>
+                    <input formControlName="phone_number" type="number" [(ngModel)]="user.phone_number" class="form-control" readonly >
+                </div>
+               
+            </div>
+            <div class="card-footer text-end">
+                <button type="submit" class="btn ms-2 btn-primary my-1">Save</button>
+                <a href="javascript:void(0)" class="btn ms-2 btn-danger my-1">Cancel</a>
+            </div>
+        </div>
+    </form>
+       
+    </div>
+</div>

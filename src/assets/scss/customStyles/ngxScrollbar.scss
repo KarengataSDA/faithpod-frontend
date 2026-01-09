@@ -1,0 +1,267 @@
+@import "../variables";
+// ngx-scrollbar
+.horizontal {
+  .horizontal-main {
+    .ng-scrollbar-wrapper[_ngcontent-ng-c1997982448],
+    .ng-scroll-viewport-wrapper[_ngcontent-ng-c1997982448],
+    .ng-scroll-layer[_ngcontent-ng-c1997982448],
+    .ng-scroll-viewport {
+      position: static !important;
+      inset: auto;
+    }
+    .ng-scroll-viewport {
+      contain: inherit;
+    }
+  }
+}
+.rtl {
+  ng-scrollbar {
+    .ng-scrollbar-wrapper {
+      direction: rtl;
+    }
+  }
+  .scrollbar-control {
+    left: 0 !important;
+    right: unset !important;
+  }
+}
+.dark-mode {
+  .cal-month-view .cal-header .cal-cell {
+    padding: 10px 0;
+    background-color: $dark-body !important;
+  }
+}
+.colorPicker-section {
+  input {
+    width: 20%;
+    border-color: rgb(27 0 0 / 10%);
+    color: #fff;
+    border-style: solid;
+  }
+}
+.country-selector {
+  .input-group-btn > .btn {
+    height: auto;
+    border-color: rgb(36, 196, 180);
+  }
+
+  .mdc-text-field--outlined {
+    height: 39px !important;
+    overflow: visible;
+  }
+  .mdc-notched-outline {
+    top: -0.5px;
+    left: 13px;
+    border-color: $border;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+  // .mat-mdc-form-field-hint-wrapper {
+  //   display: block;
+  // }
+  // .mat-mdc-form-field-hint-wrapper,
+  // .mat-mdc-form-field-error-wrapper {
+  //   top: -31px;
+  //   left: 47px;
+  // }
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__leading,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__notch,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__trailing {
+    border-color: $border;
+  }
+  .mdc-button .mdc-button__label {
+    // position: relative;
+    // left: -20px;
+    top: -8px;
+    /* width: 19px; */
+  }
+  .country-selector-flag {
+    top: -15px;
+  }
+  .country-selector-code {
+    font-size: 12px;
+    position: relative;
+    top: 8px;
+  }
+}
+.owl-carousel {
+  .owl-nav .owl-next {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    right: -1px;
+    top: 44%;
+  }
+  .owl-nav .owl-prev {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    left: -1px;
+    top: 44%;
+  }
+  .carousel-container-padding-right {
+    top: -7px;
+    position: absolute;
+    font-size: 27px;
+    color: #ffff;
+  }
+  .carousel-container-padding {
+    top: -7px;
+    position: absolute;
+    font-size: 27px;
+    padding: 0px;
+    color: #ffff;
+  }
+}
+
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+  background-color: rgb(108 95 252 / 5%);
+}
+
+.dark-mode .list-group-item-action:hover, .dark-mode .list-group-item-action:focus, .dark-mode .list-group-item-action:active {
+  background-color: #1e2448;
+}
+
+.fullwidth-primary-ribbons .bar span:nth-child(2) {
+  border-color: var(--primary09) var(--primary09) var(--primary09) transparent;
+}
+.fullwidth-primary-ribbons .bar span:nth-child(4) {
+  border-color: var(--primary09) transparent var(--primary09) var(--primary09);
+}
+@media (max-width: 767px){
+  .carousel-caption {
+      display: block ;
+  }
+}
+
+.sub-slide.is-expanded{
+  a.sub-side-menu__item{
+    color: var(--primary-bg-color) !important;
+  }
+}
+
+@media (min-width: 992px){
+  .scrollable-layout .main-sidemenu {
+      padding-top: 0px !important;
+  }
+}
+
+.cdk-overlay-container{
+  z-index: 9999;
+}
+
+.cdk-global-overlay-wrapper{
+  background-color: black;
+}
+
+#cdk-overlay-0{
+  height: 300px;
+}
+
+.rtl .breadcrumb-style3 .breadcrumb-item1+.breadcrumb-item1::before, .rtl .breadcrumb-style2 .breadcrumb-item1+.breadcrumb-item1::before, .rtl .handle-counter .counter-plus, .rtl .handle-counter .counter-minus, .rtl div.dt-datetime div.dt-datetime-iconRight, .rtl div.dt-datetime div.dt-datetime-iconLeft{
+  transform:rotate(180deg)
+}
+
+.rtl{
+    .owl-carousel .owl-nav .owl-next {
+      right: 98%;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper{
+    right: 105px;
+  }
+}
+@media (max-width: 400px){
+  .btn-lg, .btn-group-lg>.btn {
+      font-size: 0.70rem !important;
+  }
+  .toast {
+    font-size: 11px;
+      width: 100%;
+  }
+}
+.offcanvas {
+  visibility: inherit;
+  opacity: 1;
+}
+.modal-content .modal-header .close span{
+  color: $white;
+}
+.rtl app-header .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  border-top-left-radius: 7px !important;
+  border-bottom-left-radius: 7px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.country-selector[_ngcontent-ng-c4150375230]{
+  opacity: 1 !important;
+}
+.country-selector[_ngcontent-ng-c4150375230]{
+  top: -18px !important;
+}
+.dark-mode{
+  app-basic-angular-table,app-stickyheader,app-add-remove-data,app-sorting-filter-pagination-table,app-selection-table{
+    table {
+      background-color: var(--dark-body);
+      thead tr th{
+        color: white;
+      }
+      tbody tr td{
+        color: white;
+      }
+    }
+    mat-paginator , .mdc-text-field--filled:not(.mdc-text-field--disabled){
+      background-color: var(--dark-body);
+      color: white;
+    }
+  }
+
+  .angular-editor-toolbar{
+    background-color: var(--dark-body) !important;
+  }
+
+  .angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button {
+    background-color: var(--dark-body) !important;
+    color: white;
+  }
+
+  .ae-font .ae-picker-label {
+    background-color: var(--dark-body) !important;
+    color: white;
+  }
+  ngx-dropzone-preview{
+    background-color: var(--dark-body);
+    background-image: none;
+  }
+}
+.mdc-button{
+  background:transparent !important;
+  &:active{
+  background:transparent !important;
+  }
+  &:hover{
+  background:transparent !important;
+  }
+}
+.mat-mdc-button, .mat-mdc-outlined-button {
+  --mat-mdc-button-persistent-ripple-color: transparent !important;
+   --mat-mdc-button-ripple-color: transparent !important;
+}
+.mat-mdc-form-field-infix{
+  width: 210px !important;
+}
+input[_ngcontent-ng-c4150375230]:not(.country-search){
+  top: -7px;
+}
+
+#leaflet1{
+  z-index: 0;
+}

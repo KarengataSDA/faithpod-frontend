@@ -1,0 +1,58 @@
+.side-menu .side-menu__icon:before{
+    display: none;
+}
+
+body:not(.horizontal-hover) .sub-slide-menu.open{
+    display: block !important;
+}
+body:not(.horizontal-hover) .slide-menu.open{
+    display: block !important;
+}
+
+@media (min-width: 1400px){
+    .horizontal.layout-boxed .sticky-pin {
+        max-width: 100% !important;
+    }
+}
+
+perfect-scrollbar{
+    overflow: inherit !important;
+}
+
+@media (max-width: 767.9px){
+    .side-menu{
+        margin-inline-start: 0 !important;
+        margin-inline-end: 0 !important;
+    }
+}
+@media (min-width: 992px){
+    .horizontal-hover .side-menu__item{
+        pointer-events: none;
+    }
+    .horizontal-hover .side-menu__item.has__link{
+        pointer-events: auto;
+    }
+}
+
+@media (min-width: 1400px){
+    .horizontal.layout-boxed .sticky-pin {
+        max-width: 80% !important;
+    }
+    .horizontal.layout-boxed.scrollable-layout .sticky-pin {
+        max-width: 100% !important;
+    }
+}
+
+@media (min-width: 992px){
+.horizontal .side-menu{
+  display: inline-flex !important;
+  transition: all 0.5s ease;
+}
+}
+
+.app-sidebar
+{
+  scrollbar-y{
+    width: 2px !important;
+  }
+}

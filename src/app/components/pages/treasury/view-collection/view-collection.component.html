@@ -1,0 +1,96 @@
+<app-page-header
+  [title]="'Collections'"
+  [items]="['Collections']"
+  [active_item]="'Members Contributions'"
+></app-page-header>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+      <div class="card overflow-visible">
+        <div class="card-header pb-0">
+            <h6 class="main-content-label mb-1">Date: {{collection?.contribution_date}}</h6>
+          <div class="card-options ">
+            
+            <p class="text-muted card-sub-title">Total Amount {{collection?.total_amount}}</p>
+        </div>
+        </div>
+        <div class="card-body">
+         
+       
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-sm">
+    <div class="col-xl-12">
+      <div class="card overflow-visible">
+        <div class="card-header pb-0">
+          <div>
+            <h6 class="">
+              List of all Contribution on Date: {{collection?.contribution_date}}.
+            </h6>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="">
+            <form action="" class="ngb-table">
+              <div class="form-group form-inline">
+                Search
+                <input class="form-control ms-2" type="text" name="searchTerm" />
+              </div>
+              <div class="table-responsive">
+                <table
+                  id="data-table"
+                  class="table table-bordered border"
+                >
+                  <thead class="border-top">
+                    <tr>
+                      <th>Name</th>
+                      <th>No.</th>
+                      <th>Contribution Category</th>
+                      <th>Amount</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let category of collection?.contributions; index as i">
+                      <td *ngIf="i === 0 || collection.contributions[i].user.first_name !== collection.contributions[i-1].user.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user.first_name)">{{category.user.first_name}} {{category.user.last_name}}</td>
+
+                      <th>{{ i + 1 }}</th>
+                      <!-- <td>{{category.user.first_name}} {{category.user.last_name}}</td> -->
+                      <td>{{ category.contribution_type.name }}</td>
+                      <td>{{ category.contribution_amount }}</td>
+                      <!-- <td *ngIf="i === 0 || collection.contributions[i].user.first_name !== collection.contributions[i-1].user.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user.first_name)"> <div class="mt-sm-1 text-center" >
+                        <i class="ri-mail-open-line text-primary s-14"></i>
+                     </div></td> -->
+
+                     <!-- <div class="mt-sm-1 text-center" >
+                      <a  class="btn text-primary btn-sm">
+                        <span (click)="sendMail(category.id)" class="fs-14"><i class="ri-mail-open-line text-danger fs-14"></i></span>
+                      </a>
+                    </div> -->
+
+
+                    <td *ngIf="i === 0 || collection.contributions[i].user.first_name !== collection.contributions[i-1].user.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user.first_name)">
+                      <div class="mt-sm-1 text-center" >
+                          <a  class="btn text-primary btn-sm">
+                             <ng-template [ngIf] ="category.status == 0">
+                              <span (click)="sendMail(category.id)" class="fs-14"><i class="ri-mail-open-line text-danger fs-14"></i></span>
+                             </ng-template>
+                      </a>
+                      <ng-template [ngIf] ="category.status == 1">
+                        <span class="fs-14" style="padding: 10px; margin-right: 30px;"><i class="ri-mail-send-line text-primary fs-14"></i></span>
+                      </ng-template>
+                      </div>
+                  </td> 
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

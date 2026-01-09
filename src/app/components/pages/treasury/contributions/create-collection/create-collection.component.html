@@ -1,0 +1,144 @@
+<app-page-header
+  [title]="'Add Collection'"
+  [items]="['collections']"
+  [active_item]="'add collection'"
+></app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input class="form-control" formControlName="first_name" type="hidden" />
+  <input class="form-control" formControlName="email" type="hidden" />
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Name & Date</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-6">
+          <!-- <div class="form-group">
+              <label class="form-label">User Name</label>
+              <select formControlName="members" class="form-control">
+                <option *ngFor="let member of members" [value]="member.id">{{ member.first_name + " " + member.last_name }}</option>
+              </select>
+            </div> -->
+          <div class="form-group">
+            <label class="form-label">User Name</label>
+            <!-- <ng-select
+              [items] = "members"
+                bindLabel="first_name + last_name"
+                bindValue="id"
+                placeholder="Choose Name"a
+                formControlName="user_id"
+              >
+              </ng-select> -->
+
+              <ng-select
+              [items]="members"
+              bindLabel="first_name"
+              bindValue="id"
+              placeholder="Choose Name"
+              formControlName="user_id"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{
+                  item ? (item.first_name || 'Choose Name') + ' ' + (item.last_name || '') : 'Choose Name'
+                }}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ (item.first_name || '') + ' ' + (item.last_name || '') }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label class="form-label">Select a Date</label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="date"
+              placeholder="yyyy-mm-dd"
+              formControlName="contribution_date"
+              id="contribution_date"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Tithes & Offering</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Contributions dynamic form array -->
+        <ng-container formArrayName="contributions">
+          <ng-container
+            *ngFor="let contribution of contributions.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="col-lg-5">
+              <div class="form-group">
+                <label>Select Category</label>
+                <ng-select formControlName="category" class="form-contrdol">
+                  <!-- Dynamically populate these options from your categories API -->
+                  <ng-option
+                    *ngFor="let category of categories"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              
+            </div>
+            <div class="col-lg-5">
+              <div class="form-group">
+                <label>Amount</label>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  formControlName="amount"
+                />
+              </div>
+            </div>
+            <div class="col-lg-2 d-flex align-items-end mb-4">
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="removeContribution(i)"
+              >
+                Remove
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <div class="col-lg-12">
+          <hr />
+        </div>
+
+        <div class="col-lg-3">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="addContribution()"
+          >
+            Add Contribution
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <button
+        type="submit"
+        class="btn ms-2 btn-primary my-1"
+        [disabled]="!form.valid"
+      >
+        Save
+      </button>
+      <button type="reset" class="btn ms-2 btn-danger my-1">Cancel</button>
+    </div>
+  </div>
+</form>

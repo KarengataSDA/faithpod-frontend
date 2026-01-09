@@ -1,0 +1,67 @@
+<app-page-header
+  [title]="'Prayercell'"
+  [items]="['Prayercells']"
+  [active_item]="'Prayercell Members'"
+></app-page-header>
+
+<div class="row row-sm">
+    <div class="col-xl-12">
+      <div class="card overflow-visible">
+        <div class="card-header pb-0">
+            <h6 class="main-content-label mb-1">Name: {{prayercell?.name}}</h6>
+          <div class="card-options ">
+            
+            <p class="text-muted card-sub-title">Total Members {{prayercell?.users?.length}}</p>
+        </div>
+        </div>
+        <div class="card-body">
+         
+       
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- row opened -->
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <div>
+          <p class="card-sub-title">List of all Prayercell Members.</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped border">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Member No</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email Address</th>
+                  <th>Phone Number</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="prayercell">
+                <tr *ngFor="let member of prayercell?.users; index as i">
+                    
+                  <th>{{ i + 1 }}</th>
+                  <th>{{ member.membership_number ? 'KSDA-' + member.membership_number : 'No Number' }}</th>
+                  <td>{{member.first_name}}</td>
+                  <td>{{ member.last_name }}</td>
+                  <td>{{ member.email }}</td>
+                  <td>{{ member.phone_number }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

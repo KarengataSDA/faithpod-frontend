@@ -1,0 +1,32 @@
+::ng-deep{
+    canvas{
+        height: 330px;
+    }
+    .cm-default-label{
+        display: none;
+    }
+    .cm-value-text{
+        display: none;
+
+    }
+}
+.bg-recentorder {
+    .chartjs-wrapper-demo {
+        .apexcharts-canvas svg {
+            width: 100% !important;
+        }
+    }
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.link-active {
+    color: rgb(23,83,81);
+}
+.link-inactive {
+    color: rgb(97, 97, 96);
+}

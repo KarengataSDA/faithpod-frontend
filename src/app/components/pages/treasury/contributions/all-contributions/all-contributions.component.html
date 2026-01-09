@@ -1,0 +1,137 @@
+<app-page-header
+  [title]="'Collections'"
+  [items]="['Collections']"
+  [active_item]="'All Collections'"
+></app-page-header>
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header">
+        <h6 class="main-content-label">Export Files: </h6>
+        <div class="card-options">
+          <div class="btn-list d-flex">
+            <button class="btn btn-primary btn-sm shadow-sm btn-wave me-3" (click)="exportToPDF()">Export PDF</button>
+            <button class="btn btn-success btn-sm shadow-sm btn-wave" (click)="exportToExcel()">Export Excel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+     <div class="card-header pb-0">
+        <h6 class="main-content-label mb-1">All Collections Made Via App</h6>
+        <div class="card-options">
+          <h6 class="main-content-label">Total: KES {{ totalAmount | number:'1.2-2'}} </h6>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="">
+          <form action="" class="ngb-table">
+            <div class="form-group form-inline">
+              Search
+              <input class="form-control ms-2" type="text" [(ngModel)]="searchTerm" name="searchTerm" (input)="filterSearchContributions()" />
+            </div>
+            <div class="table-responsive">
+              <table
+                id="data-table"
+                 class="table table-striped border"
+              >
+                <thead class="border-top">
+                  <tr>
+                    <th>NO.</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone Number</th>
+                    <th>Contribution Category</th>
+                    <th>Amount</th>
+                    <th>Contribution Date</th>
+                  </tr>
+                </thead>
+                 <tbody *ngIf="isLoading">
+                  <tr *ngFor="let item of [1,2,3,4,5]">
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                  </tr>
+                </tbody>
+
+                <tbody *ngIf="!isLoading">
+                  <tr
+                    class="border-bottom"
+                    *ngFor="let collection of paginatedContributions; index as i"
+                  >
+                    <td>
+                      <div class="d-flex">
+                        <div class="mt-0 mt-sm-3 d-block">
+                          <h6 class="mb-0 fs-14 fw-semibold">{{ i + 1 }}</h6>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="mt-sm-2 d-block">{{
+                        collection.user.first_name
+                      }}</span>
+                    </td>
+                     <td>
+                      <span class="mt-sm-2 d-block">{{
+                        collection.user.last_name
+                      }}</span>
+                    </td>
+                     <td>
+                      <span class="mt-sm-2 d-block">{{
+                        collection.user.phone_number
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="mt-sm-2 d-block">{{
+                        collection.contribution_type.name
+                      }}</span>
+                    </td>
+                     <td>
+                      <span class="mt-sm-2 d-block"> {{ collection.contribution_amount | number:'1.2-2' }}</span>
+                    </td>
+                     <td>
+                      <span class="mt-sm-2 d-block">{{ collection.contribution_date | date:'mediumDate' }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+               <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px;">
+              <div>
+                <p>showing {{(currentPage - 1 ) * pageSize + 1}} to {{(currentPage - 1) * pageSize +
+                  paginatedContributions.length}} of {{totalLength}} members</p>
+              </div>
+
+              <div>
+                <ul class="pagination">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+                  </li>
+
+                  <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
+                    [class.disabled]="page === '...'">
+                    <a class="page-link" (click)="page !== '...' && onPageChange(page)">{{ page }}</a>
+                  </li>
+
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

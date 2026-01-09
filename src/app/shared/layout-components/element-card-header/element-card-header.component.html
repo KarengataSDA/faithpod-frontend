@@ -1,0 +1,10 @@
+<div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title">{{title}}</h3>
+    <div>
+      <label class="form-switch float-end mb-0 my-2">
+        <a class="tx-14 me-2 fw-bold">Show Code</a>
+        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+          <span (click)="item.toggle()" [attr.aria-expanded]="item1" class="custom-switch-indicator me-3"></span>
+      </label>
+  </div>
+</div>

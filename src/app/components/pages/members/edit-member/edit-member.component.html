@@ -1,0 +1,136 @@
+<app-page-header
+  [title]="'Edit Member'"
+  [items]="['Members']"
+  [active_item]="'Edit Member'"
+></app-page-header>
+
+<!-- ROW-1 OPEN -->
+<div class="row justify-content-center">
+  <div class="col-xl-8">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Edit Member</h3>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="exampleInputname">First Name</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="first_name"
+              id="first_name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputname">Middle Name</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="middle_name"
+              id="middle_name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputname">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="last_name"
+              id="last_name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              id="email"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputname">Phone Number</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="phone_number"
+              id="last_name"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Membership Number</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="membership_number"
+              id="membership_number"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="">Membership Type</label>
+            <select
+              name="membership_type_id"
+              class="form-control"
+              formControlName="membership_type_id"
+            >
+              <option *ngFor="let membershiptype of membershiptypes" [ngValue]="membershiptype.id">
+                {{ membershiptype.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="">Role</label>
+            <select
+              name="role_id"
+              class="form-control"
+              formControlName="role_id"
+            >
+              <option *ngFor="let role of roles" [ngValue]="role.id">
+                {{ role.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="">Population Group</label>
+            <select
+              name="population_group_id"
+              class="form-control"
+              formControlName="population_group_id"
+            >
+              <option *ngFor="let group of groups" [ngValue]="group.id">
+                {{ group.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="">Prayercell</label>
+            <select
+              name="prayercell_id"
+              class="form-control"
+              formControlName="prayercell_id"
+            >
+              <option *ngFor="let prayercell of prayercells" [ngValue]="prayercell.id">
+                {{ prayercell.name }}
+              </option>
+            </select>
+          </div>
+
+        </div>
+        <div class="card-footer text-end">
+          <button type="submit" class="btn ms-2 btn-primary my-1">Save</button>
+          <a href="" class="btn ms-2 btn-danger my-1">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

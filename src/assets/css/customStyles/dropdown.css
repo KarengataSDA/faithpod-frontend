@@ -1,0 +1,693 @@
+:root {
+    --primary-rgb: 108, 95, 252;
+    --primary-bg-color: rgb(var(--primary-rgb));
+    --primary-bg-hover: rgb(var(--primary-rgb), 0.9);
+    --primary-bg-border: rgb(var(--primary-rgb));
+    --primary01: rgba(var(--primary-rgb), 0.1);
+    --primary02: rgba(var(--primary-rgb), 0.2);
+    --primary03: rgba(var(--primary-rgb), 0.3);
+    --primary04: rgba(var(--primary-rgb), 0.4);
+    --primary05: rgba(var(--primary-rgb), 0.5);
+    --primary06: rgba(var(--primary-rgb), 0.6);
+    --primary07: rgba(var(--primary-rgb), 0.7);
+    --primary08: rgba(var(--primary-rgb), 0.8);
+    --primary09: rgba(var(--primary-rgb), 0.9);
+    --primary005: rgba(var(--primary-rgb), 0.05);
+    --dark-body: #292e4a;
+    --dark-border: #30314e;
+    --transparent-primary: #6c5ffc;
+    --transparent-bg-rgb: 88, 76, 217;
+    --transparent-body: rgb(var(--transparent-bg-rgb));
+    --transparent-theme: rgba(0, 0, 0, 0.2);
+    --transparent-border: rgba(255, 255, 255, 0.1);
+    --blue: #1a1a3c;
+    --dark-primary-hover: #233ac5;
+    --primary-transparentcolor: #eaedf7;
+    --darkprimary-transparentcolor: #2b356e;
+    --transparentprimary-transparentcolor: rgba(255, 255, 255, 0.05);
+    --float-right: right;
+    --float-left: left;
+    --indigo: #4b0082;
+    --purple: #6f42c1;
+    --pink: #fc5296;
+    --orange: #fd7e14;
+    --yellow: #FBB034;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #ffffff;
+    --gray: #6c757d;
+    --gray-dark: #343a40;
+    --primary: #6c5ffc;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/*Color variables*/
+/*Gradient variables*/
+/*white variables*/
+/*black variables*/
+/*float variables*/
+/*shadow variables*/
+/*Dark Theme Variables*/
+/*Transparent variables*/
+.ng-dropdown-panel {
+    z-index: 8 !important;
+}
+
+.dropdown-toggle.no-caret::after {
+    display: none;
+}
+
+.transparent-mode .drops-down-auto {
+    background: var(--transparent-body) !important;
+}
+
+.transparent-mode .drops-down-auto .calendar .calendar-table {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.transparent-mode .btn-light {
+    color: #fff !important;
+}
+
+.transparent-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup {
+    color: #fff !important;
+}
+
+.transparent-mode .dropdown-list ul li:hover {
+    background: var(--primary-bg-color);
+}
+
+.transparent-mode .selected-list .c-btn {
+    background-color: var(--primary-bg-color);
+}
+
+.transparent-mode .ng-valid {
+    color: #fff;
+}
+
+.transparent-mode .record-picker li:hover {
+    background-color: var(--primary-bg-color) !important;
+}
+
+.transparent-mode .select2-selection {
+    background-color: var(--primary-bg-color) !important;
+    color: #fff;
+}
+
+.transparent-mode .select2-dropdown {
+    background-color: var(--primary-bg-color) !important;
+    color: #fff;
+}
+
+.transparent-mode .select2-results__options div {
+    background-color: var(--primary-bg-color) !important;
+    color: #fff;
+}
+
+.transparent-mode .select2-search--dropdown {
+    background-color: var(--primary-bg-color) !important;
+    color: #fff;
+}
+
+.transparent-mode .select2-search__field {
+    color: #fff;
+}
+
+.transparent-mode .accordion-item .accordion-body {
+    color: #fff;
+}
+
+.transparent-mode .search-result,
+.transparent-mode .serach-result-empty {
+    background-color: var(--transparent-body);
+}
+
+.transparent-mode .search-result[_ngcontent-ajq-c108] .header-list-group[_ngcontent-ajq-c108]:hover {
+    background-color: var(--primary-bg-color);
+    color: #fff;
+}
+
+.transparent-mode ngb-alert {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.transparent-mode .alert-light {
+    background-color: transparent !important;
+}
+
+.transparent-mode countries-map-base svg {
+    background-color: transparent !important;
+}
+
+.transparent-mode .iti__country-list {
+    background-color: var(--transparent-body);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
+}
+
+.transparent-mode .c-remove c-icon {
+    filter: invert(1);
+}
+
+.transparent-mode .iti__country-name {
+    color: #fff;
+}
+
+.transparent-mode .custom,
+.transparent-mode .ng-valid {
+    color: #fff;
+}
+
+.transparent-mode li.slide.active .material-icons-two-tone,
+.transparent-mode li.slide:hover .material-icons-two-tone {
+    filter: invert(80%) sepia(94%) saturate(10000%) hue-rotate(208deg) brightness(162%) contrast(112%);
+}
+
+.transparent-mode li.slide .material-icons-two-tone {
+    filter: invert(78%) sepia(98%) saturate(10034%) hue-rotate(214deg) brightness(162%) contrast(112%) !important;
+}
+
+.transparent-mode .dropdown button.btn-light:focus,
+.transparent-mode .show>.btn-outline-light.dropdown-toggle:focus {
+    color: var(--primary-bg-color) !important;
+    box-shadow: none;
+}
+
+.transparent-mode .main-contact-item+.main-contact-item::before {
+    border-top-color: transparent;
+}
+
+.transparent-mode .cal-month-view .cal-day-number {
+    color: #fff !important;
+}
+
+.transparent-mode #external-events {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.transparent-mode .cal-month-view {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.transparent-mode .cal-header {
+    border-top-color: rgba(255, 255, 255, 0.1);
+    border-left-color: rgba(255, 255, 255, 0.1);
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-month-view .cal-day-cell:not(:last-child) {
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-month-view .cal-days .cal-cell-row {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-month-view .cal-days {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-cell {
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view {
+    background-color: var(--transparent-body);
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-hour-odd {
+    background-color: var(--transparent-body);
+}
+
+.transparent-mode .cal-week-view .cal-header.cal-today {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-day-headers .cal-header:hover,
+.transparent-mode .cal-week-view .cal-day-headers .cal-drag-over,
+.transparent-mode .cal-week-view .cal-time-events .cal-day-columns:not(.cal-resize-active) .cal-hour-segment:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-day-headers {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-day-headers .cal-header:first-child {
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-day-headers .cal-header:not(:last-child) {
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-time-events {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-day-column {
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode.rtl .cal-week-view .cal-day-headers .cal-header:first-child {
+    border-right-color: rgba(255, 255, 255, 0.1) !important;
+    border-left-color: inherit;
+}
+
+.transparent-mode.rtl .cal-week-view .cal-day-headers .cal-header:not(:last-child) {
+    border-left-color: rgba(255, 255, 255, 0.1) !important;
+    border-right-color: inherit;
+}
+
+.transparent-mode.rtl .cal-week-view .cal-time-events {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode.rtl .cal-week-view .cal-day-column {
+    border-left-color: rgba(255, 255, 255, 0.1) !important;
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-week-view .cal-hour:not(:last-child) .cal-hour-segment,
+.transparent-mode .cal-week-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .cal-month-view .cal-day-cell.cal-today,
+.transparent-mode .cal-month-view .cal-cell-row .cal-cell:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.transparent-mode .cal-month-view .cal-cell-row:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.transparent-mode .mat-autocomplete-trigger {
+    color: var(--primary-bg-color);
+}
+
+.transparent-mode .mat-autocomplete-trigger::placeholder {
+    color: var(--primary-bg-color);
+}
+
+.transparent-mode .accordion-item .accordion-body {
+    padding: 20px 20px;
+}
+
+.transparent-mode .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
+    color: #282f53;
+}
+
+.transparent-mode .apexcharts-theme-light .apexcharts-selection-icon:not(.apexcharts-selected):hover svg,
+.transparent-mode .apexcharts-theme-light .apexcharts-zoom-icon:not(.apexcharts-selected):hover svg,
+.transparent-mode .apexcharts-theme-light .apexcharts-zoomin-icon:hover svg,
+.transparent-mode .apexcharts-theme-light .apexcharts-zoomout-icon:hover svg,
+.transparent-mode .apexcharts-theme-light .apexcharts-reset-icon:hover svg,
+.transparent-mode .apexcharts-theme-light .apexcharts-menu-icon:hover svg {
+    fill: var(--primary-bg-color);
+}
+
+.transparent-mode .ng-select .ng-arrow-wrapper .ng-arrow {
+    border-color: var(--primary-bg-color) transparent transparent;
+}
+
+.transparent-mode .ng-select .ng-clear-wrapper {
+    color: var(--primary-bg-color);
+}
+
+.transparent-mode .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: var(--primary-bg-color);
+}
+
+.transparent-mode .ng-dropdown-panel {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--transparent-body);
+}
+
+.transparent-mode .prev-price {
+    color: var(--primary-bg-color) !important;
+}
+
+.transparent-mode .horizontalMenucontainer .main-header {
+    background: var(--primary-bg-color);
+}
+
+.transparent-mode .mat-autocomplete-panel {
+    background-color: var(--primary-bg-color);
+}
+
+.transparent-mode .mat-option-text {
+    color: #323131;
+}
+
+.transparent-mode .mat-stepper-horizontal,
+.transparent-mode .mat-stepper-vertical {
+    background-color: transparent;
+}
+
+.transparent-mode .mat-step-text-label {
+    color: #eee;
+}
+
+.transparent-mode .apexcharts-menu {
+    background-color: var(--primary-bg-color);
+    color: #fff;
+}
+
+.transparent-mode .apexcharts-menu .apexcharts-menu-item:hover {
+    color: #000;
+}
+
+.transparent-mode .ng-select .ng-select-container,
+.transparent-mode .ng-select input {
+    color: #fff !important;
+    background: var(--transparent-body);
+    border: none;
+    outline: none;
+    border-radius: 0.25rem;
+}
+
+.transparent-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    background-color: var(--transparent-body);
+    color: #fff;
+}
+
+.transparent-mode ngx-dropzone,
+.transparent-mode .custom-dropzone {
+    background: var(--transparent-theme);
+    color: #fff !important;
+    border: 2px dashed rgba(255, 255, 255, 0.1) !important;
+}
+
+.transparent-mode .record-picker[_ngcontent-gox-c195] li[_ngcontent-gox-c195] {
+    border-top: thin solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .c-btn.disabled {
+    background: var(--primary-bg-color) !important;
+    cursor: not-allowed !important;
+}
+
+.transparent-mode .selected-list,
+.transparent-mode .lazyContainer,
+.transparent-mode .pure-checkbox {
+    background-color: var(--primary-bg-color);
+    color: #fff;
+}
+
+.transparent-mode .ngb-dp-weekdays {
+    background-color: var(--primary-bg-color);
+    color: #fff;
+}
+
+.transparent-mode .ngb-dp-header {
+    background-color: var(--primary-bg-color);
+    color: #fff;
+}
+
+.transparent-mode .c-btn,
+.transparent-mode .list-filter,
+.transparent-mode .select-all,
+.transparent-mode .list-area {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .selected-list .c-angle-down svg,
+.transparent-mode .selected-list .c-angle-up svg {
+    fill: var(--primary-bg-color);
+}
+
+.transparent-mode .list-area {
+    background-color: var(--transparent-body);
+}
+
+.transparent-mode .arrow-down,
+.transparent-mode .arrow-up {
+    border-bottom: 15px solid var(--transparent-body);
+}
+
+.transparent-mode .iti.iti--allow-dropdown input {
+    background-color: transparent;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .dropdown-menu.country-dropdown.show {
+    background-color: var(--transparent-body);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ck.ck-toolbar {
+    background: var(--transparent-body);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ck.ck-icon,
+.transparent-mode .ck.ck-icon *,
+.transparent-mode .ck.ck-button .ck-button__label,
+.transparent-mode a.ck.ck-button .ck-button__label {
+    color: var(--primary-bg-color);
+}
+
+.transparent-mode .ck.ck-button:not(.ck-disabled):hover,
+.transparent-mode a.ck.ck-button:not(.ck-disabled):hover,
+.transparent-mode .ck.ck-button.ck-on:not(.ck-disabled):hover,
+.transparent-mode a.ck.ck-button.ck-on:not(.ck-disabled):hover,
+.transparent-mode .ck.ck-button.ck-on,
+.transparent-mode a.ck.ck-button.ck-on {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ck.ck-editor__main>.ck-editor__editable,
+.transparent-mode .ck.ck-list,
+.transparent-mode .ck.ck-dropdown__panel,
+.transparent-mode .ck.ck-input {
+    background-color: var(--transparent-body);
+}
+
+.transparent-mode .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused),
+.transparent-mode .ck.ck-dropdown__panel {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ck.ck-list__item .ck-button:hover:not(.ck-disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .angular-editor-toolbar .angular-editor-button.active {
+    color: #fff !important;
+}
+
+.transparent-mode .angular-editor-wrapper .angular-editor-textarea {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.transparent-mode .ae-font .ae-picker-label {
+    background-color: transparent;
+    color: var(--primary-bg-color);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ae-font .ae-picker-label:before {
+    background: linear-gradient(to right, var(--transparent-body), var(--transparent-body) 100%);
+}
+
+.transparent-mode .ae-font .ae-picker-label:hover,
+.transparent-mode .angular-editor-toolbar-set .select-heading {
+    background-color: transparent;
+}
+
+.transparent-mode ae-select:hover {
+    background-color: transparent !important;
+}
+
+.transparent-mode .ae-font .ae-picker-label:hover:before {
+    background: linear-gradient(to right, var(--transparent-body), var(--transparent-body) 100%);
+}
+
+.transparent-mode .ae-font .ae-picker-options {
+    background-color: var(--transparent-body);
+}
+
+.transparent-mode .ae-font.ae-expanded .ae-picker-options {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ae-font .ae-picker-label:disabled,
+.transparent-mode .ae-font .ae-picker-label:disabled:before {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.transparent-mode .ql-snow .ql-picker-options {
+    background-color: var(--transparent-body) !important;
+}
+
+.transparent-mode .custom-control-input:disabled~.custom-control-label {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.transparent-mode code {
+    color: #fe89c2;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+    margin-top: 0px !important;
+}
+
+.show>.btn-outline-light.dropdown-toggle:focus {
+    color: #282f53 !important;
+}
+
+.show>.btn-light.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+ngx-dropzone-label {
+    z-index: 0 !important;
+}
+
+ngx-dropzone,
+.custom-dropzone {
+    color: #282f53 !important;
+    border: 2px dashed #e9edf4 !important;
+}
+
+ngx-dropzone,
+.custom-dropzone {
+    margin: 5px;
+}
+
+.dark-mode ngx-dropzone,
+.dark-mode .custom-dropzone {
+    color: #dedefd !important;
+    border: 2px dashed rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .md-drppicker.drops-down-auto {
+    background-color: #2a2a4a !important;
+}
+
+.dark-mode .md-drppicker .calendar-table {
+    background-color: #2a2a4a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .md-drppicker td.off,
+.dark-mode .md-drppicker td.off.end-date,
+.dark-mode .md-drppicker td.off.in-range,
+.dark-mode .md-drppicker td.off.start-date {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: transparent;
+    color: #dedefd;
+}
+
+.dark-mode .md-drppicker th {
+    color: #dedefd;
+}
+
+.dark-mode .md-drppicker td.available:hover,
+.dark-mode .md-drppicker th.available:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #dedefd;
+}
+
+.dark-mode .md-drppicker td.in-range {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: transparent;
+    color: #dedefd;
+}
+
+.dark-mode .md-drppicker td.active,
+.dark-mode .md-drppicker td.active:hover {
+    background-color: var(--primary-bg-color) !important;
+}
+
+.transparent-mode .md-drppicker th {
+    color: #dedefd;
+}
+
+.transparent-mode .md-drppicker td.off,
+.transparent-mode .md-drppicker td.off.end-date,
+.transparent-mode .md-drppicker td.off.in-range,
+.transparent-mode .md-drppicker td.off.start-date {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: transparent;
+    color: #dedefd;
+}
+
+.transparent-mode .md-drppicker td.available:hover,
+.transparent-mode .md-drppicker th.available:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #dedefd;
+}
+
+.transparent-mode .md-drppicker td.in-range {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: transparent;
+    color: #dedefd;
+}
+
+.md-drppicker td.active,
+.md-drppicker td.active:hover {
+    background-color: var(--primary-bg-color) !important;
+    opacity: 1 !important;
+}
+
+.md-drppicker .btn,
+.md-drppicker .btn:focus,
+.md-drppicker .btn:hover {
+    background-color: var(--primary-bg-color) !important;
+}
+
+.dark-mode .record-picker,
+.transparent-mode .record-picker {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .record-picker li,
+.transparent-mode .record-picker li {
+    border-top: thin solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode input::-webkit-input-placeholder,
+.transparent-mode input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.rtl .dual-list .listbox {
+    margin-right: 10px !important;
+    margin-left: 0 !important;
+}
+
+.rtl .point-left:before {
+    padding-left: 1em !important;
+    padding-right: inherit !important;
+}
+
+.rtl .point-right:after {
+    padding-right: 1em !important;
+    padding-left: inherit !important;
+}
+
+.rtl .pull-left {
+    float: right;
+}
+
+/*# sourceMappingURL=dropdown.css.map */

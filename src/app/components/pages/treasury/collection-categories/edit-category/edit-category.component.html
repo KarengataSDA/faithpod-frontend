@@ -1,0 +1,41 @@
+<app-page-header
+  [title]="'Add Category'"
+  [items]="['Category']"
+  [active_item]="'Add Category'"
+></app-page-header>
+
+<!-- ROW-1 OPEN -->
+<div class="row justify-content-center">
+  <div class="col-xl-8">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Edit Category</h3>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              placeholder="Name"
+              [disabled]="form.get('archived')?.value"
+            />
+          </div>
+          <div class="form-group">
+            <label for="">Status</label>
+            <select class="form-control" formControlName="archived">
+              <option [ngValue]="false">Active</option>
+              <option [ngValue]="true">Archived</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-footer text-end">
+          <button type="submit" class="btn ms-2 btn-primary my-1">Save</button>
+          <a href="#" class="btn ms-2 btn-danger my-1">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

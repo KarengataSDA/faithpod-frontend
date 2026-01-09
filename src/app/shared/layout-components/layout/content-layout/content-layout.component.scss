@@ -1,0 +1,29 @@
+::ng-deep{
+    .loader-container{
+        // position: fixed;
+        width: 100%;
+        z-index: 99;
+        padding-top: 0%;
+    }
+    .jumps-prevent{
+        display: none;
+    }
+    .pt-74{
+        padding-top: 74px;
+    }
+    body:not(.horizontal){
+        .pt-74{
+            padding-top: 74px;
+        }
+        .jumps-prevent{
+            display: block;
+        }
+    }
+    @media (max-width: 991px){
+        .horizontal{
+            .jumps-prevent{
+                display: block;
+            }
+        }
+    }
+}

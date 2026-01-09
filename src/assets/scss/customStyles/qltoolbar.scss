@@ -1,0 +1,59 @@
+@import "../variables";
+.ql-snow.ql-toolbar button,
+.ql-snow .ql-toolbar button {
+  border: none;
+  background: none;
+  width: 25px;
+  height: 25px;
+}
+
+.ql-snow .ql-formats {
+  background: none;
+}
+
+.ql-snow.ql-toolbar button:last-child,
+.ql-snow .ql-toolbar button:last-child {
+  border-right: none;
+}
+
+.ql-toolbar.ql-snow .ql-picker-label {
+  border: none;
+  background: none;
+  line-height: 25px;
+  padding: 0;
+}
+.ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+  margin-top: -13px;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  color: inherit;
+}
+.ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-stroke {
+  stroke: #495057;
+}
+
+.ql-snow .ql-color-picker,
+.ql-snow .ql-icon-picker {
+  width: 20px;
+}
+
+.rtl {
+  .angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button {
+    float: right !important;
+  }
+  .angular-editor-toolbar .angular-editor-toolbar-set .foreground :after {
+    right: auto !important;
+    left: auto !important;
+  }
+}
+
+.dark-mode.rtl .form-file-label::after {
+  border-right-color: rgba(255, 255, 255, 0.1);
+  border-left-color: transparent;
+}
+
+.transparent-mode.rtl .form-file-label::after {
+  border-right-color: rgba(255, 255, 255, 0.1);
+  border-left-color: transparent;
+}

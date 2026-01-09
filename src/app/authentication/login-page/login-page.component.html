@@ -1,0 +1,83 @@
+
+<div class="page-style1 light-mode default-sidebar error-page1">
+  <div class="img-card bg-primary">
+      <div class="page">
+          <div class="container">
+              <div class="row">
+                  <div class="col mx-auto">
+                      <div class="row justify-content-center">
+                          <div class="col-md-7 col-lg-5">
+                              <div class="login-option">
+                                  <ul ngbNav #nav="ngbNav" >
+                                        <li ngbNavItem="Angular">
+                                          <ng-template ngbNavContent>
+                                              <form [formGroup]="form" (submit)="submit()">
+                                                  <div class="text-center title-style mb-6">
+                                                      <h1 class="mb-2">Login</h1>
+                                                      <hr>
+                                                      <p class="text-muted">Sign In to your account</p>
+                                                  </div>
+
+                                                  <div class="alert alert-danger" *ngIf="loginError">
+                                                    {{loginError}} 
+                                                </div>
+
+                                                  <div class="input-group mb-3">
+                                                    <a
+                                                    href="javascript:void(0)"
+                                                    class="input-group-text bg-white text-muted"
+                                                  >
+                                                    <i
+                                                      class="zmdi zmdi-email text-muted"
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                  </a>
+                                                      <input type="email" class="input100 border-start-0 form-control ms-0" placeholder="Email" autocomplete formControlName="email">
+                                                  </div>
+                                                  <div class="input-group mb-4">
+                                                    <a class="input-group-text bg-white text-muted" (click)="togglePassword()">
+                                                      <i [ngClass]="{'zmdi zmdi-eye-off text-muted': !showPassword, 'mdi mdi-eye text-muted': showPassword}" aria-hidden="true"></i>
+                                                    </a>
+                                                    <input type="{{ showPassword ? 'text' : 'password' }}" class="input100 border-start-0 form-control ms-0" placeholder="Password" formControlName="password">
+                                                  </div>
+                                                  
+                                                  <div class="row">
+                                                      <div class="col-12">
+                                                          <button type="submit" class="btn btn-lg btn-primary btn-block" [disabled]="isLoading">
+                                                            <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+                                                            <span *ngIf="!isLoading">Login</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="col-12">
+                                                          <a routerLink="/auth/forgot-password" class="btn btn-link box-shadow-0 px-0">Forgot password?</a>
+                                                      </div>
+                                                  </div>
+                                                  <div class="text-center pt-3">
+                                                    <p class="text-dark mb-0">
+                                                      Not a member?<a
+                                                        routerLink="/auth/register"
+                                                        class=" ms-1"
+                                                        >Sign Up</a
+                                                      >
+                                                    </p>
+                                                  </div>
+                                              </form>
+                                          </ng-template>
+                                        </li>
+                                  </ul>
+                              </div>
+                              <div class="card card-group mb-0">
+                                  <div class="card p-4">
+                                      <div class="card-body">
+                                          <div [ngbNavOutlet]="nav" class="ml-4"></div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

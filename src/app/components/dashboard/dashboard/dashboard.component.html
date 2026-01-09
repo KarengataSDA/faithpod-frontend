@@ -1,0 +1,124 @@
+<app-page-header [title]="'App Analytics'" [items]="['Home']" [active_item]="'Dashboard'"></app-page-header>
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="card bg-primary img-card box-primary-shadow">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="text-white">
+                        <h2 class="mb-0 number-font">{{groups.length}}</h2> 
+                        <p class="text-white mb-0">Population Groups </p>
+                    </div>
+                    <div class="ms-auto"> <i class="fa fa-users text-white fs-30 me-2 mt-2"></i> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="card  bg-yellow img-card box-success-shadow">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="text-white">
+                        <h2 class="mb-0 number-font">{{prayercells.length}}</h2>
+                        <p class="text-white mb-0">Prayercells</p>
+                    </div>
+                    <div class="ms-auto"> <i class="fa fa-th text-white fs-30 me-2 mt-2"></i> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="card bg-primary img-card box-info-shadow">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="text-white">
+                        <h2 class="mb-0 number-font">Ksh. {{totalCollection?.total_amount_collected}}</h2>
+                        <p class="text-white mb-0">Total App Collection</p>
+                    </div>
+                    <div class="ms-auto"> <i class="fa fa-bank text-white fs-30 me-2 mt-2"></i> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8">
+        <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="card-title">Contribution Analytics</h3>
+                <div class="button-group">
+                    <p [ngClass] = "{'link-active' : selectedCategory === 'weekly', 'link-inactive' : selectedCategory !== 'weekly' }" (click)="updateChartData('weekly')">Weekly</p>
+                    <p [ngClass] = "{'link-active' : selectedCategory === 'monthly', 'link-inactive' : selectedCategory !== 'monthly' }" (click)="updateChartData('monthly')">Monthly</p>
+                    <p [ngClass] = "{'link-active' : selectedCategory === 'yearly', 'link-inactive' : selectedCategory !== 'yearly' }" (click)="updateChartData('yearly')">Yearly</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chartjs-wrapper-demo">
+                    <canvas baseChart [data]="solidContributionData" [options]="solidContributionOptions"
+                    [legend]="solidContributionLegend" [type]="solidContributionType">
+                   </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+        <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="card-title">{{selectedCategoryName}}</h3>
+                <ng-select id="category" class="form-contrdol" [(ngModel)] ="selectedCategoryId" (change)="onCategoryChange()">
+                    <!-- Dynamically populate these options from your categories API -->
+                    <ng-option
+                      *ngFor="let category of contributionCategories"
+                      [value]="category.id"
+                    >
+                      {{ category.name }}
+                    </ng-option>
+                  </ng-select>
+            </div>
+            <div class="card-body">
+                <div class="chartjs-wrapper-demo">
+                    <canvas baseChart
+                    *ngIf="solidCategoryData"
+                    [datasets]="solidCategoryData.datasets"
+                    [labels]="solidCategoryData.labels"
+                    [options]="solidCategoryOptions"
+                    [legend]="solidCategoryLegend"
+                    [type]="solidCategoryType">
+            </canvas>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="card box-success-shadow">
+                <div class="card-body text-center">
+                    <h6 class=""><span class="text-primary"><i
+                                class="fe fe-users me-2 fs-20 text-dark text-secondary-shadow"></i></span>Total Members</h6>
+                    <h3 class="text-dark counter mt-0 mb-3 number-font">{{members.length}}</h3>
+                    <hr style="border: solid 1px rgb(222, 222, 222);">
+                    <div class="row mt-4">
+                        <div class="col text-center"> <span class="text-mute">Male</span>
+                            <h4 class="fw-normal mt-2 mb-0 number-font1">{{gender?.male}}</h4>
+                        </div>
+                        <div class="col text-center"> <span class="text-mute">Female</span>
+                            <h4 class="fw-normal mt-2 mb-0 number-font1">{{gender?.female}}</h4>
+                        </div>
+                        <div class="col text-center"> <span class="text-mute">Members</span>
+                            <h4 class="fw-normal mt-2 mb-0 number-font1">{{membershipCount?.member ?? '0'}}</h4>
+                        </div>
+                        <div class="col text-center"> <span class="text-mute">SS Members</span>
+                            <h4 class="fw-normal mt-2 mb-0 number-font1">{{membershipCount?.sabbath ?? '0'}}</h4>
+                        </div>
+                        <div class="col text-center"> <span class="text-mute">Visitors</span>
+                            <h4 class="fw-normal mt-2 mb-0 number-font1">{{membershipCount?.visitor ?? '0'}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+   
+</div>
+
+
+

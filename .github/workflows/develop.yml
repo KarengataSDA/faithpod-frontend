@@ -1,0 +1,71 @@
+
+
+name: Deploy Angular to Contabo
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Print GITHUB_WORKSPACE
+        run: echo "Workspace:$GITHUB_WORKSPACE"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Clean and Install Dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm cache clean --force
+          npm install --legacy-peer-deps
+
+      - name: Build Angular App
+        run: npm run build --configuration=production
+
+      - name: Debug Check Build Directory
+        run: ls -R dist/
+
+      - name: Deploy Build Files to Server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2150
+          source: "dist/*"
+          target: "/home/${{ secrets.VPS_USER }}/ksda-frontend-temp"
+
+      - name: Deploy to Contabo Server via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2150
+          script: |
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S mkdir -p /var/www/html/ksda-frontend
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S rsync -avz --delete /home/${{ secrets.VPS_USER }}/ksda-frontend-temp/ /var/www/html/ksda-frontend/
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chown -R www-data:www-data /var/www/html/ksda-frontend
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chmod -R 755 /var/www/html/ksda-frontend
+            rm -rf /home/${{ secrets.VPS_USER }}/ksda-frontend-temp
+
+      - name: Restart Server (Optional)
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2150
+          script: |
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart nginx || echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart apache2
+

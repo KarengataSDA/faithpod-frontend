@@ -1,0 +1,24 @@
+
+<div class="page">
+  <div class="page-main">
+    <!-- // header -->
+    <app-header></app-header>
+    <!-- //sidebar -->
+    <app-sidebar appHoverEffectSidebar></app-sidebar>
+    <div class="jumps-prevent" style="padding-top: 74px;"></div>
+    
+    <div class="main-content app-content mt-0">
+     
+      <app-loader></app-loader>
+      <div class="side-app" [ngClass]="{ 'pt-74': scrolled }">
+        <div class="main-container container-fluid" (click)="toggleSwitcherBody()">
+          <!-- // contetnt  -->
+          <router-outlet>
+          </router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>
+<app-tab-to-top></app-tab-to-top>

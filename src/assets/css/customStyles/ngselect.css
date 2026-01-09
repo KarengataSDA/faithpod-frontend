@@ -1,0 +1,454 @@
+:root {
+    --primary-rgb: 108, 95, 252;
+    --primary-bg-color: rgb(var(--primary-rgb));
+    --primary-bg-hover: rgb(var(--primary-rgb), 0.9);
+    --primary-bg-border: rgb(var(--primary-rgb));
+    --primary01: rgba(var(--primary-rgb), 0.1);
+    --primary02: rgba(var(--primary-rgb), 0.2);
+    --primary03: rgba(var(--primary-rgb), 0.3);
+    --primary04: rgba(var(--primary-rgb), 0.4);
+    --primary05: rgba(var(--primary-rgb), 0.5);
+    --primary06: rgba(var(--primary-rgb), 0.6);
+    --primary07: rgba(var(--primary-rgb), 0.7);
+    --primary08: rgba(var(--primary-rgb), 0.8);
+    --primary09: rgba(var(--primary-rgb), 0.9);
+    --primary005: rgba(var(--primary-rgb), 0.05);
+    --dark-body: #292e4a;
+    --dark-border: #30314e;
+    --transparent-primary: #6c5ffc;
+    --transparent-bg-rgb: 88, 76, 217;
+    --transparent-body: rgb(var(--transparent-bg-rgb));
+    --transparent-theme: rgba(0, 0, 0, 0.2);
+    --transparent-border: rgba(255, 255, 255, 0.1);
+    --blue: #1a1a3c;
+    --dark-primary-hover: #233ac5;
+    --primary-transparentcolor: #eaedf7;
+    --darkprimary-transparentcolor: #2b356e;
+    --transparentprimary-transparentcolor: rgba(255, 255, 255, 0.05);
+    --float-right: right;
+    --float-left: left;
+    --indigo: #4b0082;
+    --purple: #6f42c1;
+    --pink: #fc5296;
+    --orange: #fd7e14;
+    --yellow: #FBB034;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #ffffff;
+    --gray: #6c757d;
+    --gray-dark: #343a40;
+    --primary: #6c5ffc;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/*Color variables*/
+/*Gradient variables*/
+/*white variables*/
+/*black variables*/
+/*float variables*/
+/*shadow variables*/
+/*Dark Theme Variables*/
+/*Transparent variables*/
+.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup {
+    color: #fff !important;
+}
+
+.dark-mode .dropdown-list ul li:hover {
+    background: #2a2a4a;
+}
+
+.dark-mode .selected-list .c-btn {
+    background-color: #1a1a3c;
+}
+
+.dark-mode .ng-valid {
+    color: #fff;
+}
+
+.dark-mode .record-picker li:hover {
+    background-color: #1a1a3c !important;
+}
+
+.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
+.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
+    color: #fff;
+    background-color: #2a2a4a;
+}
+
+.dark-mode .select2-selection {
+    background-color: #2a2a4a !important;
+    color: #fff;
+}
+
+.dark-mode .select2-results__options {
+    background-color: #2a2a4a !important;
+    color: #fff;
+}
+
+.dark-mode .select2-results__options div {
+    background-color: #2a2a4a !important;
+    color: #fff;
+}
+
+.dark-mode .select2-search--dropdown {
+    background-color: #2a2a4a !important;
+    color: #fff;
+}
+
+.dark-mode .select2-search__field {
+    color: #fff;
+}
+
+.dark-mode .select2-selection__rendered span {
+    color: #fff;
+}
+
+.dark-mode .accordion-item .accordion-body {
+    color: #fff;
+}
+
+.dark-mode countries-map-base svg {
+    background-color: transparent !important;
+}
+
+.dark-mode ngb-alert {
+    border-color: #2a2a4a;
+}
+
+.dark-mode .alert-light {
+    background-color: #2a2a4a !important;
+}
+
+.dark-mode .c-remove c-icon {
+    filter: invert(1);
+}
+
+.dark-mode .iti__country-name {
+    color: #fff;
+}
+
+.dark-mode .custom,
+.dark-mode .ng-valid {
+    color: #fff;
+}
+
+.dark-mode .accordion-item .accordion-body {
+    padding: 20px 20px;
+}
+
+.dark-mode .alert-outline-success .btn-close,
+.dark-mode .alert-outline-info .btn-close,
+.dark-mode .alert-outline-warning .btn-close,
+.dark-mode .alert-outline-danger .btn-close {
+    filter: invert(78%) sepia(98%) saturate(10034%) hue-rotate(214deg) brightness(162%) contrast(112%) !important;
+}
+
+.dark-mode .dropdown button.btn-light:focus,
+.dark-mode .show>.btn-outline-light.dropdown-toggle:focus {
+    color: #343a40 !important;
+    box-shadow: none;
+}
+
+.dark-mode .main-contact-item+.main-contact-item::before {
+    border-top-color: transparent;
+}
+
+.dark-mode .cal-month-view .cal-day-number {
+    color: #343a40;
+}
+
+.dark-mode .cal-month-view {
+    background-color: #1a1a3c;
+}
+
+.dark-mode .cal-header {
+    border-top-color: rgba(255, 255, 255, 0.1);
+    border-left-color: rgba(255, 255, 255, 0.1);
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .cal-month-view .cal-day-cell:not(:last-child) {
+    border-right-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .cal-month-view .cal-days .cal-cell-row {
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .cal-month-view .cal-days {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .cal-cell {
+    border-right-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .cal-month-view .cal-day-cell.cal-today,
+.dark-mode .cal-month-view .cal-cell-row .cal-cell:hover {
+    background-color: #2a2a4a;
+}
+
+.dark-mode .cal-month-view .cal-cell-row:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .cal-week-view .cal-day-headers {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .cal-week-view .cal-day-headers .cal-header:first-child {
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .cal-week-view .cal-day-headers .cal-header:not(:last-child) {
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .cal-week-view .cal-time-events {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .cal-week-view .cal-day-column {
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    background-color: #1a1a3c;
+    color: #fff;
+}
+
+.dark-mode .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
+    color: #282f53;
+}
+
+.dark-mode .ng-select .ng-clear-wrapper {
+    color: #dedefd;
+}
+
+.dark-mode .apexcharts-theme-light .apexcharts-selection-icon:not(.apexcharts-selected):hover svg,
+.dark-mode .apexcharts-theme-light .apexcharts-zoom-icon:not(.apexcharts-selected):hover svg,
+.dark-mode .apexcharts-theme-light .apexcharts-zoomin-icon:hover svg,
+.dark-mode .apexcharts-theme-light .apexcharts-zoomout-icon:hover svg,
+.dark-mode .apexcharts-theme-light .apexcharts-reset-icon:hover svg,
+.dark-mode .apexcharts-theme-light .apexcharts-menu-icon:hover svg {
+    fill: #343a40;
+}
+
+.dark-mode .ng-select .ng-arrow-wrapper .ng-arrow {
+    border-color: #343a40 transparent transparent;
+}
+
+.dark-mode .mat-autocomplete-panel {
+    background-color: #1a1a3c;
+}
+
+.dark-mode .mat-option-text {
+    color: #9d9999;
+}
+
+.dark-mode .mat-option:hover {
+    color: #1a1a3c;
+    background-color: #eee;
+}
+
+.dark-mode .mat-autocomplete-trigger {
+    color: #343a40;
+}
+
+.dark-mode .mat-autocomplete-trigger::placeholder {
+    color: #343a40;
+}
+
+.dark-mode .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: #343a40;
+}
+
+.dark-mode .ng-dropdown-panel {
+    background-color: #1a1a3c;
+    border: 1px solid #1a1a3c;
+}
+
+.dark-mode .apexcharts-menu {
+    background-color: #1a1a3c;
+    color: #fff;
+}
+
+.dark-mode .apexcharts-menu .apexcharts-menu-item:hover {
+    color: #000;
+}
+
+.dark-mode .ng-select .ng-select-container,
+.dark-mode .ng-select input {
+    color: #fff !important;
+    background: #1a1a3c;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    border-radius: 0.25rem;
+}
+
+.dark-mode .ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+    border-color: var(--primary-bg-color) !important;
+}
+
+.dark-mode ngx-dropzone,
+.dark-mode .custom-dropzone {
+    background: #1a1a3c;
+    color: #fff;
+    border: 2px dashed #fff;
+}
+
+.dark-mode .mat-stepper-horizontal,
+.dark-mode .mat-stepper-vertical {
+    background-color: transparent;
+}
+
+.dark-mode .mat-step-text-label {
+    color: #eee;
+}
+
+.dark-mode .lazyContainer,
+.dark-mode .pure-checkbox {
+    background-color: #1a1a3c;
+    color: #fff;
+}
+
+.dark-mode .c-btn.disabled {
+    background: #1f2940 !important;
+    cursor: not-allowed !important;
+}
+
+.dark-mode .ngb-dp-weekdays {
+    background-color: #1a1a3c;
+    color: #fff;
+}
+
+.dark-mode .ngb-dp-header {
+    background-color: #1a1a3c;
+    color: #fff;
+}
+
+.dark-mode .c-btn,
+.dark-mode .list-filter,
+.dark-mode .select-all,
+.dark-mode .list-area {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .selected-list .c-angle-down svg,
+.dark-mode .selected-list .c-angle-up svg {
+    fill: #343a40;
+}
+
+.dark-mode .list-area {
+    background-color: #1a1a3c;
+}
+
+.dark-mode .arrow-down,
+.dark-mode .arrow-up {
+    border-bottom: 15px solid #1a1a3c;
+}
+
+.dark-mode .iti.iti--allow-dropdown input {
+    background-color: transparent;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .dropdown-menu.country-dropdown.show {
+    background-color: #1a1a3c;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .ck.ck-toolbar {
+    background: #1a1a3c;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .ck.ck-icon,
+.dark-mode .ck.ck-icon *,
+.dark-mode .ck.ck-button .ck-button__label,
+.dark-mode a.ck.ck-button .ck-button__label {
+    color: #343a40;
+}
+
+.dark-mode .ck.ck-button:not(.ck-disabled):hover,
+.dark-mode a.ck.ck-button:not(.ck-disabled):hover,
+.dark-mode .ck.ck-button.ck-on:not(.ck-disabled):hover,
+.dark-mode a.ck.ck-button.ck-on:not(.ck-disabled):hover,
+.dark-mode .ck.ck-button.ck-on,
+.dark-mode a.ck.ck-button.ck-on {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .ck.ck-editor__main>.ck-editor__editable,
+.dark-mode .ck.ck-list,
+.dark-mode .ck.ck-dropdown__panel,
+.dark-mode .ck.ck-input {
+    background-color: #1a1a3c;
+}
+
+.dark-mode .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused),
+.dark-mode .ck.ck-dropdown__panel {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .ck.ck-list__item .ck-button:hover:not(.ck-disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .angular-editor-toolbar .angular-editor-button.active {
+    color: #fff !important;
+}
+
+.dark-mode .main-mail-compose-body .form-group .nav-link:hover,
+.dark-mode .main-mail-compose-body .form-group .nav-link:focus {
+    color: #343a40;
+}
+
+.dark-mode .toast-header svg {
+    fill: #343a40;
+}
+
+.form-lg .ng-select-container {
+    height: 44px !important;
+}
+
+.form-md .ng-select-container {
+    height: 38px !important;
+}
+
+.ng-select .ng-select-container {
+    border: 1px solid #e9edf4 !important;
+    box-shadow: none !important;
+}
+
+.dark-mode .ng-select .ng-select-container {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.transparent-mode .ng-select .ng-select-container {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ng-select.ng-select-opened .ng-select-container {
+    z-index: 5 !important;
+}
+
+.ng-select .ng-select-container {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+/*# sourceMappingURL=ngselect.css.map */

@@ -1,0 +1,75 @@
+<app-page-header
+  [title]="'Membership'"
+  [items]="['Membership']"
+  [active_item]="'Membership Type'"
+></app-page-header>
+
+<!-- row opened -->
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <div>
+          <h6 class="main-content-label mb-1">Membership Type</h6>
+          
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="">
+          <form action="" class="ngb-table">
+            <div class="table-responsive">
+              <table
+                id="data-table"
+                class="table table-striped border"
+              >
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="isLoading">
+                  <tr *ngFor="let item of [1,2,3]">
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                  </tr>
+                </tbody>
+
+                <tbody *ngIf="!isLoading">
+                  <tr *ngFor="let membership of memberships; index as i">
+                    <th>{{ i + 1 }}</th>
+                    <th>{{ membership.name }}</th>
+                    <td>
+                        <div class="g-2">
+                          <td>
+                            <div class="g-2">
+                              <!-- <a
+                                routerLink="view/{{ role.id }}"
+                                class="btn text-primary btn-sm"
+                                data-bs-toggle="tooltip"
+                                ngbTooltip="Edit"
+                                ><span class="fe fe-eye fs-14"></span
+                              ></a> -->
+                              <a 
+                                routerLink="view/{{ membership.id }}"
+                                class="btn text-primary btn-sm"
+                                ngbTooltip="View"
+                                ><span class="fe fe-eye fs-14"></span
+                              ></a>
+                            
+                            </div>
+                          </td>
+                        </div>
+                      </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

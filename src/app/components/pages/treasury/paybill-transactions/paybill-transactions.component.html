@@ -1,0 +1,139 @@
+<app-page-header [title]="'Paybill Transactions'" [items]="['Paybill']"
+  [active_item]="'Transactions'"></app-page-header>
+
+<!-- row opened -->
+
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header">
+        <h6 class="main-content-label">Export Files: </h6>
+        <div class="card-options">
+          <div class="btn-list d-flex">
+            <button class="btn btn-primary btn-sm shadow-sm btn-wave me-3" (click)="exportToPDF()">Export PDF</button>
+            <button class="btn btn-success btn-sm shadow-sm btn-wave" (click)="exportToExcel()">Export Excel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <h6 class="main-content-label mb-1">All Paybill Transactions</h6>
+        <div class="card-options">
+          <h6 class="main-content-label">Total: KES {{ totalAmount | number:'1.2-2'}} </h6>
+        </div>
+      </div>
+      <div class="card-body">
+        <form action="" class="ngb-table">
+          <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+
+            <!-- 🔍 Search on the left -->
+            <div class="form-group d-flex align-items-center mb-2">
+              <label class="me-2">Search</label>
+              <input class="form-control" type="text" [(ngModel)]="searchTerm" (input)="filterTransactions()" />
+            </div>
+
+            <!-- 📅 Dates on the right -->
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <div class="form-group d-flex align-items-center">
+                <label class="me-2" style="min-width: 80px;">Start Date</label>
+                <input class="form-control" type="date" [(ngModel)]="startDate" name="startDate"
+                  (change)="applyFilters()" />
+              </div>
+
+              <div class="form-group d-flex align-items-center">
+                 <label class="me-2" style="min-width: 80px;">End Date</label>
+                <input class="form-control" type="date" [(ngModel)]="endDate" name="endDate"a
+                  (change)="applyFilters()" />
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="table-responsive">
+            <table class="table table-striped border">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Transaction ID</th>
+                  <th>First Name</th>
+                  <th>Phone Number</th>
+                  <th>Account</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="isLoading">
+                <tr *ngFor="let item of [1,2,3,4,5]">
+                  <td>
+                    <div class="skeleton skeleton-text"></div>
+                  </td>
+                  <td>
+                    <div class="skeleton skeleton-text"></div>
+                  </td>
+                  <td>
+                    <div class="skeleton skeleton-btn"></div>
+                  </td>
+                  <td>
+                    <div class="skeleton skeleton-text"></div>
+                  </td>
+                  <td>
+                    <div class="skeleton skeleton-text"></div>
+                  </td>
+                  <td>
+                    <div class="skeleton skeleton-btn"></div>
+                  </td>
+                  <td>
+                    <div class="skeleton skeleton-text"></div>
+                  </td>
+                </tr>
+              </tbody>
+
+              <tbody *ngIf="!isLoading">
+                <tr *ngFor="let paybill of paginatedTransactions; index as i">
+                  <td>{{(currentPage - 1) * pageSize + i + 1 }}</td>
+                  <td>{{paybill.trans_id}}</td>
+                  <td>{{paybill.first_name}}</td>
+                  <td>{{paybill.phone_number}}</td>
+                  <td>{{paybill.account}}</td>
+                  <td>{{paybill.amount}}</td>
+                  <td>{{formatDateTime(paybill.created_at)}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px;">
+              <div>
+                <p>showing {{(currentPage - 1 ) * pageSize + 1}} to {{(currentPage - 1) * pageSize +
+                  paginatedTransactions.length}} of {{totalLength}} members</p>
+              </div>
+
+              <div>
+                <ul class="pagination">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+                  </li>
+
+                  <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
+                    [class.disabled]="page === '...'">
+                    <a class="page-link" (click)="page !== '...' && onPageChange(page)">{{ page }}</a>
+                  </li>
+
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

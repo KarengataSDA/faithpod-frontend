@@ -1,0 +1,94 @@
+<app-page-header
+  [title]="'Roles'"
+  [items]="['Roles']"
+  [active_item]="'Roles List'"
+></app-page-header>
+
+<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_role')">
+  <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/roles/create-role">
+    <i class="fe fe-plus"></i>  Create Role
+  </a>
+</div>
+
+<!-- row opened -->
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <div>
+          <h6 class="main-content-label mb-3">Roles</h6>
+          <p class="text-muted card-sub-title">
+            List of all User roles.
+          </p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="">
+          <form action="" class="ngb-table">
+            <div class="form-group form-inline">
+              Search
+              <input class="form-control ms-2" type="text" name="searchTerm" />
+            </div>
+            <div class="table-responsive">
+              <table
+                id="data-table"
+                class="table table-striped border"
+              >
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="isLoading">
+                  <tr *ngFor="let item of [1,2,3]">
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="!isLoading">
+                  <tr *ngFor="let role of roles; index as i">
+                    <th>{{ i + 1 }}</th>
+                    <th>{{ role.name }}</th>
+                    <td>
+                      <div class="g-2">
+                        <td>
+                          <div class="g-2">
+                            <!-- <a
+                              routerLink="view/{{ role.id }}"
+                              class="btn text-primary btn-sm"
+                              data-bs-toggle="tooltip"
+                              ngbTooltip="Edit"
+                              ><span class="fe fe-eye fs-14"></span
+                            ></a> -->
+                            <a 
+                            *ngIf="authService.hasPermission('can_edit_role')"
+                              routerLink="edit/{{ role.id }}"
+                              class="btn text-primary btn-sm"
+                              ngbTooltip="Edit"
+                              ><span class="fe fe-edit fs-14"></span
+                            ></a>
+                            <a 
+                            *ngIf="authService.hasPermission('can_delete_role')"
+                              (click)="deleteRole(role.id)"
+                              class="btn text-danger btn-sm"
+                              data-bs-toggle="tooltip"
+                              ngbTooltip="Delete"
+                              ><span class="fe fe-trash-2 fs-14"></span
+                            ></a>
+                          </div>
+                        </td>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

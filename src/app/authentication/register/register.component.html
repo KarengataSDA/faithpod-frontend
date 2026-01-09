@@ -1,0 +1,102 @@
+<div class="page-style1 light-mode default-sidebar error-page1">
+    <div class="img-card bg-primary">
+        <div class="page">
+            <div class="container">
+                <div class="row">
+                    <div class="col mx-auto">
+                        <div class="row justify-content-center">
+                            <div class="col-md-7 col-lg-5">
+                                <div class="login-option">
+                                    <ul ngbNav #nav="ngbNav">
+                                          <li ngbNavItem="Angular">
+                                            <ng-template ngbNavContent>
+                                                <form  class="validate-form" (submit)="submit()">
+                                                    <div class="text-center title-style mb-6">
+                                                        <h1 class="mb-2">Register</h1>
+                                                        <hr>
+                                                        <p class="text-muted">Create An Account Here</p>
+                                                    </div>
+                                                     
+                                                        <div class="alert alert-danger" *ngIf="errorMessage">
+                                                            {{errorMessage}} 
+                                                        </div>
+                                
+                                                    <div class="wrap-input100 validate-input input-group" >
+                                                        <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                            <i class="zmdi zmdi-account" aria-hidden="true"></i>
+                                                        </a>
+                                                        <input class="input100  ms-0 form-control" type="text" [(ngModel)]="firstName" placeholder="First Name" name="first_name" required>
+                                                    </div>
+                                                    <div class="wrap-input100 validate-input input-group" >
+                                                        <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                            <i class="zmdi zmdi-account" aria-hidden="true"></i>
+                                                        </a>
+                                                        <input class="input100  ms-0 form-control" type="text" [(ngModel)]="lastName" placeholder="Last Name" name="last_name" required>
+                                                    </div>
+                                                    <div class="wrap-input100 validate-input input-group" data-bs-validate="Valid email is required: ex@abc.xyz">
+                                                        <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                            <i class="zmdi zmdi-email" aria-hidden="true"></i>
+                                                        </a>
+                                                        <input class="input100  ms-0 form-control" type="email" [(ngModel)]="email" [(ngModel)]="email" placeholder="Email Address" name="email" required>
+                                                    </div>
+                                                    <div class="wrap-input100 validate-input input-group" >
+                                                        <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                            <i class="zmdi zmdi-phone" aria-hidden="true"></i>
+                                                        </a>
+                                                        <input class="input100  ms-0 form-control" type="text" [(ngModel)]="phoneNumber" placeholder="(e.g 254716402525)" name="phone_number" required>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div class="wrap-input100 validate-input input-group" id="Password-toggle">
+                                                        <a (click)="togglePassword()" class="input-group-text bg-white text-muted">
+                                                            <i [ngClass]="{'zmdi zmdi-eye-off text-muted': !showPassword, 'mdi mdi-eye text-muted': showPassword}" aria-hidden="true"></i>
+                                                        </a>
+                                                        <input class="input100 border-start-0 ms-0 form-control"  type="{{ showPassword ? 'text' : 'password' }}"  [(ngModel)]="password"  [(ngModel)]="password" name="password" placeholder="Enter Password" required>
+                                                        
+
+                                                    </div>
+                                                    <div class="wrap-input100 validate-input input-group" id="Password-toggle">
+                                                        <a (click)="toggleConfirmPassword()" class="input-group-text bg-white text-muted">
+                                                            <i [ngClass]="{'zmdi zmdi-eye-off text-muted': !showConfirmPassword, 'mdi mdi-eye text-muted': showConfirmPassword}" aria-hidden="true"></i>
+                                                        </a>
+                                                        <input class="input100 border-start-0 ms-0 form-control" name="password" type="{{ showConfirmPassword ? 'text' : 'password' }}"  [(ngModel)]="passwordConfirm" name="password_confirm" placeholder="Confirm Password" required>
+                                                    </div>
+                                                    
+                                                    <label class="custom-control custom-checkbox mt-4">
+                                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="isTermsChecked">
+                                                        <span class="custom-control-label">Agree the <a routerLink="/auth/terms">terms and policies</a></span>
+                                                    </label>
+                                                    <div class="container-login100-form-btn">
+                                                        <button type="submit" class="btn btn-lg btn-primary btn-block" [disabled]="isLoading || !isTermsChecked">
+                                                            <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+                                                            <span *ngIf="!isLoading">Register</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="text-center pt-3">
+                                                        <p class="text-dark mb-0">Already have account?<a routerLink="/auth/login" class="ms-1">Sign In</a></p>
+                                                    </div>
+                                                </form>
+
+                                                
+                                            </ng-template>
+                                          </li>
+                                    </ul>
+                                </div>
+                                <div class="card card-group mb-0">
+                                    <div class="card p-4">
+                                        <div class="card-body">
+                                            <div [ngbNavOutlet]="nav" class="ml-4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+
