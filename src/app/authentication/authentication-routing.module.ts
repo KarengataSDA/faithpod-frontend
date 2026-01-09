@@ -25,14 +25,7 @@ const routes: Routes = [
     ]
   },
   // Central Admin routes (accessible only on root domain)
-  { path: 'tenants', component: TenantManagementComponent },
-  {
-    path: 'central-admin', children: [
-      { path: 'register', component: CentralAdminRegisterComponent },
-      { path: 'login', component: CentralAdminLoginComponent },
-      { path: 'tenants', component: TenantManagementComponent }
-    ]
-  }
+  { path: 'tenants', component: TenantManagementComponent }
 ];
 
 @NgModule({
