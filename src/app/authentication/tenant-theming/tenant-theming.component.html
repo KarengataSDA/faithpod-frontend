@@ -31,13 +31,16 @@
               <input
                 type="color"
                 class="form-control form-control-color"
-                formControlName="brand_color"
+                [ngModel]="themeForm.get('basic')?.get('brand_color')?.value"
+                (ngModelChange)="updateFormColor('brand_color', $event)"
+                [ngModelOptions]="{standalone: true}"
                 style="max-width: 60px;" />
               <input
                 type="text"
                 class="form-control"
                 formControlName="brand_color"
-                placeholder="#ffd300" />
+                placeholder="#ffd300"
+                maxlength="7" />
             </div>
             <small class="form-hint">Primary brand color</small>
           </div>
@@ -49,13 +52,16 @@
               <input
                 type="color"
                 class="form-control form-control-color"
-                formControlName="accent_color"
+                [ngModel]="themeForm.get('basic')?.get('accent_color')?.value"
+                (ngModelChange)="updateFormColor('accent_color', $event)"
+                [ngModelOptions]="{standalone: true}"
                 style="max-width: 60px;" />
               <input
                 type="text"
                 class="form-control"
                 formControlName="accent_color"
-                placeholder="#433B97" />
+                placeholder="#433B97"
+                maxlength="7" />
             </div>
             <small class="form-hint">Secondary accent color</small>
           </div>
@@ -67,13 +73,16 @@
               <input
                 type="color"
                 class="form-control form-control-color"
-                formControlName="background_color"
+                [ngModel]="themeForm.get('basic')?.get('background_color')?.value"
+                (ngModelChange)="updateFormColor('background_color', $event)"
+                [ngModelOptions]="{standalone: true}"
                 style="max-width: 60px;" />
               <input
                 type="text"
                 class="form-control"
                 formControlName="background_color"
-                placeholder="#f5f5f5" />
+                placeholder="#f5f5f5"
+                maxlength="7" />
             </div>
             <small class="form-hint">Background color</small>
           </div>

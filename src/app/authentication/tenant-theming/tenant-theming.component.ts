@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -22,7 +22,7 @@ interface ThemeConfig {
 @Component({
   selector: 'app-tenant-theming',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './tenant-theming.component.html',
   styleUrl: './tenant-theming.component.scss'
 })
@@ -177,5 +177,16 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
 
   resetForm(): void {
     this.loadThemeConfig();
+  }
+
+  /**
+   * Update form color when color picker changes
+   * This keeps the color picker and text input in sync
+   */
+  updateFormColor(field: string, color: string): void {
+    const basicGroup = this.themeForm.get('basic');
+    if (basicGroup) {
+      basicGroup.patchValue({ [field]: color });
+    }
   }
 }
