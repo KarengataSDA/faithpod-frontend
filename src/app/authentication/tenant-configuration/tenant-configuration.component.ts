@@ -60,6 +60,8 @@ export class TenantConfigurationComponent implements OnInit, OnDestroy {
     hashlix: false
   };
 
+  visibleFields: { [key: string]: boolean } = {};
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -229,5 +231,13 @@ export class TenantConfigurationComponent implements OnInit, OnDestroy {
       'passkey', 'partner_id'
     ];
     return sensitiveFields.includes(fieldName);
+  }
+
+  toggleFieldVisibility(fieldId: string): void {
+    this.visibleFields[fieldId] = !this.visibleFields[fieldId];
+  }
+
+  isFieldVisible(fieldId: string): boolean {
+    return this.visibleFields[fieldId] || false;
   }
 }

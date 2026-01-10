@@ -55,8 +55,20 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Password</label>
-              <input type="password" class="form-control" formControlName="password" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('mail_password') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('mail_password')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('mail_password') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">From Address</label>
@@ -85,13 +97,37 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Consumer Key</label>
-              <input type="password" class="form-control" formControlName="consumer_key" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('mpesa_consumer_key') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="consumer_key"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('mpesa_consumer_key')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('mpesa_consumer_key') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Consumer Secret</label>
-              <input type="password" class="form-control" formControlName="consumer_secret" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('mpesa_consumer_secret') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="consumer_secret"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('mpesa_consumer_secret')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('mpesa_consumer_secret') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Shortcode</label>
@@ -99,8 +135,20 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Passkey</label>
-              <input type="password" class="form-control" formControlName="passkey" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('mpesa_passkey') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="passkey"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('mpesa_passkey')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('mpesa_passkey') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
             <div class="col-md-12 mb-3">
               <label class="form-label">Callback URL</label>
@@ -133,13 +181,37 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Partner ID</label>
-              <input type="password" class="form-control" formControlName="partner_id" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('sms_partner_id') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="partner_id"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('sms_partner_id')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('sms_partner_id') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">API Key</label>
-              <input type="password" class="form-control" formControlName="api_key" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('sms_api_key') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="api_key"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('sms_api_key')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('sms_api_key') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Shortcode</label>
@@ -168,8 +240,20 @@
           <div class="row">
             <div class="col-md-12 mb-3">
               <label class="form-label">API Key</label>
-              <input type="password" class="form-control" formControlName="api_key" placeholder="••••••••">
-              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+              <div class="input-group">
+                <input
+                  [type]="isFieldVisible('hashlix_api_key') ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="api_key"
+                  placeholder="••••••••">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="toggleFieldVisibility('hashlix_api_key')">
+                  <i class="zmdi" [ngClass]="isFieldVisible('hashlix_api_key') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
+                </button>
+              </div>
+              <small class="form-hint text-muted">Sensitive field</small>
             </div>
           </div>
         </div>
