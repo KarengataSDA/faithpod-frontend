@@ -22,6 +22,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   showPassword = false;
   isLoading: boolean = false;
   isCentralAdmin: boolean = false;
+  tenantName: string = '';
 
   constructor(
     private router: Router,
@@ -40,6 +41,39 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       email: '',
       password: '',
     });
+
+    // Fetch tenant name if it's a tenant login
+    if (!this.isCentralAdmin) {
+      this.loadTenantInfo();
+    }
+  }
+
+  private loadTenantInfo(): void {
+    // Check if tenant name is already in session storage
+    const storedTenantName = this.tenantService.getTenantName();
+    if (storedTenantName) {
+      this.tenantName = storedTenantName;
+      return;
+    }
+
+    // Fetch tenant info from API
+    this.tenantService.fetchTenantInfo()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (tenantInfo) => {
+          this.tenantName = tenantInfo.name;
+          this.tenantService.setTenantName(tenantInfo.name);
+        },
+        error: (err) => {
+          console.error('Failed to fetch tenant info:', err);
+          // Fallback to subdomain if API fails
+          const subdomain = this.tenantService.getTenantFromSubdomain();
+          if (subdomain) {
+            // Capitalize first letter and format subdomain
+            this.tenantName = subdomain.charAt(0).toUpperCase() + subdomain.slice(1);
+          }
+        }
+      });
   }
 
   togglePassword() {

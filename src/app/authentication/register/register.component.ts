@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { TenantService } from 'src/app/shared/services/tenant.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Subject, takeUntil } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +13,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./register.component.scss'],
   standalone: false
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   firstName: string = '';
   middleName: string = '';
   lastName: string = '';
@@ -26,6 +28,7 @@ export class RegisterComponent implements OnInit {
   isLoading: boolean = false;
   isTermsChecked: boolean = false;
   isCentralAdmin: boolean = false;
+  tenantName: string = '';
 
   constructor(
     private authService: AuthService,
@@ -38,6 +41,39 @@ export class RegisterComponent implements OnInit {
     // Check if we're on root domain (central admin) or subdomain (tenant)
     const tenant = this.tenantService.getTenantFromSubdomain();
     this.isCentralAdmin = tenant === null;
+
+    // Fetch tenant name if it's a tenant registration
+    if (!this.isCentralAdmin) {
+      this.loadTenantInfo();
+    }
+  }
+
+  private loadTenantInfo(): void {
+    // Check if tenant name is already in session storage
+    const storedTenantName = this.tenantService.getTenantName();
+    if (storedTenantName) {
+      this.tenantName = storedTenantName;
+      return;
+    }
+
+    // Fetch tenant info from API
+    this.tenantService.fetchTenantInfo()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (tenantInfo) => {
+          this.tenantName = tenantInfo.name;
+          this.tenantService.setTenantName(tenantInfo.name);
+        },
+        error: (err) => {
+          console.error('Failed to fetch tenant info:', err);
+          // Fallback to subdomain if API fails
+          const subdomain = this.tenantService.getTenantFromSubdomain();
+          if (subdomain) {
+            // Capitalize first letter and format subdomain
+            this.tenantName = subdomain.charAt(0).toUpperCase() + subdomain.slice(1);
+          }
+        }
+      });
   }
 
   clearErrorMessage() {
@@ -230,5 +266,10 @@ export class RegisterComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

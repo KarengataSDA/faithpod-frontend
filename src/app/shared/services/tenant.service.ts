@@ -1,16 +1,25 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+
+export interface TenantInfo {
+  id: string;
+  name: string;
+  email: string;
+  domains?: Array<{ domain: string }>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class TenantService {
   private readonly TENANT_KEY = 'tenant_id';
+  private readonly TENANT_NAME_KEY = 'tenant_name';
   private tenantSubject: BehaviorSubject<string | null>;
   public tenant$: Observable<string | null>;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const storedTenant = this.getTenantId();
     this.tenantSubject = new BehaviorSubject<string | null>(storedTenant);
     this.tenant$ = this.tenantSubject.asObservable();
@@ -162,8 +171,9 @@ export class TenantService {
   /**
    * Get dynamic API URL based on current subdomain
    * Examples:
-   * - demo.localhost → "http://demo.localhost:8000/api"
-   * - test.localhost → "http://test.localhost:8000/api"
+   * - demo.localhost → "http://demo.localhost:8000/api" (tenant-specific)
+   * - test.localhost → "http://test.localhost:8000/api" (tenant-specific)
+   * - localhost → "http://127.0.0.1:8000/api" (central admin)
    * - tenant1.faithpod.com → "https://tenant1.faithpod.com/api"
    */
   getApiUrl(): string {
@@ -171,23 +181,76 @@ export class TenantService {
     const protocol = window.location.protocol; // http: or https:
     const port = environment.apiPort;
 
-    // If static apiUrl is configured in environment, use it
+    // Check if we're on a tenant subdomain
+    const hasTenantSubdomain = this.getTenantFromSubdomain() !== null;
+
+    // If on tenant subdomain, MUST use subdomain in API URL for Laravel tenancy to work
+    if (hasTenantSubdomain) {
+      let apiUrl = `${protocol}//${hostname}`;
+      if (port) {
+        apiUrl += `:${port}`;
+      }
+      apiUrl += '/api';
+      console.log('[TenantService] Tenant subdomain detected, using:', apiUrl);
+      return apiUrl;
+    }
+
+    // For central admin (no subdomain), use static API URL if configured
     if (environment.apiUrl) {
+      console.log('[TenantService] Central admin, using static API URL:', environment.apiUrl);
       return environment.apiUrl;
     }
 
-    // Build dynamic API URL based on hostname
+    // Fallback: build from hostname
     let apiUrl = `${protocol}//${hostname}`;
-
-    // Add port if specified (for development)
     if (port) {
       apiUrl += `:${port}`;
     }
-
-    // Add /api path
     apiUrl += '/api';
 
     console.log('[TenantService] Constructed API URL:', apiUrl, 'from hostname:', hostname);
     return apiUrl;
+  }
+
+  /**
+   * Fetch tenant information from the API
+   */
+  fetchTenantInfo(): Observable<TenantInfo> {
+    const apiUrl = this.getApiUrl();
+    return this.http.get<TenantInfo>(`${apiUrl}/tenant/info`);
+  }
+
+  /**
+   * Get stored tenant name from sessionStorage
+   */
+  getTenantName(): string | null {
+    try {
+      return sessionStorage.getItem(this.TENANT_NAME_KEY);
+    } catch (error) {
+      console.error('Error reading tenant name from sessionStorage:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Store tenant name in sessionStorage
+   */
+  setTenantName(tenantName: string): void {
+    try {
+      sessionStorage.setItem(this.TENANT_NAME_KEY, tenantName);
+    } catch (error) {
+      console.error('Error storing tenant name in sessionStorage:', error);
+    }
+  }
+
+  /**
+   * Clear tenant name from sessionStorage
+   */
+  clearTenantName(): void {
+    try {
+      sessionStorage.removeItem(this.TENANT_NAME_KEY);
+    } catch (error) {
+      console.error('Error clearing tenant name from sessionStorage:', error);
+    }
   }
 }

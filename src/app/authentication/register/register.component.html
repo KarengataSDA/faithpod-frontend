@@ -12,7 +12,7 @@
                                             <ng-template ngbNavContent>
                                                 <form  class="validate-form" (submit)="submit()">
                                                     <div class="text-center title-style mb-6">
-                                                        <h1 class="mb-2">Register</h1>
+                                                        <h2 class="mb-2">{{ tenantName ? tenantName + ' Register' : 'Register' }}</h2>
                                                         <hr>
                                                         <p class="text-muted">Create An Account Here</p>
                                                     </div>

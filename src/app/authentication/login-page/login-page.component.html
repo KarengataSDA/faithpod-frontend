@@ -13,9 +13,9 @@
                                           <ng-template ngbNavContent>
                                               <form [formGroup]="form" (submit)="submit()">
                                                   <div class="text-center title-style mb-6">
-                                                      <h1 class="mb-2">{{ isCentralAdmin ? 'Central Admin Login' : 'Login' }}</h1>
+                                                      <h2 class="mb-2">{{ isCentralAdmin ? 'Central Admin Login' : (tenantName ? tenantName + ' Login' : 'Login') }}</h2>
                                                       <hr>
-                                                      <p class="text-muted">{{ isCentralAdmin ? 'Sign in to manage tenants' : 'Sign In to your account' }}</p>
+                                                      <p class="text-muted">Sign in to your account</p>
                                                   </div>
 
                                                   <div class="alert alert-danger" *ngIf="loginError">
