@@ -21,45 +21,45 @@
     <form [formGroup]="themeForm" (ngSubmit)="saveThemeConfig()">
 
       <!-- Color Configuration Section -->
-      <div class="mb-4" formGroupName="basic">
+      <div class="mb-4" formGroupName="colors">
         <h4 class="mb-3">Brand Colors</h4>
         <div class="row">
-          <!-- Brand Color -->
+          <!-- Primary Color -->
           <div class="col-md-4 mb-3">
-            <label class="form-label">Brand Color</label>
+            <label class="form-label">Primary Color</label>
             <div class="input-group">
               <input
                 type="color"
                 class="form-control form-control-color"
-                [ngModel]="themeForm.get('basic')?.get('brand_color')?.value"
-                (ngModelChange)="updateFormColor('brand_color', $event)"
+                [ngModel]="themeForm.get('colors')?.get('primaryColor')?.value"
+                (ngModelChange)="updateFormColor('primaryColor', $event)"
                 [ngModelOptions]="{standalone: true}"
                 style="max-width: 60px;" />
               <input
                 type="text"
                 class="form-control"
-                formControlName="brand_color"
+                formControlName="primaryColor"
                 placeholder="#ffd300"
                 maxlength="7" />
             </div>
             <small class="form-hint">Primary brand color</small>
           </div>
 
-          <!-- Accent Color -->
+          <!-- Secondary Color -->
           <div class="col-md-4 mb-3">
-            <label class="form-label">Accent Color</label>
+            <label class="form-label">Secondary Color</label>
             <div class="input-group">
               <input
                 type="color"
                 class="form-control form-control-color"
-                [ngModel]="themeForm.get('basic')?.get('accent_color')?.value"
-                (ngModelChange)="updateFormColor('accent_color', $event)"
+                [ngModel]="themeForm.get('colors')?.get('secondaryColor')?.value"
+                (ngModelChange)="updateFormColor('secondaryColor', $event)"
                 [ngModelOptions]="{standalone: true}"
                 style="max-width: 60px;" />
               <input
                 type="text"
                 class="form-control"
-                formControlName="accent_color"
+                formControlName="secondaryColor"
                 placeholder="#433B97"
                 maxlength="7" />
             </div>
@@ -73,18 +73,106 @@
               <input
                 type="color"
                 class="form-control form-control-color"
-                [ngModel]="themeForm.get('basic')?.get('background_color')?.value"
-                (ngModelChange)="updateFormColor('background_color', $event)"
+                [ngModel]="themeForm.get('colors')?.get('backgroundColor')?.value"
+                (ngModelChange)="updateFormColor('backgroundColor', $event)"
                 [ngModelOptions]="{standalone: true}"
                 style="max-width: 60px;" />
               <input
                 type="text"
                 class="form-control"
-                formControlName="background_color"
+                formControlName="backgroundColor"
                 placeholder="#f5f5f5"
                 maxlength="7" />
             </div>
             <small class="form-hint">Background color</small>
+          </div>
+        </div>
+
+        <!-- State Colors Row -->
+        <h5 class="mb-3 mt-4">State Colors</h5>
+        <div class="row">
+          <!-- Success Color -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Success Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                [ngModel]="themeForm.get('colors')?.get('successColor')?.value"
+                (ngModelChange)="updateFormColor('successColor', $event)"
+                [ngModelOptions]="{standalone: true}"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="successColor"
+                placeholder="#28a745"
+                maxlength="7" />
+            </div>
+            <small class="form-hint">Success messages</small>
+          </div>
+
+          <!-- Danger Color -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Danger Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                [ngModel]="themeForm.get('colors')?.get('dangerColor')?.value"
+                (ngModelChange)="updateFormColor('dangerColor', $event)"
+                [ngModelOptions]="{standalone: true}"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="dangerColor"
+                placeholder="#dc3545"
+                maxlength="7" />
+            </div>
+            <small class="form-hint">Error messages</small>
+          </div>
+
+          <!-- Warning Color -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Warning Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                [ngModel]="themeForm.get('colors')?.get('warningColor')?.value"
+                (ngModelChange)="updateFormColor('warningColor', $event)"
+                [ngModelOptions]="{standalone: true}"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="warningColor"
+                placeholder="#ffc107"
+                maxlength="7" />
+            </div>
+            <small class="form-hint">Warning messages</small>
+          </div>
+
+          <!-- Info Color -->
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Info Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                [ngModel]="themeForm.get('colors')?.get('infoColor')?.value"
+                (ngModelChange)="updateFormColor('infoColor', $event)"
+                [ngModelOptions]="{standalone: true}"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="infoColor"
+                placeholder="#17a2b8"
+                maxlength="7" />
+            </div>
+            <small class="form-hint">Info messages</small>
           </div>
         </div>
       </div>

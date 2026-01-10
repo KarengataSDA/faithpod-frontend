@@ -8,10 +8,14 @@ import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 
 interface ThemeConfig {
-  basic: {
-    brand_color: string;
-    accent_color: string;
-    background_color: string;
+  colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    backgroundColor: string;
+    successColor: string;
+    dangerColor: string;
+    warningColor: string;
+    infoColor: string;
   };
   links: Array<{
     url: string;
@@ -53,10 +57,14 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
 
   initializeForm(): void {
     this.themeForm = this.formBuilder.group({
-      basic: this.formBuilder.group({
-        brand_color: ['#ffd300'],
-        accent_color: ['#433B97'],
-        background_color: ['#f5f5f5']
+      colors: this.formBuilder.group({
+        primaryColor: ['#ffd300'],
+        secondaryColor: ['#433B97'],
+        backgroundColor: ['#f5f5f5'],
+        successColor: ['#28a745'],
+        dangerColor: ['#dc3545'],
+        warningColor: ['#ffc107'],
+        infoColor: ['#17a2b8']
       }),
       links: this.formBuilder.array([])
     });
@@ -97,12 +105,16 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
       next: (config) => {
         this.isLoading = false;
 
-        // Patch basic colors
+        // Patch colors
         this.themeForm.patchValue({
-          basic: {
-            brand_color: config.basic.brand_color || '#ffd300',
-            accent_color: config.basic.accent_color || '#433B97',
-            background_color: config.basic.background_color || '#f5f5f5'
+          colors: {
+            primaryColor: config.colors.primaryColor || '#ffd300',
+            secondaryColor: config.colors.secondaryColor || '#433B97',
+            backgroundColor: config.colors.backgroundColor || '#f5f5f5',
+            successColor: config.colors.successColor || '#28a745',
+            dangerColor: config.colors.dangerColor || '#dc3545',
+            warningColor: config.colors.warningColor || '#ffc107',
+            infoColor: config.colors.infoColor || '#17a2b8'
           }
         });
 
@@ -148,7 +160,7 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
     })
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (response) => {
+      next: () => {
         this.isSaving = false;
         Swal.fire({
           toast: true,
@@ -184,9 +196,9 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
    * This keeps the color picker and text input in sync
    */
   updateFormColor(field: string, color: string): void {
-    const basicGroup = this.themeForm.get('basic');
-    if (basicGroup) {
-      basicGroup.patchValue({ [field]: color });
+    const colorsGroup = this.themeForm.get('colors');
+    if (colorsGroup) {
+      colorsGroup.patchValue({ [field]: color });
     }
   }
 }

@@ -3,11 +3,22 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
+export interface TenantTheme {
+  primaryColor?: string; // RGB format: "23, 83, 81"
+  secondaryColor?: string;
+  backgroundColor?: string;
+  successColor?: string;
+  dangerColor?: string;
+  warningColor?: string;
+  infoColor?: string;
+}
+
 export interface TenantInfo {
   id: string;
   name: string;
   email: string;
   domains?: Array<{ domain: string }>;
+  theme?: TenantTheme;
 }
 
 @Injectable({

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 //import { AuthService } from 'src/app/shared/services/auth.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
+import { ThemeService } from '../../shared/services/theme.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, throwError, Subject } from 'rxjs';
@@ -28,6 +29,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private tenantService: TenantService,
+    private themeService: ThemeService,
     private http: HttpClient,
     private formBuilder: FormBuilder
   ) {}
@@ -42,17 +44,23 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       password: '',
     });
 
-    // Fetch tenant name if it's a tenant login
+    // Fetch tenant name and theme if it's a tenant login
     if (!this.isCentralAdmin) {
       this.loadTenantInfo();
+    } else {
+      // Apply default theme for central admin
+      this.themeService.applyDefaultTheme();
     }
   }
 
   private loadTenantInfo(): void {
     // Check if tenant name is already in session storage
     const storedTenantName = this.tenantService.getTenantName();
-    if (storedTenantName) {
+    const storedTheme = this.themeService.getStoredTheme();
+
+    if (storedTenantName && storedTheme) {
       this.tenantName = storedTenantName;
+      this.themeService.applyTheme(storedTheme);
       return;
     }
 
@@ -63,6 +71,14 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         next: (tenantInfo) => {
           this.tenantName = tenantInfo.name;
           this.tenantService.setTenantName(tenantInfo.name);
+
+          // Apply tenant theme if available
+          if (tenantInfo.theme) {
+            this.themeService.applyTheme(tenantInfo.theme);
+          } else {
+            // No custom theme, use default
+            this.themeService.applyDefaultTheme();
+          }
         },
         error: (err) => {
           console.error('Failed to fetch tenant info:', err);
@@ -72,6 +88,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             // Capitalize first letter and format subdomain
             this.tenantName = subdomain.charAt(0).toUpperCase() + subdomain.slice(1);
           }
+          // Apply default theme on error
+          this.themeService.applyDefaultTheme();
         }
       });
   }

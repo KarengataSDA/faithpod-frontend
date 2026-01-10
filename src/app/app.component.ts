@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { fromEvent, Subject, timer } from 'rxjs';
 import { takeUntil, filter, take } from 'rxjs/operators';
 import { AuthService } from './shared/services/auth.service';
+import { ThemeService } from './shared/services/theme.service';
 
 @Component({
     selector: 'app-root',
@@ -16,8 +17,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private themeService: ThemeService,
     private router: Router
-  ) {}
+  ) {
+    // Initialize theme when app starts
+    this.themeService.initializeTheme();
+  }
 
   ngAfterViewInit() {
     // Multi-strategy loader removal for iOS compatibility
