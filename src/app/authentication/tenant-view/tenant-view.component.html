@@ -4,7 +4,7 @@
       <div class="row g-2 align-items-center">
         <div class="col">
           <div class="page-pretitle">Tenant Management</div>
-          <h2 class="page-title">Tenant Details</h2>
+          <h2 class="page-title">{{tenant?.name || 'Tenant Details'}}</h2>
         </div>
         <div class="col-auto">
           <button class="btn btn-secondary me-2" (click)="goBack()">
@@ -36,108 +36,107 @@
         <p class="mt-2">Loading tenant details...</p>
       </div>
 
-      <!-- Tenant Details -->
-      <div class="card" *ngIf="!isLoading && tenant">
-        <div class="card-header">
-          <h3 class="card-title">{{tenant.name}}</h3>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6 mb-4">
-              <label class="form-label fw-bold text-muted">Tenant ID</label>
-              <p class="fs-4">{{tenant.id}}</p>
-            </div>
-
-            <div class="col-md-6 mb-4">
-              <label class="form-label fw-bold text-muted">Organization Name</label>
-              <p class="fs-4">{{tenant.name}}</p>
-            </div>
-
-            <div class="col-md-6 mb-4">
-              <label class="form-label fw-bold text-muted">Email Address</label>
-              <p class="fs-4">
-                <a [href]="'mailto:' + tenant.email">{{tenant.email}}</a>
-              </p>
-            </div>
-
-            <div class="col-md-6 mb-4">
-              <label class="form-label fw-bold text-muted">Domain</label>
-              <p class="fs-4">
-                <span *ngIf="tenant.domains && tenant.domains.length > 0">
-                  <a [href]="'http://' + tenant.domains[0].domain" target="_blank">
-                    {{tenant.domains[0].domain}}
-                    <i class="zmdi zmdi-open-in-new ms-1"></i>
-                  </a>
-                </span>
-                <span *ngIf="!tenant.domains || tenant.domains.length === 0" class="text-muted">
-                  Not configured
-                </span>
-              </p>
-            </div>
-
-            <div class="col-md-4 mb-4">
-              <label class="form-label fw-bold text-muted">Brand Color</label>
-              <p class="fs-4">
-                <span *ngIf="tenant.brand_color">
-                  {{tenant.brand_color}}
-                  <span class="badge" [style.background-color]="tenant.brand_color"
-                        style="width: 40px; height: 25px; display: inline-block; margin-left: 10px; border: 1px solid #ddd;">
-                  </span>
-                </span>
-                <span *ngIf="!tenant.brand_color" class="text-muted">Not set</span>
-              </p>
-            </div>
-
-            <div class="col-md-4 mb-4">
-              <label class="form-label fw-bold text-muted">Accent Color</label>
-              <p class="fs-4">
-                <span *ngIf="tenant.accent_color">
-                  {{tenant.accent_color}}
-                  <span class="badge" [style.background-color]="tenant.accent_color"
-                        style="width: 40px; height: 25px; display: inline-block; margin-left: 10px; border: 1px solid #ddd;">
-                  </span>
-                </span>
-                <span *ngIf="!tenant.accent_color" class="text-muted">Not set</span>
-              </p>
-            </div>
-
-            <div class="col-md-4 mb-4">
-              <label class="form-label fw-bold text-muted">Background Color</label>
-              <p class="fs-4">
-                <span *ngIf="tenant.background_color">
-                  {{tenant.background_color}}
-                  <span class="badge" [style.background-color]="tenant.background_color"
-                        style="width: 40px; height: 25px; display: inline-block; margin-left: 10px; border: 1px solid #ddd;">
-                  </span>
-                </span>
-                <span *ngIf="!tenant.background_color" class="text-muted">Not set</span>
-              </p>
-            </div>
-
-            <div class="col-md-6 mb-4">
-              <label class="form-label fw-bold text-muted">Logo</label>
-              <p class="fs-4">
-                <span *ngIf="tenant.logo">
-                  <img [src]="tenant.logo" alt="Tenant Logo" style="max-height: 60px; max-width: 200px;"
-                       class="border rounded p-1"
-                       (error)="handleImageError($event)">
-                  <br>
-                  <small><a [href]="tenant.logo" target="_blank">{{tenant.logo}}</a></small>
-                </span>
-                <span *ngIf="!tenant.logo" class="text-muted">Not set</span>
-              </p>
-            </div>
-
-            <div class="col-md-6 mb-4">
-              <label class="form-label fw-bold text-muted">Created At</label>
-              <p class="fs-4">
-                <span *ngIf="tenant.created_at">
-                  {{tenant.created_at | date: 'MMM d, y, h:mm:ss a'}}
-                </span>
-                <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
-              </p>
+      <!-- Tenant Details with Sidebar Navigation -->
+      <div *ngIf="!isLoading && tenant" class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3 mb-4">
+          <div class="card">
+            <div class="list-group list-group-flush">
+              <a
+                href="javascript:void(0)"
+                class="list-group-item list-group-item-action"
+                [class.active]="activeTab === 'details'"
+                (click)="setActiveTab('details')">
+                <i class="zmdi zmdi-info me-2"></i>
+                Details
+              </a>
+              <a
+                href="javascript:void(0)"
+                class="list-group-item list-group-item-action"
+                [class.active]="activeTab === 'theming'"
+                (click)="setActiveTab('theming')">
+                <i class="zmdi zmdi-palette me-2"></i>
+                Theming
+              </a>
+              <a
+                href="javascript:void(0)"
+                class="list-group-item list-group-item-action"
+                [class.active]="activeTab === 'configuration'"
+                (click)="setActiveTab('configuration')">
+                <i class="zmdi zmdi-settings me-2"></i>
+                Configuration
+              </a>
             </div>
           </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="col-md-9">
+
+          <!-- Details Tab -->
+          <div *ngIf="activeTab === 'details'">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">{{tenant.name}}</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <label class="form-label fw-bold text-muted">Tenant ID</label>
+                    <p class="fs-4">{{tenant.id}}</p>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <label class="form-label fw-bold text-muted">Organization Name</label>
+                    <p class="fs-4">{{tenant.name}}</p>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <label class="form-label fw-bold text-muted">Email Address</label>
+                    <p class="fs-4">
+                      <a [href]="'mailto:' + tenant.email">{{tenant.email}}</a>
+                    </p>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <label class="form-label fw-bold text-muted">Domain</label>
+                    <p class="fs-4">
+                      <span *ngIf="tenant.domains && tenant.domains.length > 0">
+                        <a [href]="'http://' + tenant.domains[0].domain" target="_blank">
+                          {{tenant.domains[0].domain}}
+                          <i class="zmdi zmdi-open-in-new ms-1"></i>
+                        </a>
+                      </span>
+                      <span *ngIf="!tenant.domains || tenant.domains.length === 0" class="text-muted">
+                        Not configured
+                      </span>
+                    </p>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <label class="form-label fw-bold text-muted">Created At</label>
+                    <p class="fs-4">
+                      <span *ngIf="tenant.created_at">
+                        {{tenant.created_at | date: 'MMM d, y, h:mm:ss a'}}
+                      </span>
+                      <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theming Tab -->
+          <div *ngIf="activeTab === 'theming'">
+            <app-tenant-theming [tenantId]="tenant.id"></app-tenant-theming>
+          </div>
+
+          <!-- Configuration Tab -->
+          <div *ngIf="activeTab === 'configuration'">
+            <app-tenant-configuration [tenantId]="tenant.id"></app-tenant-configuration>
+          </div>
+
         </div>
       </div>
 

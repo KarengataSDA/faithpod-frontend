@@ -11,10 +11,6 @@ interface Tenant {
   email: string;
   domains?: Array<{ domain: string }>;
   created_at?: string;
-  brand_color?: string;
-  accent_color?: string;
-  background_color?: string;
-  logo?: string;
 }
 
 @Component({
@@ -28,6 +24,7 @@ export class TenantViewComponent implements OnInit, OnDestroy {
   tenant: Tenant | null = null;
   isLoading = false;
   errorMessage = '';
+  activeTab: string = 'details';
 
   constructor(
     private route: ActivatedRoute,
@@ -91,6 +88,10 @@ export class TenantViewComponent implements OnInit, OnDestroy {
   handleImageError(event: Event): void {
     const imgElement = event.target as HTMLImageElement;
     imgElement.style.display = 'none';
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
   }
 
   private handleError(error: HttpErrorResponse) {

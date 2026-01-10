@@ -13,10 +13,6 @@ interface Tenant {
   email: string;
   domains?: Array<{ domain: string }>;
   created_at?: string;
-  brand_color?: string;
-  accent_color?: string;
-  background_color?: string;
-  logo?: string;
 }
 
 @Component({
@@ -46,11 +42,7 @@ export class TenantEditComponent implements OnInit, OnDestroy {
     this.editTenantForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      domain: ['', Validators.required],
-      brand_color: [''],
-      accent_color: [''],
-      background_color: [''],
-      logo: ['']
+      domain: ['', Validators.required]
     });
 
     this.tenantId = this.route.snapshot.paramMap.get('id');
@@ -91,11 +83,7 @@ export class TenantEditComponent implements OnInit, OnDestroy {
             this.editTenantForm.patchValue({
               name: this.tenant.name,
               email: this.tenant.email,
-              domain: this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : '',
-              brand_color: this.tenant.brand_color || '',
-              accent_color: this.tenant.accent_color || '',
-              background_color: this.tenant.background_color || '',
-              logo: this.tenant.logo || ''
+              domain: this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : ''
             });
           }
         },

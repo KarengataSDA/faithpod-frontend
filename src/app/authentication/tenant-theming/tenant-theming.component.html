@@ -1,0 +1,176 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Theme Configuration</h3>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-danger m-3" *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading theme configuration...</p>
+  </div>
+
+  <!-- Theme Form -->
+  <div class="card-body" *ngIf="!isLoading">
+    <form [formGroup]="themeForm" (ngSubmit)="saveThemeConfig()">
+
+      <!-- Color Configuration Section -->
+      <div class="mb-4" formGroupName="basic">
+        <h4 class="mb-3">Brand Colors</h4>
+        <div class="row">
+          <!-- Brand Color -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Brand Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                formControlName="brand_color"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="brand_color"
+                placeholder="#ffd300" />
+            </div>
+            <small class="form-hint">Primary brand color</small>
+          </div>
+
+          <!-- Accent Color -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Accent Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                formControlName="accent_color"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="accent_color"
+                placeholder="#433B97" />
+            </div>
+            <small class="form-hint">Secondary accent color</small>
+          </div>
+
+          <!-- Background Color -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Background Color</label>
+            <div class="input-group">
+              <input
+                type="color"
+                class="form-control form-control-color"
+                formControlName="background_color"
+                style="max-width: 60px;" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="background_color"
+                placeholder="#f5f5f5" />
+            </div>
+            <small class="form-hint">Background color</small>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Social Links Section -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Social Links</h4>
+          <button type="button" class="btn btn-primary btn-sm" (click)="addLink()">
+            <i class="zmdi zmdi-plus me-1"></i>
+            Add Link
+          </button>
+        </div>
+
+        <!-- Links Array -->
+        <div formArrayName="links">
+          <div *ngIf="linksArray.length === 0" class="alert alert-info">
+            No social links configured. Click "Add Link" to add one.
+          </div>
+
+          <div
+            *ngFor="let linkGroup of linksArray.controls; let i = index"
+            [formGroupName]="i"
+            class="card mb-3">
+            <div class="card-body">
+              <div class="row align-items-end">
+                <div class="col-md-5">
+                  <label class="form-label">Platform Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="name"
+                    placeholder="e.g., Instagram, Facebook, TikTok" />
+                  <div
+                    *ngIf="linkGroup.get('name')?.invalid && linkGroup.get('name')?.touched"
+                    class="text-danger small mt-1">
+                    Platform name is required
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">URL</label>
+                  <input
+                    type="url"
+                    class="form-control"
+                    formControlName="url"
+                    placeholder="https://www.instagram.com/yourpage" />
+                  <div
+                    *ngIf="linkGroup.get('url')?.invalid && linkGroup.get('url')?.touched"
+                    class="text-danger small mt-1">
+                    Valid URL is required (must start with http:// or https://)
+                  </div>
+                </div>
+
+                <div class="col-md-1">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm w-100"
+                    (click)="removeLink(i)">
+                    <i class="zmdi zmdi-delete"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="card-footer d-flex justify-content-end gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="resetForm()"
+          [disabled]="isSaving">
+          <i class="zmdi zmdi-refresh me-2"></i>
+          Reset
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSaving || themeForm.invalid">
+          <span *ngIf="!isSaving">
+            <i class="zmdi zmdi-save me-2"></i>
+            Save Theme
+          </span>
+          <span *ngIf="isSaving">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Saving...
+          </span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

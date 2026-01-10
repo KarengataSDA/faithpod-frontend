@@ -1,0 +1,205 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">App Configuration</h3>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-danger m-3" *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading app configuration...</p>
+  </div>
+
+  <!-- Configuration Form -->
+  <div class="card-body" *ngIf="!isLoading">
+    <form [formGroup]="configForm" (ngSubmit)="saveAppConfig()">
+
+      <!-- Mail Configuration -->
+      <div class="card mb-3">
+        <div class="card-header" (click)="toggleSection('mail')" style="cursor: pointer;">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="zmdi zmdi-email me-2"></i>
+              Mail Configuration
+            </h4>
+            <i class="zmdi" [ngClass]="expandedSections['mail'] ? 'zmdi-chevron-up' : 'zmdi-chevron-down'"></i>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="expandedSections['mail']" formGroupName="mail">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Mailer</label>
+              <input type="text" class="form-control" formControlName="mailer" placeholder="smtp">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Host</label>
+              <input type="text" class="form-control" formControlName="host" placeholder="smtp.gmail.com">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Port</label>
+              <input type="text" class="form-control" formControlName="port" placeholder="465">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Encryption</label>
+              <input type="text" class="form-control" formControlName="encryption" placeholder="tls">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control" formControlName="username" placeholder="your-email@gmail.com">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" formControlName="password" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">From Address</label>
+              <input type="email" class="form-control" formControlName="from_address" placeholder="noreply@example.com">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">From Name</label>
+              <input type="text" class="form-control" formControlName="from_name" placeholder="Your App Name">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- M-Pesa Configuration -->
+      <div class="card mb-3">
+        <div class="card-header" (click)="toggleSection('mpesa')" style="cursor: pointer;">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="zmdi zmdi-money me-2"></i>
+              M-Pesa Configuration
+            </h4>
+            <i class="zmdi" [ngClass]="expandedSections['mpesa'] ? 'zmdi-chevron-up' : 'zmdi-chevron-down'"></i>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="expandedSections['mpesa']" formGroupName="mpesa">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Consumer Key</label>
+              <input type="password" class="form-control" formControlName="consumer_key" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Consumer Secret</label>
+              <input type="password" class="form-control" formControlName="consumer_secret" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Shortcode</label>
+              <input type="text" class="form-control" formControlName="shortcode" placeholder="288822">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Passkey</label>
+              <input type="password" class="form-control" formControlName="passkey" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="form-label">Callback URL</label>
+              <input type="url" class="form-control" formControlName="callback_url" placeholder="https://example.com/mpesa/callback">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Validation URL</label>
+              <input type="url" class="form-control" formControlName="validation_url" placeholder="https://example.com/mpesa/validation">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Confirmation URL</label>
+              <input type="url" class="form-control" formControlName="confirmation_url" placeholder="https://example.com/mpesa/confirmation">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMS Configuration -->
+      <div class="card mb-3">
+        <div class="card-header" (click)="toggleSection('sms')" style="cursor: pointer;">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="zmdi zmdi-comment-text me-2"></i>
+              SMS Configuration
+            </h4>
+            <i class="zmdi" [ngClass]="expandedSections['sms'] ? 'zmdi-chevron-up' : 'zmdi-chevron-down'"></i>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="expandedSections['sms']" formGroupName="sms">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Partner ID</label>
+              <input type="password" class="form-control" formControlName="partner_id" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">API Key</label>
+              <input type="password" class="form-control" formControlName="api_key" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Shortcode</label>
+              <input type="text" class="form-control" formControlName="shortcode" placeholder="FAITHPOD">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">URL</label>
+              <input type="url" class="form-control" formControlName="url" placeholder="https://sms-api.example.com">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hashlix Configuration -->
+      <div class="card mb-3">
+        <div class="card-header" (click)="toggleSection('hashlix')" style="cursor: pointer;">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="zmdi zmdi-key me-2"></i>
+              Hashlix Configuration
+            </h4>
+            <i class="zmdi" [ngClass]="expandedSections['hashlix'] ? 'zmdi-chevron-up' : 'zmdi-chevron-down'"></i>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="expandedSections['hashlix']" formGroupName="hashlix">
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label class="form-label">API Key</label>
+              <input type="password" class="form-control" formControlName="api_key" placeholder="••••••••">
+              <small class="form-hint text-muted">Sensitive field - will be masked</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="card-footer d-flex justify-content-end gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="resetForm()"
+          [disabled]="isSaving">
+          <i class="zmdi zmdi-refresh me-2"></i>
+          Reset
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSaving || configForm.invalid">
+          <span *ngIf="!isSaving">
+            <i class="zmdi zmdi-save me-2"></i>
+            Save Configuration
+          </span>
+          <span *ngIf="isSaving">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Saving...
+          </span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

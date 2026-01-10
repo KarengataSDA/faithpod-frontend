@@ -16,6 +16,8 @@ import { CentralAdminLoginComponent } from './central-admin-login/central-admin-
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
 import { TenantViewComponent } from './tenant-view/tenant-view.component';
 import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
+import { TenantThemingComponent } from './tenant-theming/tenant-theming.component';
+import { TenantConfigurationComponent } from './tenant-configuration/tenant-configuration.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
     FormsModule,
     ReactiveFormsModule,
     AngularFireAuthModule,
-    NgScrollbarModule
+    NgScrollbarModule,
+    TenantThemingComponent,
+    TenantConfigurationComponent
 
   ],
   providers: [
