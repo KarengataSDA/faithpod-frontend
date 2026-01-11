@@ -47,14 +47,14 @@ export class ThemeService {
     }
 
     if (theme.secondaryColor) {
-      // secondaryColor comes as RGB format from API, convert to hex if needed
+      // secondaryColor comes as RGB format from API
       const isRgbFormat = theme.secondaryColor.includes(',');
       if (isRgbFormat) {
-        // Convert "167, 32, 32" to "#a72020"
+        // RGB format: "167, 32, 32"
         root.style.setProperty('--secondary-rgb', theme.secondaryColor);
         root.style.setProperty('--secondary', `rgb(${theme.secondaryColor})`);
       } else {
-        // Already in hex format
+        // Hex format (fallback)
         root.style.setProperty('--secondary', theme.secondaryColor);
       }
     }
@@ -66,35 +66,31 @@ export class ThemeService {
     }
 
     if (theme.successColor) {
+      // Success color comes as hex from API
       root.style.setProperty('--success', theme.successColor);
-      // Add success variants with opacity
-      const successHex = theme.successColor;
-      root.style.setProperty('--success-bg', `${successHex}1a`); // 10% opacity
-      root.style.setProperty('--success-border', successHex);
+      root.style.setProperty('--success-bg', `${theme.successColor}1a`); // 10% opacity
+      root.style.setProperty('--success-border', theme.successColor);
     }
 
     if (theme.dangerColor) {
+      // Danger color comes as hex from API
       root.style.setProperty('--danger', theme.dangerColor);
-      // Add danger variants with opacity
-      const dangerHex = theme.dangerColor;
-      root.style.setProperty('--danger-bg', `${dangerHex}1a`); // 10% opacity
-      root.style.setProperty('--danger-border', dangerHex);
+      root.style.setProperty('--danger-bg', `${theme.dangerColor}1a`); // 10% opacity
+      root.style.setProperty('--danger-border', theme.dangerColor);
     }
 
     if (theme.warningColor) {
+      // Warning color comes as hex from API
       root.style.setProperty('--warning', theme.warningColor);
-      // Add warning variants with opacity
-      const warningHex = theme.warningColor;
-      root.style.setProperty('--warning-bg', `${warningHex}1a`); // 10% opacity
-      root.style.setProperty('--warning-border', warningHex);
+      root.style.setProperty('--warning-bg', `${theme.warningColor}1a`); // 10% opacity
+      root.style.setProperty('--warning-border', theme.warningColor);
     }
 
     if (theme.infoColor) {
+      // Info color comes as hex from API
       root.style.setProperty('--info', theme.infoColor);
-      // Add info variants with opacity
-      const infoHex = theme.infoColor;
-      root.style.setProperty('--info-bg', `${infoHex}1a`); // 10% opacity
-      root.style.setProperty('--info-border', infoHex);
+      root.style.setProperty('--info-bg', `${theme.infoColor}1a`); // 10% opacity
+      root.style.setProperty('--info-border', theme.infoColor);
     }
 
     console.log('[ThemeService] Applied tenant theme:', theme);

@@ -4,6 +4,7 @@ import { fromEvent, Subject, timer } from 'rxjs';
 import { takeUntil, filter, take } from 'rxjs/operators';
 import { AuthService } from './shared/services/auth.service';
 import { ThemeService } from './shared/services/theme.service';
+import { TenantService } from './shared/services/tenant.service';
 
 @Component({
     selector: 'app-root',
@@ -18,10 +19,62 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
+    private tenantService: TenantService,
     private router: Router
   ) {
-    // Initialize theme when app starts
-    this.themeService.initializeTheme();
+    // Initialize tenant-specific theme when app starts
+    this.initializeTenantTheme();
+  }
+
+  /**
+   * Initialize tenant theme from API or fallback to stored/default theme
+   */
+  private initializeTenantTheme(): void {
+    // Check if we have a tenant context
+    const tenantId = this.tenantService.getTenantFromSubdomain();
+
+    if (!tenantId) {
+      // No tenant context, use default theme (central admin)
+      console.log('[AppComponent] No tenant context, applying default theme');
+      this.themeService.applyDefaultTheme();
+      return;
+    }
+
+    // Try to use stored theme first for instant application
+    const storedTheme = this.themeService.getStoredTheme();
+    if (storedTheme) {
+      console.log('[AppComponent] Applying stored tenant theme');
+      this.themeService.applyTheme(storedTheme);
+    }
+
+    // Fetch fresh theme from API in the background
+    this.tenantService.fetchTenantInfo()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (tenantInfo) => {
+          console.log('[AppComponent] Fetched tenant info:', tenantInfo.name);
+
+          // Store tenant name for later use
+          this.tenantService.setTenantName(tenantInfo.name);
+
+          // Apply tenant theme if available
+          if (tenantInfo.theme) {
+            console.log('[AppComponent] Applying tenant theme from API');
+            this.themeService.applyTheme(tenantInfo.theme);
+          } else {
+            console.log('[AppComponent] No custom theme, applying default');
+            this.themeService.applyDefaultTheme();
+          }
+        },
+        error: (err) => {
+          console.error('[AppComponent] Failed to fetch tenant info:', err);
+
+          // If we don't have a stored theme, apply default
+          if (!storedTheme) {
+            this.themeService.applyDefaultTheme();
+          }
+        }
+      });
   }
 
   ngAfterViewInit() {
