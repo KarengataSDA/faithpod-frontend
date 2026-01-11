@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TenantService } from '../../services/tenant.service';
 
 @Component({
     selector: 'app-footer',
@@ -8,12 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private tenantService: TenantService) { }
 
   currentYear: number = new Date().getFullYear()
-  
+  tenantName: string = 'Demo SDA Church'
+
   ngOnInit(): void {
-    
+    // Get tenant name from service, fallback to default
+    const storedTenantName = this.tenantService.getTenantName();
+    if (storedTenantName) {
+      this.tenantName = storedTenantName;
+    }
   }
 
 }
