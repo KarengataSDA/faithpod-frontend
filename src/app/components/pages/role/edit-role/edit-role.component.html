@@ -36,8 +36,9 @@
           </div>
         </div>
         <div class="card-footer text-end">
-          <button type="submit" class="btn ms-2 btn-primary my-1">Save</button>
-          <a href="#" class="btn ms-2 btn-danger my-1">Cancel</a>
+          <button type="submit" class="btn ms-2 btn-primary my-1">Update Role & Permissions</button>
+          <button type="button" (click)="updatePermissionsOnly()" class="btn ms-2 btn-info my-1">Update Permissions Only</button>
+          <a routerLink="/pages/roles" class="btn ms-2 btn-danger my-1">Cancel</a>
         </div>
       </div>
     </form>

@@ -26,14 +26,21 @@ export class RoleService {
   private readonly STORAGE_KEY = 'roles';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data
 
-  getAll(): Observable<Role[]> {
-    // Try localStorage first for reference data
-    const cached = this.localStorageService.get<Role[]>(this.STORAGE_KEY);
-    if (cached && Array.isArray(cached)) {
-      return new Observable(observer => {
-        observer.next(cached);
-        observer.complete();
-      });
+  getAll(forceRefresh: boolean = false): Observable<Role[]> {
+    // If forceRefresh is true, skip cache and fetch from server
+    if (forceRefresh) {
+      this.invalidateCache();
+    }
+
+    // Try localStorage first for reference data (skip if forceRefresh)
+    if (!forceRefresh) {
+      const cached = this.localStorageService.get<Role[]>(this.STORAGE_KEY);
+      if (cached && Array.isArray(cached)) {
+        return new Observable(observer => {
+          observer.next(cached);
+          observer.complete();
+        });
+      }
     }
 
     // Use service-level cache with localStorage backup
@@ -51,8 +58,14 @@ export class RoleService {
     );
   }
 
-  get(id: number): Observable<Role> {
+  get(id: number, forceRefresh: boolean = false): Observable<Role> {
     const cacheKey = `${this.CACHE_KEY}_${id}`;
+
+    // If forceRefresh is true, clear this specific role's cache
+    if (forceRefresh) {
+      this.cacheService.clear(cacheKey);
+    }
+
     return this.cacheService.get(
       cacheKey,
       this.http.get<Role | { data: Role }>(this.baseUrl + '/roles/' + id).pipe(
@@ -94,7 +107,9 @@ export class RoleService {
    * Clear all role-related cache after mutations
    */
   private invalidateCache(): void {
-    this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY}`));
+    // Pattern matches both "roles" and "roles_<id>" after optional tenant prefix
+    // Examples: "roles", "roles_6", "tenant123_roles", "tenant123_roles_6"
+    this.cacheService.clearPattern(new RegExp(`_?${this.CACHE_KEY}(_\\d+)?$`));
     this.localStorageService.remove(this.STORAGE_KEY);
   }
 }
