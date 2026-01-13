@@ -11,7 +11,7 @@
             <h6 class="main-content-label mb-1">Name: {{prayercell?.name}}</h6>
           <div class="card-options ">
             
-            <p class="text-muted card-sub-title">Total Members {{prayercell?.users?.length}}</p>
+            <p class="text-muted card-sub-title">Total Members {{prayercell?.members?.length}}</p>
         </div>
         </div>
         <div class="card-body">
@@ -45,7 +45,7 @@
                 </tr>
               </thead>
               <tbody *ngIf="prayercell">
-                <tr *ngFor="let member of prayercell?.users; index as i">
+                <tr *ngFor="let member of prayercell?.members; index as i">
                     
                   <th>{{ i + 1 }}</th>
                   <th>{{ member.membership_number ? 'KSDA-' + member.membership_number : 'No Number' }}</th>

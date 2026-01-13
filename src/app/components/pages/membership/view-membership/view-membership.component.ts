@@ -3,6 +3,7 @@ import { MemberService } from 'src/app/shared/services/member.service';
 import { ActivatedRoute } from '@angular/router';
 import { MembershipTypeService } from 'src/app/shared/services/membership-type.service';
 import { Membership } from 'src/app/shared/models/membership';
+import { Member } from 'src/app/shared/models/member';
 
 @Component({
     selector: 'app-view-membership',
@@ -12,9 +13,10 @@ import { Membership } from 'src/app/shared/models/membership';
 })
 export class ViewMembershipComponent implements OnInit {
 id: number;
-membership: Membership 
+membership: Membership;
+members: Member[] = [];
 
-constructor( 
+constructor(
   private membershipTypeService: MembershipTypeService,
   private route: ActivatedRoute
 ) {}
@@ -23,8 +25,8 @@ constructor(
      this.id = this.route.snapshot.params['id'];
 
      this.membershipTypeService.find(this.id).subscribe((data: Membership) => {
-        this.membership = data
-
+        this.membership = data;
+        this.members = data.members || [];
      })
   }
 }

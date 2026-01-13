@@ -21,8 +21,8 @@ export interface Member {
   roles?: string[];
   population_group?: PopulationGroup;
   prayercell?: Prayercell;
-  membershiptype?: Membership;
-  membership_type?: { id: number; name: string };
+  membership_type?: Membership;
+  //membership_type?: { id: number; name: string };
   contributions?: Contribution[];
   tenant_id?: string;
 }

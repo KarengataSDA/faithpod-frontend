@@ -1,10 +1,10 @@
-import { User } from "./user"
+import { Member } from "./member"
 
 
 export interface Membership {
-    id: number 
+    id: number
     name: string
-    users: User[]
+    members: Member[]
 }
 
 export interface MembershipCount {

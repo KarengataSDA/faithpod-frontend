@@ -11,7 +11,7 @@
             <h6 class="main-content-label mb-1">Name: {{membership?.name}}</h6>
           <div class="card-options ">
             
-            <p class="text-muted card-sub-title">Total Members: {{membership?.users?.length}}</p>
+            <p class="text-muted card-sub-title">Total Members: {{membership?.members?.length}}</p>
         </div>
         </div>
         <div class="card-body">
@@ -45,7 +45,7 @@
                 </tr>
               </thead>
               <tbody *ngIf="membership">
-                <tr *ngFor="let member of membership?.users; index as i">
+                <tr *ngFor="let member of membership?.members; index as i">
                     
                   <th>{{ i + 1 }}</th>
                   <th>{{member.membership_number}}</th>

@@ -85,7 +85,7 @@ export class EditMemberComponent implements OnInit, OnDestroy {
           email: member.email,
           phone_number: member.phone_number,
           membership_number: member.membership_number,
-          membership_type_id: member.membershiptype?.id || member.membership_type?.id || null,
+          membership_type_id: member.membership_type?.id || null,
           role_id: member.role?.id || null,
           population_group_id: member.population_group?.id || null,
           prayercell_id: member.prayercell?.id || null

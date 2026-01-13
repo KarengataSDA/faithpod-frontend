@@ -24,8 +24,8 @@ export class ViewGroupComponent implements OnInit {
       this.id = this.route.snapshot.params['groupId'];
 
       this.populationGroupService.find(this.id).subscribe((data: PopulationGroup) => {
-        this.group = data; 
-        this.members = data.users || []; 
+        this.group = data;
+        this.members = data.members || [];
       })
   }
 

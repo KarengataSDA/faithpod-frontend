@@ -27,9 +27,7 @@ export class ViewPrayercellComponent implements OnInit {
 
     this.prayercellService.find(this.id).subscribe((data: Prayercell) => {
       this.prayercell = data;
-      this.members = data.users || [];
+      this.members = data.members || [];
     })
-
-   // this.memberService.getAll().
   }
 }

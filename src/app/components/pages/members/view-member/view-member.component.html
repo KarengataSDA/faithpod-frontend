@@ -30,11 +30,11 @@
                                       <button
                                       class="btn btn-sm d-block"
                                       [ngClass]="{
-                                        'btn-yellow' : member?.membershiptype?.name === 'visitor',
-                                        'btn-green' : member?.membershiptype?.name === 'member',
-                                        'btn-success': member?.membershiptype?.name === 'sabbath'
+                                        'btn-yellow' : member?.membership_type?.name === 'visitor',
+                                        'btn-green' : member?.membership_type?.name === 'member',
+                                        'btn-success': member?.membership_type?.name === 'sabbath'
                                       }"
-                                      >{{member?.membershiptype?.name}}</button
+                                      >{{member?.membership_type?.name}}</button
                                     >
                                     </div>
                                   </div>
