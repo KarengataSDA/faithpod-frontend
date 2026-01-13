@@ -70,9 +70,9 @@
                       <span
                         class="badge  rounded-pill p-2 px-3"
                         [ngClass]="{
-                          ' bg-success-transparent text-success': member?.membership_type?.name === 'visitor',
-                          ' bg-warning-transparent text-warning': member?.membership_type?.name === 'member',
-                          ' bg-danger-transparent text-danger': member?.membership_type?.name === 'sabbath'
+                          ' bg-success-transparent text-success': member?.membership_type?.name?.toLowerCase() === 'visitor',
+                          ' bg-warning-transparent text-warning': member?.membership_type?.name?.toLowerCase() === 'member',
+                          ' bg-danger-transparent text-danger': member?.membership_type?.name?.toLowerCase() === 'sabbath'
                         }"
                         >{{member?.membership_type?.name || '-'}}</span
                       >

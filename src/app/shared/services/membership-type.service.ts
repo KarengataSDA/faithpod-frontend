@@ -62,11 +62,8 @@ export class MembershipTypeService {
   }
 
   membershipCount(): Observable<any> {
-    return this.cacheService.get(
-      this.CACHE_KEY_COUNT,
-      this.http.get<any>(this.baseUrl + '/membership-count'),
-      this.CACHE_TTL,
-      true // Use shareReplay for dashboard data
-    );
+    // Clear cache to ensure fresh data
+    this.cacheService.clear(this.CACHE_KEY_COUNT);
+    return this.http.get<any>(this.baseUrl + '/membership-count');
   }
 }

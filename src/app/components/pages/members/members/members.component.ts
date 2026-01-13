@@ -31,7 +31,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   constructor(public memberService: MemberService, public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.memberService.getAll()
+    this.memberService.getAllFresh()
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: Member[]) => {
         this.members = data;

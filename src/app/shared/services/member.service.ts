@@ -130,4 +130,25 @@ export class MemberService {
     this.cacheService.clear(this.CACHE_KEY_GENDER);
     this.localStorageService.remove(this.STORAGE_KEY_MEMBERS);
   }
+
+  /**
+   * Public method to force refresh members data from API
+   */
+  clearCache(): void {
+    this.invalidateCache();
+  }
+
+  /**
+   * Force fetch members from API, bypassing cache
+   */
+  getAllFresh(): Observable<Member[]> {
+    this.invalidateCache();
+    return this.http.get<Member[] | { data: Member[] }>(this.baseUrl + '/members').pipe(
+      tap(response => {
+        const data = Array.isArray(response) ? response : (response as any)?.data || [];
+        this.localStorageService.set(this.STORAGE_KEY_MEMBERS, data, { ttl: this.CACHE_TTL });
+      }),
+      map(response => Array.isArray(response) ? response : (response as any)?.data || [])
+    );
+  }
 }
