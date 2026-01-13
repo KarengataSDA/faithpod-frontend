@@ -78,22 +78,22 @@
                     </td>
                     <td>
                       <span class="mt-sm-2 d-block">{{
-                        collection.user.first_name
+                        collection.user?.first_name || '-'
                       }}</span>
                     </td>
                      <td>
                       <span class="mt-sm-2 d-block">{{
-                        collection.user.last_name
+                        collection.user?.last_name || '-'
                       }}</span>
                     </td>
                      <td>
                       <span class="mt-sm-2 d-block">{{
-                        collection.user.phone_number
+                        collection.user?.phone_number || '-'
                       }}</span>
                     </td>
                     <td>
                       <span class="mt-sm-2 d-block">{{
-                        collection.contribution_type.name
+                        collection.contribution_type?.name || '-'
                       }}</span>
                     </td>
                      <td>

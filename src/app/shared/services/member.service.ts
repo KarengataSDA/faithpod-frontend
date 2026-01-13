@@ -1,10 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Member } from '../models/member';
 import { environment } from 'src/environments/environment';
 import { CacheService } from './cache.service';
+import { LocalStorageService } from './local-storage.service';
 import { TenantService } from './tenant.service';
 
 @Injectable({
@@ -13,9 +14,11 @@ import { TenantService } from './tenant.service';
 export class MemberService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
+  private localStorageService = inject(LocalStorageService);
   private tenantService = inject(TenantService);
 
   private readonly CACHE_KEY_MEMBERS = 'members';
+  private readonly STORAGE_KEY_MEMBERS = 'members';
   private readonly CACHE_KEY_GENDER = 'gender_count';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
@@ -26,10 +29,25 @@ export class MemberService {
     return this.tenantService.getApiUrl();
   }
 
-  getAll(): Observable<any> {
+  getAll(): Observable<Member[]> {
+    // Try localStorage first
+    const cached = this.localStorageService.get<Member[]>(this.STORAGE_KEY_MEMBERS);
+    if (cached && Array.isArray(cached)) {
+      return new Observable(observer => {
+        observer.next(cached);
+        observer.complete();
+      });
+    }
+
     return this.cacheService.get(
       this.CACHE_KEY_MEMBERS,
-      this.http.get<any>(this.baseUrl + '/users'),
+      this.http.get<Member[] | { data: Member[] }>(this.baseUrl + '/members').pipe(
+        tap(response => {
+          const data = Array.isArray(response) ? response : (response as any)?.data || [];
+          this.localStorageService.set(this.STORAGE_KEY_MEMBERS, data, { ttl: this.CACHE_TTL });
+        }),
+        map(response => Array.isArray(response) ? response : (response as any)?.data || [])
+      ),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
     );
@@ -48,20 +66,20 @@ export class MemberService {
     const cacheKey = `${this.CACHE_KEY_MEMBERS}_${id}`;
     return this.cacheService.get(
       cacheKey,
-      this.http.get<Member>(this.baseUrl + '/users/' + id),
+      this.http.get<Member>(this.baseUrl + '/members/' + id),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
     );
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(this.baseUrl + '/users/' + id).pipe(
+    return this.http.delete<void>(this.baseUrl + '/members/' + id).pipe(
       tap(() => this.invalidateCache())
     );
   }
 
   create(data): Observable<Member> {
-    return this.http.post<Member>(this.baseUrl + '/users', data, {
+    return this.http.post<Member>(this.baseUrl + '/members', data, {
       withCredentials: true
     }).pipe(
       tap(() => this.invalidateCache())
@@ -69,7 +87,7 @@ export class MemberService {
   }
 
   update(id: number, data): Observable<Member> {
-    return this.http.put<Member>(this.baseUrl + '/users/' + id, data).pipe(
+    return this.http.put<Member>(this.baseUrl + '/members/' + id, data).pipe(
       tap(() => this.invalidateCache())
     );
   }
@@ -110,5 +128,6 @@ export class MemberService {
   private invalidateCache(): void {
     this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY_MEMBERS}`));
     this.cacheService.clear(this.CACHE_KEY_GENDER);
+    this.localStorageService.remove(this.STORAGE_KEY_MEMBERS);
   }
 }

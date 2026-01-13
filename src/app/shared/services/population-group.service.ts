@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { PopulationGroup } from 'src/app/shared/models/population-group';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
@@ -29,7 +29,7 @@ export class PopulationGroupService {
   getAll(): Observable<PopulationGroup[]> {
     // Try localStorage first for reference data
     const cached = this.localStorageService.get<PopulationGroup[]>(this.STORAGE_KEY);
-    if (cached) {
+    if (cached && Array.isArray(cached)) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();
@@ -38,8 +38,12 @@ export class PopulationGroupService {
 
     return this.cacheService.get(
       this.CACHE_KEY,
-      this.http.get<PopulationGroup[]>(this.baseUrl + '/groups').pipe(
-        tap(data => this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL }))
+      this.http.get<PopulationGroup[] | { data: PopulationGroup[] }>(this.baseUrl + '/population-groups').pipe(
+        tap(response => {
+          const data = Array.isArray(response) ? response : (response as any)?.data || [];
+          this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL });
+        }),
+        map(response => Array.isArray(response) ? response : (response as any)?.data || [])
       ),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
@@ -47,7 +51,7 @@ export class PopulationGroupService {
   }
 
   create(data): Observable<PopulationGroup> {
-    return this.http.post<PopulationGroup>(this.baseUrl + '/groups', data).pipe(
+    return this.http.post<PopulationGroup>(this.baseUrl + '/population-groups', data).pipe(
       tap(() => this.invalidateCache())
     );
   }
@@ -56,20 +60,20 @@ export class PopulationGroupService {
     const cacheKey = `${this.CACHE_KEY}_${id}`;
     return this.cacheService.get(
       cacheKey,
-      this.http.get<PopulationGroup>(this.baseUrl + '/groups/' + id),
+      this.http.get<PopulationGroup>(this.baseUrl + '/population-groups/' + id),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
     );
   }
 
   update(id: number, data): Observable<PopulationGroup> {
-    return this.http.put<PopulationGroup>(this.baseUrl + '/groups/' + id, data).pipe(
+    return this.http.put<PopulationGroup>(this.baseUrl + '/population-groups/' + id, data).pipe(
       tap(() => this.invalidateCache())
     );
   }
 
   delete(id: number) {
-    return this.http.delete<PopulationGroup>(this.baseUrl + '/groups/' + id).pipe(
+    return this.http.delete<PopulationGroup>(this.baseUrl + '/population-groups/' + id).pipe(
       tap(() => this.invalidateCache())
     );
   }

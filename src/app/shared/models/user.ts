@@ -8,19 +8,23 @@ export interface User {
     id: number;
     membership_number: string
     first_name: string
-    middle_name: string
+    middle_name?: string
     last_name: string
+    full_name?: string
     email: string
     phone_number: string
     date_of_birth: string
     gender: string
-    role: Role
-    prayercell: Prayercell
-    membershiptype: Membership
-    population_group: PopulationGroup
-    contributions: Contribution[]
+    email_verified_at?: string
+    role?: Role
+    roles?: string[]
+    permissions?: string[]
+    prayercell?: Prayercell
+    membershiptype?: Membership
+    membership_type?: { id: number; name: string }
+    population_group?: PopulationGroup
+    contributions?: Contribution[]
     tenant_id?: string
-
 }
 
 

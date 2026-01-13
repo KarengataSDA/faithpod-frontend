@@ -4,7 +4,7 @@
   [active_item]="'Members List'"
 ></app-page-header>
 
-<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_user')">
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create members')">
   <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/members/create-member">
     <i class="fe fe-plus"></i>  Add Member
   </a>
@@ -39,7 +39,7 @@
                     <th>Phone Number</th>
                     <th>Role</th>
                     <th>Membership</th>
-                    <th *ngIf="authService.hasPermission('can_view_users')">Actions</th>
+                    <th *ngIf="authService.hasPermission('view members')">Actions</th>
                   </tr>
                 </thead>
                   <tbody *ngIf="isLoading">
@@ -65,39 +65,38 @@
                     <td>{{ member.last_name }}</td>
                     <td>{{ member.email }}</td>
                     <td>{{ member.phone_number }}</td>
-                    <td>{{member.role.name}}</td>
+                    <td>{{member.roles?.join(', ') || '-'}}</td>
                     <td>
                       <span
                         class="badge  rounded-pill p-2 px-3"
                         [ngClass]="{
-                          ' bg-success-transparent text-success': member?.membershiptype?.name === 'visitor',
-                          ' bg-warning-transparent text-warning': member?.membershiptype?.name === 'member',
-                          ' bg-danger-transparent text-danger': member?.membershiptype?.name === 'sabbath'
+                          ' bg-success-transparent text-success': member?.membership_type?.name === 'visitor',
+                          ' bg-warning-transparent text-warning': member?.membership_type?.name === 'member',
+                          ' bg-danger-transparent text-danger': member?.membership_type?.name === 'sabbath'
                         }"
-                        >{{member?.membershiptype?.name}}</span
+                        >{{member?.membership_type?.name || '-'}}</span
                       >
                     </td>
                     <td>
                       <div class="g-2">
-                        <a 
-                        *ngIf="authService.hasPermission('can_view_users')"
+                        <a
+                        *ngIf="authService.hasPermission('view members')"
                           routerLink="view/{{ member.id }}"
                           class="btn text-primary btn-sm"
                           data-bs-toggle="tooltip"
-                          routerLink="edit-member"
-                          ngbTooltip="Edit"
+                          ngbTooltip="View"
                           ><span class="fe fe-eye fs-14"></span
                         ></a>
 
-                        <a 
-                        *ngIf="authService.hasPermission('can_edit_user')"
+                        <a
+                        *ngIf="authService.hasPermission('edit members')"
                         routerLink="edit/{{ member.id }}"
                         class="btn text-primary btn-sm"
-                       
+
                         ><span class="fe fe-edit fs-14"></span
                       ></a>
-                        <a 
-                        *ngIf="authService.hasPermission('can_delete_user')"
+                        <a
+                        *ngIf="authService.hasPermission('delete members')"
                           (click)="deleteMember(member.id)"
                           class="btn text-danger btn-sm"
                           data-bs-toggle="tooltip"

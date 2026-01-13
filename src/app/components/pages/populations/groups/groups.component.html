@@ -4,7 +4,7 @@
   [active_item]="'Population Groups'"
 ></app-page-header>
 
-<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_group')">
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create population groups')">
   <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/groups/create-group">
     <i class="fe fe-plus"></i>  Add Group
   </a>
@@ -32,7 +32,7 @@
                   <tr>
                     <th>No.</th>
                     <th>Prayercell Name</th>
-                    <th *ngIf="authService.hasPermission('can_view_groups')">Actions</th>
+                    <th *ngIf="authService.hasPermission('view population groups')">Actions</th>
                   </tr>
                 </thead>
                 <tbody *ngIf="isLoading">
@@ -51,7 +51,7 @@
                         <td>
                           <div class="g-2">
                             <a 
-                            *ngIf="authService.hasPermission('can_view_groups')"
+                            *ngIf="authService.hasPermission('view population groups')"
                               routerLink="view/{{ group.id }}"
                               class="btn text-primary btn-sm"
                               data-bs-toggle="tooltip"
@@ -60,7 +60,7 @@
                             ></a>
 
                             <a 
-                            *ngIf="authService.hasPermission('can_edit_group')"
+                            *ngIf="authService.hasPermission('edit population groups')"
                               routerLink="edit/{{ group.id }}"
                               class="btn text-primary btn-sm"
                               data-bs-toggle="tooltip"
@@ -69,7 +69,7 @@
                             ></a>
 
                             <a 
-                            *ngIf="authService.hasPermission('can_delete_group')"
+                            *ngIf="authService.hasPermission('delete population groups')"
                               (click)="deleteGroup(group.id)"
                               class="btn text-danger btn-sm"
                               data-bs-toggle="tooltip"

@@ -61,11 +61,11 @@ export class AllContributionsComponent implements OnInit {
   filterSearchContributions(): void {
     const term = this.searchTerm.toLowerCase()
     this.filteredContributions = this.collections.filter(txn =>
-      txn.user.first_name?.toLowerCase().includes(term) || 
-      txn.user.last_name?.toLowerCase().includes(term) ||
-      txn.user.phone_number?.toLowerCase().includes(term) ||
+      txn.user?.first_name?.toLowerCase().includes(term) ||
+      txn.user?.last_name?.toLowerCase().includes(term) ||
+      txn.user?.phone_number?.toLowerCase().includes(term) ||
       txn.contribution_date?.toLowerCase().includes(term) ||
-      txn.contribution_type.name?.toLocaleLowerCase().includes(term)
+      txn.contribution_type?.name?.toLocaleLowerCase().includes(term)
     )
     
     this.totalAmount = this.filteredContributions.reduce((sum, txn) => {
@@ -127,9 +127,9 @@ export class AllContributionsComponent implements OnInit {
   exportToExcel(): void {
     const exportData = this.filteredContributions.map((txn, index) => ({
       'No': index + 1,
-      'First Name': txn.user.first_name,
-      'Last Name': txn.user.last_name,
-      'Contribution Category': txn.contribution_type.name,
+      'First Name': txn.user?.first_name || '-',
+      'Last Name': txn.user?.last_name || '-',
+      'Contribution Category': txn.contribution_type?.name || '-',
       'Amount': parseFloat(txn.contribution_amount),
       'Date' : txn.contribution_date
     }))
@@ -185,10 +185,10 @@ export class AllContributionsComponent implements OnInit {
     const headers = [['#', 'First Name', 'Last Name', 'Phone Number', 'Category Type', 'Amount', 'Date']]
     const data = this.filteredContributions.map((txn, index) => [
       index + 1,
-      txn.user.first_name,
-      txn.user.last_name,
-      txn.user.phone_number,
-      txn.contribution_type.name,
+      txn.user?.first_name || '-',
+      txn.user?.last_name || '-',
+      txn.user?.phone_number || '-',
+      txn.contribution_type?.name || '-',
       txn.contribution_amount,
       txn.contribution_date,
       this.formatDateTime(txn.contribution_date)

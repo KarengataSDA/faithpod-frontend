@@ -159,7 +159,7 @@
                             <tbody >
                               <ng-container *ngIf="user?.contributions as contributions">
                                 <tr class="border-bottom" *ngFor="let collection of contributions; index as i">
-                                    <td *ngIf="i === 0 || user.contributions[i].contribution_date !== user.contributions[i-1].contribution_date" [attr.rowspan]="getRowspan(user.contributions, collection.contribution_date)">{{collection.contribution_date}}</td>
+                                    <td *ngIf="i === 0 || contributions[i].contribution_date !== contributions[i-1].contribution_date" [attr.rowspan]="getRowspan(contributions, collection.contribution_date)">{{collection.contribution_date}}</td>
                                     <th>{{i + 1}}</th>
                                     <td>{{collection?.contribution_type?.name}}</td>
                                     <td>{{collection?.contribution_amount}}</td>
@@ -179,11 +179,11 @@
                         <table class="table table-bordered" *ngIf="user">
                           <tr>
                             <td class="fw-bold">Population Group</td>
-                            <td>{{user.population_group.name}}</td>
+                            <td>{{user.population_group?.name}}</td>
                           </tr>
                           <tr>
                             <td class="fw-bold">Prayercell</td>
-                            <td>{{user.prayercell.name}}</td>
+                            <td>{{user.prayercell?.name}}</td>
                           </tr>
                         </table>
                       </div>

@@ -7,21 +7,24 @@ import { Role } from './role';
 
 export interface Member {
   id: number;
-  membership_number: number
+  membership_number?: string;
   first_name: string;
-  middle_name: string;
+  middle_name?: string;
   last_name: string;
+  full_name?: string;
   email: string;
   phone_number: string;
-  date_of_birth: string;
-  gender: string;
-  role: Role;
-  population_group: PopulationGroup;
-  prayercell: Prayercell;
-  membershiptype: Membership
-  contributions: Contribution[];
+  date_of_birth?: string;
+  gender?: string;
+  email_verified_at?: string;
+  role?: Role;
+  roles?: string[];
+  population_group?: PopulationGroup;
+  prayercell?: Prayercell;
+  membershiptype?: Membership;
+  membership_type?: { id: number; name: string };
+  contributions?: Contribution[];
   tenant_id?: string;
-
 }
 
 export interface Gender {

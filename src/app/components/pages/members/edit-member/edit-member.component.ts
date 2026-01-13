@@ -85,11 +85,10 @@ export class EditMemberComponent implements OnInit, OnDestroy {
           email: member.email,
           phone_number: member.phone_number,
           membership_number: member.membership_number,
-          membership_type_id: member.membershiptype.id,
-          role_id: member.role.id,
-          population_group_id: member.population_group ? member.population_group.id : null,
-          prayercell_id: member.prayercell ? member.prayercell.id : null
-
+          membership_type_id: member.membershiptype?.id || member.membership_type?.id || null,
+          role_id: member.role?.id || null,
+          population_group_id: member.population_group?.id || null,
+          prayercell_id: member.prayercell?.id || null
         });
       });
   }
@@ -113,8 +112,9 @@ export class EditMemberComponent implements OnInit, OnDestroy {
     });
   
     if (this.form.valid) {
+      const { phone_number, ...formData } = this.form.getRawValue();
 
-      this.memberService.update(this.id, this.form.getRawValue())
+      this.memberService.update(this.id, formData)
         .pipe(
           takeUntil(this.destroy$),
           catchError((error) => {

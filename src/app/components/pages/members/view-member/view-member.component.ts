@@ -28,25 +28,20 @@ constructor (
 
 ngOnInit(): void {
   this.id = this.route.snapshot.params['memberId'];
-  
+
   this.memberService.getUser(this.id).subscribe((data: Member) => {
     this.member = data;
-  
   })
-
-  var col_id = this.member?.contributions.find(item => item.id == this.id)?.id
-  
 }
 
 getRowspan(contributions: Contribution[], date: string): number {
   return contributions.filter(contribution => contribution.contribution_date === date).length
 }
 
-sendMail(id) {
+sendMail(id: number) {
   this.collectionService.sendMail(id).subscribe(res => {
-    id = this.member.contributions.find(item => item.id == id)?.id
+    id = this.member?.contributions?.find(item => item.id == id)?.id ?? id
     window.location.reload()
-  
   })
 }
 }

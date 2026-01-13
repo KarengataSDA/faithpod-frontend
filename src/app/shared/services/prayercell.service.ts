@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Prayercell } from '../models/prayercell';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
@@ -29,7 +29,7 @@ export class PrayercellService {
   getAll(): Observable<Prayercell[]> {
     // Try localStorage first for reference data
     const cached = this.localStorageService.get<Prayercell[]>(this.STORAGE_KEY);
-    if (cached) {
+    if (cached && Array.isArray(cached)) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();
@@ -38,8 +38,12 @@ export class PrayercellService {
 
     return this.cacheService.get(
       this.CACHE_KEY,
-      this.http.get<Prayercell[]>(this.baseUrl + '/prayercells').pipe(
-        tap(data => this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL }))
+      this.http.get<Prayercell[] | { data: Prayercell[] }>(this.baseUrl + '/prayercells').pipe(
+        tap(response => {
+          const data = Array.isArray(response) ? response : (response as any)?.data || [];
+          this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL });
+        }),
+        map(response => Array.isArray(response) ? response : (response as any)?.data || [])
       ),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching

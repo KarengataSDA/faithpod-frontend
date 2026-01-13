@@ -4,7 +4,7 @@
   [active_item]="'Category List'"
 ></app-page-header>
 
-<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_category')">
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create contribution types')">
   <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/treasury/collection-categories/create">
     <i class="fe fe-plus"></i>  Add Category
   </a>
@@ -39,7 +39,7 @@
                     <th>No.</th>
                     <th>Name</th>
                     <th>Status</th>
-                    <th *ngIf="authService.hasPermission('can_view_categories')">Action</th>
+                    <th *ngIf="authService.hasPermission('view contribution types')">Action</th>
                   </tr>
                 </thead>
                  <tbody *ngIf="isLoading">
@@ -67,7 +67,7 @@
                         <td>
                           <div class="g-2">
                             <a
-                            *ngIf="authService.hasPermission('can_view_categories')"
+                            *ngIf="authService.hasPermission('view contribution types')"
                               [routerLink]="['/pages/treasury/collection-categories/', category.id, 'contributions']"
                               class="btn text-primary btn-sm"
                               data-bs-toggle="tooltip"
@@ -75,14 +75,14 @@
                               ><span class="fe fe-eye fs-14"></span
                             ></a>
                             <a
-                            *ngIf="authService.hasPermission('can_edit_category')"
+                            *ngIf="authService.hasPermission('edit contribution types')"
                               routerLink="edit/{{ category.id }}"
                               class="btn text-primary btn-sm"
                               ngbTooltip="Edit"
                               ><span class="fe fe-edit fs-14"></span
                             ></a>
                             <a
-                            *ngIf="authService.hasPermission('can_delete_category')"
+                            *ngIf="authService.hasPermission('delete contribution types')"
                               (click)="deleteCategory(category.id)"
                               class="btn text-danger btn-sm"
                               data-bs-toggle="tooltip"

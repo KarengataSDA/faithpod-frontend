@@ -55,11 +55,11 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let category of collection?.contributions; index as i">
-                      <td *ngIf="i === 0 || collection.contributions[i].user.first_name !== collection.contributions[i-1].user.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user.first_name)">{{category.user.first_name}} {{category.user.last_name}}</td>
+                      <td *ngIf="i === 0 || collection.contributions[i]?.user?.first_name !== collection.contributions[i-1]?.user?.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user?.first_name || '')">{{category.user?.first_name || '-'}} {{category.user?.last_name || ''}}</td>
 
                       <th>{{ i + 1 }}</th>
                       <!-- <td>{{category.user.first_name}} {{category.user.last_name}}</td> -->
-                      <td>{{ category.contribution_type.name }}</td>
+                      <td>{{ category.contribution_type?.name || '-' }}</td>
                       <td>{{ category.contribution_amount }}</td>
                       <!-- <td *ngIf="i === 0 || collection.contributions[i].user.first_name !== collection.contributions[i-1].user.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user.first_name)"> <div class="mt-sm-1 text-center" >
                         <i class="ri-mail-open-line text-primary s-14"></i>
@@ -72,7 +72,7 @@
                     </div> -->
 
 
-                    <td *ngIf="i === 0 || collection.contributions[i].user.first_name !== collection.contributions[i-1].user.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user.first_name)">
+                    <td *ngIf="i === 0 || collection.contributions[i]?.user?.first_name !== collection.contributions[i-1]?.user?.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user?.first_name || '')">
                       <div class="mt-sm-1 text-center" >
                           <a  class="btn text-primary btn-sm">
                              <ng-template [ngIf] ="category.status == 0">

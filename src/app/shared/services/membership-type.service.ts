@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Membership } from 'src/app/shared/models/membership';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
@@ -30,7 +30,7 @@ export class MembershipTypeService {
   getAll(): Observable<Membership[]> {
     // Try localStorage first for reference data
     const cached = this.localStorageService.get<Membership[]>(this.STORAGE_KEY);
-    if (cached) {
+    if (cached && Array.isArray(cached)) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();
@@ -39,8 +39,12 @@ export class MembershipTypeService {
 
     return this.cacheService.get(
       this.CACHE_KEY,
-      this.http.get<Membership[]>(this.baseUrl + '/membershiptype').pipe(
-        tap(data => this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL }))
+      this.http.get<Membership[] | { data: Membership[] }>(this.baseUrl + '/membership-types').pipe(
+        tap(response => {
+          const data = Array.isArray(response) ? response : (response as any)?.data || [];
+          this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL });
+        }),
+        map(response => Array.isArray(response) ? response : (response as any)?.data || [])
       ),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
@@ -51,7 +55,7 @@ export class MembershipTypeService {
     const cacheKey = `${this.CACHE_KEY}_${id}`;
     return this.cacheService.get(
       cacheKey,
-      this.http.get<Membership>(this.baseUrl + '/membershiptype/' + id),
+      this.http.get<Membership>(this.baseUrl + '/membership-types/' + id),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
     );

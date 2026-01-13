@@ -87,7 +87,7 @@ export class NavService implements OnDestroy {
     },
     {
       headTitle: 'MEMBERSHIP',
-      permissions: ['can_view_users', 'can_view_membershiptypes']
+      permissions: ['view members', 'view membership types']
     },
     {
       title: 'Members',
@@ -96,14 +96,14 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_users'],
+      permissions: ['view members'],
       children: [
         {
           path: '/pages/members',
           title: 'Members List',
           type: 'link',
           selected: false,
-          permissions: ['can_view_users']
+          permissions: ['view members']
         }
       ],
     },
@@ -114,7 +114,7 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_membershiptypes'],
+      permissions: ['view membership types'],
       children: [
 
         {
@@ -122,13 +122,13 @@ export class NavService implements OnDestroy {
           title: 'Membership Type',
           type: 'link',
           selected: false,
-          permissions: ['can_view_membershiptypes']
+          permissions: ['view membership types']
         }
       ],
     },
     {
       headTitle: 'TREASURY',
-      permissions: ['can_view_contributions']
+      permissions: ['view contribution types']
     },
     {
       title: 'Categories',
@@ -137,14 +137,14 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_categories'],
+      permissions: ['view contribution types'],
       children: [
         {
           path: '/pages/treasury/collection-categories',
           title: 'Categories',
           type: 'link',
           selected: false,
-          permissions: ['can_view_categories']
+          permissions: ['view contribution types']
         }
       ],
     },
@@ -155,14 +155,14 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_contributions'],
+      permissions: ['view contribution types'],
       children: [
         {
           path: '/pages/treasury/collections',
           title: 'Date Categories',
           type: 'link',
           selected: false,
-          permissions: ['can_view_contributions']
+          permissions: ['view contribution types']
 
         },
         {
@@ -170,7 +170,7 @@ export class NavService implements OnDestroy {
           title: 'All Contributions',
           type: 'link',
           selected: false,
-          permissions: ['can_view_contributions']
+          permissions: ['view contribution types']
 
         },
       ],
@@ -182,14 +182,14 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_contributions'],
+      permissions: ['view contribution types'],
       children: [
         {
           path: '/pages/treasury/paybill-transactions',
           title: 'Paybill Collection',
           type: 'link',
           selected: false,
-          // permissions: ['can_view_contributions']
+          // permissions: ['view contribution types']
 
         },
          {
@@ -203,7 +203,7 @@ export class NavService implements OnDestroy {
     },
     {
       headTitle: 'POPULATION GROUPS',
-      permissions: ['can_view_groups']
+      permissions: ['view population groups']
     },
     {
       title: 'Groups',
@@ -212,20 +212,20 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_groups'],
+      permissions: ['view population groups'],
       children: [
         {
           path: '/pages/groups',
           title: 'Groups',
           type: 'link',
           selected: false,
-          permissions: ['can_view_groups']
+          permissions: ['view population groups']
         }
       ],
     },
     {
       headTitle: 'Prayercell',
-      permissions: ['can_view_prayercells']
+      permissions: ['view prayer cells']
     },
     {
       title: 'Prayercells',
@@ -234,20 +234,20 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_prayercells'],
+      permissions: ['view prayer cells'],
       children: [
         {
           path: '/pages/prayercells',
           title: 'Prayercells',
           type: 'link',
           selected: false,
-          permissions: ['can_view_prayercells']
+          permissions: ['view prayer cells']
         }
       ]
     },
     {
       headTitle: 'Settings',
-      permissions: ['can_view_roles']
+      permissions: ['view roles']
     },
     {
       title: 'Roles',
@@ -256,14 +256,14 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_roles'],
+      permissions: ['view roles'],
       children: [
         {
           path: '/pages/roles',
           title: 'Roles',
           type: 'link',
           selected: false,
-          permissions: ['can_view_roles']
+          permissions: ['view roles']
         }
       ]
     },

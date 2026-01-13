@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Role } from 'src/app/shared/models/role';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
@@ -29,7 +29,7 @@ export class RoleService {
   getAll(): Observable<Role[]> {
     // Try localStorage first for reference data
     const cached = this.localStorageService.get<Role[]>(this.STORAGE_KEY);
-    if (cached) {
+    if (cached && Array.isArray(cached)) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();
@@ -39,8 +39,12 @@ export class RoleService {
     // Use service-level cache with localStorage backup
     return this.cacheService.get(
       this.CACHE_KEY,
-      this.http.get<Role[]>(this.baseUrl + '/roles').pipe(
-        tap(data => this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL }))
+      this.http.get<Role[] | { data: Role[] }>(this.baseUrl + '/roles').pipe(
+        tap(response => {
+          const data = Array.isArray(response) ? response : (response as any)?.data || [];
+          this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL });
+        }),
+        map(response => Array.isArray(response) ? response : (response as any)?.data || [])
       ),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching

@@ -5,7 +5,7 @@
 ></app-page-header>
 
 
-<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_contribution')">
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create contribution types')">
   <a class="btn ms-2 btn-primary my-1"
     routerLink="/pages/treasury/collections/create">
     <i class="fe fe-plus"></i> Add Collection
@@ -38,7 +38,7 @@
                     <th>NO.</th>
                     <th>Contribution Date</th>
                     <th>Total</th>
-                    <th *ngIf="authService.hasPermission('can_view_contributions')">Action</th>
+                    <th *ngIf="authService.hasPermission('view contribution types')">Action</th>
                   </tr>
                 </thead>
                  <tbody *ngIf="isLoading">

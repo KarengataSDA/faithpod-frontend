@@ -33,7 +33,7 @@ export class ViewCollectionComponent implements OnInit {
   }
 
   getRowspan(contributions: Contribution[], name: string): number {
-    return contributions.filter(contribution => contribution.user.first_name == name).length
+    return contributions.filter(contribution => contribution.user?.first_name == name).length
   }
 
   sendMail(id) {

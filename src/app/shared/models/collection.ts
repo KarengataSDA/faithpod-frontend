@@ -25,10 +25,10 @@ export interface CollectionTotal {
 }
 
 export interface Contribution {
-        id: number 
+        id: number
         contribution_amount: string
         contribution_date: string
         status: number
-        user: User
-        contribution_type: ContributionCategory
+        user?: User
+        contribution_type?: ContributionCategory
 }

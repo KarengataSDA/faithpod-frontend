@@ -4,7 +4,7 @@
   [active_item]="'Roles List'"
 ></app-page-header>
 
-<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_role')">
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create roles')">
   <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/roles/create-role">
     <i class="fe fe-plus"></i>  Create Role
   </a>
@@ -64,14 +64,14 @@
                               ><span class="fe fe-eye fs-14"></span
                             ></a> -->
                             <a 
-                            *ngIf="authService.hasPermission('can_edit_role')"
+                            *ngIf="authService.hasPermission('edit roles')"
                               routerLink="edit/{{ role.id }}"
                               class="btn text-primary btn-sm"
                               ngbTooltip="Edit"
                               ><span class="fe fe-edit fs-14"></span
                             ></a>
                             <a 
-                            *ngIf="authService.hasPermission('can_delete_role')"
+                            *ngIf="authService.hasPermission('delete roles')"
                               (click)="deleteRole(role.id)"
                               class="btn text-danger btn-sm"
                               data-bs-toggle="tooltip"

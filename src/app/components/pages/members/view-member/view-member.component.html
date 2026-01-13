@@ -146,11 +146,11 @@
                                    
                                 </tr>
                             </thead>
-                            <tbody *ngIf="member">
-                                <tr class="border-bottom" *ngFor="let collection of member.contributions; index as i">
-                                    <td *ngIf="i === 0 || member.contributions[i].contribution_date !== member.contributions[i-1].contribution_date" [attr.rowspan]="getRowspan(member.contributions, collection.contribution_date)">{{collection.contribution_date}}</td>
+                            <tbody *ngIf="member?.contributions as contributions">
+                                <tr class="border-bottom" *ngFor="let collection of contributions; index as i">
+                                    <td *ngIf="i === 0 || contributions[i].contribution_date !== contributions[i-1].contribution_date" [attr.rowspan]="getRowspan(contributions, collection.contribution_date)">{{collection.contribution_date}}</td>
                                     <th>{{i + 1}}</th>
-                                    <td>{{collection.contribution_type.name}}</td>
+                                    <td>{{collection.contribution_type?.name}}</td>
                                     <td>{{collection.contribution_amount}}</td>
                                     
                                     <!-- <td>

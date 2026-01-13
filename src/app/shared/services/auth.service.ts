@@ -200,9 +200,22 @@ export class AuthService {
       }
     }
 
-    if (user && user.role && user.role.permissions) {
-      return user.role.permissions.some((perm: any) => perm.name === permission);
+    if (!user) {
+      return false;
     }
+
+    // Check permissions array directly (API returns permissions as array of strings)
+    if (user.permissions && Array.isArray(user.permissions)) {
+      return user.permissions.includes(permission);
+    }
+
+    // Fallback: check nested role.permissions structure (legacy format)
+    if (user.role && user.role.permissions) {
+      return user.role.permissions.some((perm: any) =>
+        typeof perm === 'string' ? perm === permission : perm.name === permission
+      );
+    }
+
     return false;
   }
 

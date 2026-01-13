@@ -4,7 +4,7 @@
   [active_item]="'Prayercells List'"
 ></app-page-header>
 
-<div class="card-footer text-end" *ngIf="authService.hasPermission('can_create_prayercell')">
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create prayer cells')">
   <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/prayercells/create-prayercell">
     <i class="fe fe-plus"></i>  Add Prayercell
   </a>
@@ -38,7 +38,7 @@
                   <tr>
                     <th>No.</th>
                     <th>Prayercell Name</th>
-                    <th *ngIf="authService.hasPermission('can_view_prayercells')">Action</th>
+                    <th *ngIf="authService.hasPermission('view prayer cells')">Action</th>
                   </tr>
                 </thead>
                 <tbody *ngIf="isLoading">
@@ -57,7 +57,7 @@
                         <td>
                           <div class="g-2">
                             <a 
-                            *ngIf="authService.hasPermission('can_view_prayercells')"
+                            *ngIf="authService.hasPermission('view prayer cells')"
                               routerLink="view/{{ prayercell.id }}"
                               class="btn text-primary btn-sm"
                               data-bs-toggle="tooltip"
@@ -65,14 +65,14 @@
                               ><span class="fe fe-eye fs-14"></span
                             ></a>
                             <a 
-                            *ngIf="authService.hasPermission('can_edit_prayercell')"
+                            *ngIf="authService.hasPermission('edit prayer cells')"
                               routerLink="edit/{{ prayercell.id }}"
                               class="btn text-primary btn-sm"
                               ngbTooltip="Edit"
                               ><span class="fe fe-edit fs-14"></span
                             ></a>
                             <a
-                            *ngIf="authService.hasPermission('can_delete_prayercell')"
+                            *ngIf="authService.hasPermission('delete prayer cells')"
                               (click)="deletePrayercell(prayercell.id)"
                               class="btn text-danger btn-sm"
                               data-bs-toggle="tooltip"
