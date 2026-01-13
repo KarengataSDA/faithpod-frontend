@@ -55,7 +55,9 @@ export class RoleService {
     const cacheKey = `${this.CACHE_KEY}_${id}`;
     return this.cacheService.get(
       cacheKey,
-      this.http.get<Role>(this.baseUrl + '/roles/' + id),
+      this.http.get<Role | { data: Role }>(this.baseUrl + '/roles/' + id).pipe(
+        map(response => (response as any)?.data || response)
+      ),
       this.CACHE_TTL,
       true // Enable shareReplay for proper caching
     );
@@ -68,7 +70,16 @@ export class RoleService {
   }
 
   update(id: number, data): Observable<Role> {
-    return this.http.put<Role>(this.baseUrl + '/roles/' + id, data).pipe(
+    return this.http.put<Role>(`${this.baseUrl}/roles/${id}`, data).pipe(
+      tap(() => this.invalidateCache())
+    );
+  }
+
+  /**
+   * Assign permissions to a role (permissions only, no name update)
+   */
+  assignPermissions(id: number, permissions: number[]): Observable<Role> {
+    return this.http.put<Role>(`${this.baseUrl}/roles/${id}/permissions`, { permissions }).pipe(
       tap(() => this.invalidateCache())
     );
   }
