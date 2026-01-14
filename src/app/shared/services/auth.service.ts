@@ -228,12 +228,22 @@ export class AuthService {
   }
 
 
+  // Tenant password reset
   sendResetLink(email: string): Observable<any> {
-    return this.http.post(this.baseUrl + '/password/email', {email});
+    return this.http.post(this.baseUrl + '/password/forgot', {email});
   }
 
   resetPassword(data: { token: string, email: string, password: string, password_confirmation: string}): Observable<any> {
     return this.http.post(this.baseUrl + '/password/reset', data)
+  }
+
+  // Central Admin password reset
+  sendCentralAdminResetLink(email: string): Observable<any> {
+    return this.http.post(`http://127.0.0.1:${environment.apiPort}/api/password/forgot`, {email});
+  }
+
+  resetCentralAdminPassword(data: { token: string, email: string, password: string, password_confirmation: string}): Observable<any> {
+    return this.http.post(`http://127.0.0.1:${environment.apiPort}/api/password/reset`, data)
   }
 
 }
