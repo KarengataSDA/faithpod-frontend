@@ -33,11 +33,6 @@ export class EditProfileComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private authService: AuthService ) {}
 
   ngOnInit(): void {
-    this.authService.user().subscribe(
-      (user) => {
-        this.user = user;
-      }
-    )
     this.infoForm = this.formBuilder.group({
       first_name: '',
       middle_name: '',
@@ -47,6 +42,13 @@ export class EditProfileComponent implements OnInit {
       date_of_birth: '',
       gender: ''
     })
+
+    this.authService.user().subscribe(
+      (user) => {
+        this.user = user;
+        this.infoForm.patchValue(user);
+      }
+    )
 
    
     this.passwordForm = this.formBuilder.group({
