@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ContributionCategory } from '../../../../../shared/models/collection';
 import { ContributionCategoryService } from 'src/app/shared/services/contribution-category.service';
+import { ThemeService } from 'src/app/shared/services/theme.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChartType } from 'chart.js';
 import * as moment from 'moment'
@@ -15,16 +16,35 @@ export class ViewCategoryComponent implements OnInit {
   id: number
   category: ContributionCategory
 
-  solidCategoryData: any 
-  solidCategoryOptions: any 
-  solidCategoryLegend: boolean = true 
+  solidCategoryData: any
+  solidCategoryOptions: any
+  solidCategoryLegend: boolean = true
   solidCategoryType: ChartType = 'bar'
-  selectedCategory: string = 'weekly' 
+  selectedCategory: string = 'weekly'
 
   constructor(
     private contributionCategoryService: ContributionCategoryService,
+    private themeService: ThemeService,
     private route: ActivatedRoute
   ) {}
+
+  /**
+   * Get the primary color from tenant theme for charts
+   */
+  getChartColor(): string {
+    const theme = this.themeService.getStoredTheme();
+    const primaryColor = theme?.primaryColor || '23, 83, 81';
+    return `rgb(${primaryColor})`;
+  }
+
+  /**
+   * Get the primary color with opacity for chart hover effects
+   */
+  getChartHoverColor(opacity: number = 0.8): string {
+    const theme = this.themeService.getStoredTheme();
+    const primaryColor = theme?.primaryColor || '23, 83, 81';
+    return `rgba(${primaryColor}, ${opacity})`;
+  }
 
   ngOnInit(): void {
       this.id = this.route.snapshot.params['categoryId'];
@@ -49,9 +69,9 @@ export class ViewCategoryComponent implements OnInit {
            label: 'Total Contribution',
            data: aggregatedData.values,
            fill: false,
-           backgroundColor: 'rgb(23,83,81)',
-           hoverBackgroundColor:  'rgb(23,83,81)',
-           hoverBorderColor: 'rgb(23,83,81)',
+           backgroundColor: this.getChartColor(),
+           hoverBackgroundColor: this.getChartHoverColor(),
+           hoverBorderColor: this.getChartColor(),
            outerHeight: '1000px'
          },
        ],

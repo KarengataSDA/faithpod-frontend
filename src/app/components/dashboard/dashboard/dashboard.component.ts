@@ -18,6 +18,7 @@ import { Gender, Member } from 'src/app/shared/models/member';
 import { PopulationGroup } from 'src/app/shared/models/population-group';
 import { CollectionTotal, ContributionCategory } from 'src/app/shared/models/collection';
 import { MembershipCount } from 'src/app/shared/models/membership';
+import { ThemeService } from 'src/app/shared/services/theme.service';
 
 
 
@@ -58,19 +59,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
   membershipCount: MembershipCount
 
  constructor (
-  private authService: AuthService, 
- 
+  private authService: AuthService,
+
   private memberService: MemberService,
   private membershipTypeService: MembershipTypeService,
   private prayercellService: PrayercellService,
   private collectionService: CollectionService,
   private contributionCategoryService: ContributionCategoryService,
   private populationGroupService: PopulationGroupService,
+  private themeService: ThemeService,
 
-  private router: Router, 
+  private router: Router,
   private route: ActivatedRoute) {
 
  }
+
+  /**
+   * Get the primary color from tenant theme for charts
+   */
+  getChartColor(): string {
+    const theme = this.themeService.getStoredTheme();
+    const primaryColor = theme?.primaryColor || '23, 83, 81';
+    return `rgb(${primaryColor})`;
+  }
+
+  /**
+   * Get the primary color with opacity for chart hover effects
+   */
+  getChartHoverColor(opacity: number = 0.8): string {
+    const theme = this.themeService.getStoredTheme();
+    const primaryColor = theme?.primaryColor || '23, 83, 81';
+    return `rgba(${primaryColor}, ${opacity})`;
+  }
   ngOnInit(): void {
     this.fetchUserData()
     this.fetchMembers()
@@ -132,9 +152,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
               label: 'Total Contributions',
               data: aggregatedContributionCategoryData.values,
               fill: false,
-              backgroundColor: 'rgb(23,83,81)',
-              hoverBackgroundColor: 'rgb(23,83,81)',
-              hoverBorderColor: 'rgb(23,83,81)',
+              backgroundColor: this.getChartColor(),
+              hoverBackgroundColor: this.getChartHoverColor(),
+              hoverBorderColor: this.getChartColor(),
             }
           ]
         }
@@ -273,9 +293,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
              label: 'Total Contribution',
              data: aggregatedData.values,
              fill: false,
-             backgroundColor: 'rgb(23,83,81)',
-             hoverBackgroundColor:  'rgb(23,83,81)',
-             hoverBorderColor: 'rgb(23,83,81)'
+             backgroundColor: this.getChartColor(),
+             hoverBackgroundColor: this.getChartHoverColor(),
+             hoverBorderColor: this.getChartColor()
            },
          ],
        };
