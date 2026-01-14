@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Subject, takeUntil } from 'rxjs';
 import Swal from 'sweetalert2';
+import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
 
 @Component({
   selector: 'app-register',
@@ -118,7 +119,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       return false
     }
 
-    const normalizedPhone = this.formatPhoneNumber(phoneNumber)
+    const normalizedPhone = normalizePhoneNumber(phoneNumber)
 
     const phoneNumberRegx = /^254\d{9}$/;
     if (!phoneNumberRegx.test(normalizedPhone)) {
@@ -128,17 +129,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.errorMessage = ''
     return true
-  }
-
-  formatPhoneNumber(phone: string): string {
-    const digits = phone.replace(/\D/g, '') 
-
-    if(digits.startsWith('0')) {
-      return '254' + digits.slice(1);
-    } else if (digits.startsWith('254')) {
-      return digits
-    }
-    return digits;
   }
 
   togglePassword() {
@@ -158,16 +148,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   private tenantRegister(): void {
-    const formatPhoneNumber = this.formatPhoneNumber(this.phoneNumber)
-
     if (this.validateRegistrationForm(this.email, this.password, this.passwordConfirm, this.phoneNumber)) {
       this.isLoading = true;
+      const formattedPhoneNumber = normalizePhoneNumber(this.phoneNumber);
       this.authService.register({
         first_name: this.firstName,
         middle_name: this.middleName,
         last_name: this.lastName,
         email: this.email,
-        phone_number: formatPhoneNumber,
+        phone_number: formattedPhoneNumber,
         password: this.password,
         password_confirm: this.passwordConfirm,
       })

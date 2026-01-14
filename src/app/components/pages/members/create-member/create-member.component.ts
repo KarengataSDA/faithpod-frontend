@@ -11,6 +11,7 @@ import { PopulationGroup } from 'src/app/shared/models/population-group';
 import { Prayercell } from 'src/app/shared/models/prayercell';
 import { MembershipTypeService } from 'src/app/shared/services/membership-type.service';
 import { Membership } from 'src/app/shared/models/membership';
+import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
 
 @Component({
     selector: 'app-create-member',
@@ -68,8 +69,11 @@ export class CreateMemberComponent implements OnInit {
   }
 
   submit() {
-    this.memberService.create(this.form.value).subscribe(res => {
-      this.form.reset() 
+    const formData = { ...this.form.value };
+    formData.phone_number = normalizePhoneNumber(formData.phone_number);
+
+    this.memberService.create(formData).subscribe(res => {
+      this.form.reset()
       Toast.fire({
         icon: 'success',
         title: 'Member added Successfully'
@@ -90,7 +94,7 @@ export class CreateMemberComponent implements OnInit {
         toast.onmouseleave = Swal.resumeTimer;
       },
     });
-  
+
   }
   
 }
