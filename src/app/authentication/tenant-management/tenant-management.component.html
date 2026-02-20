@@ -89,16 +89,21 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label">Password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  placeholder="Minimum 8 characters"
-                  formControlName="password"
-                  [class.is-invalid]="createTenantForm.get('password')?.invalid && createTenantForm.get('password')?.touched"
-                >
-                <div class="invalid-feedback" *ngIf="createTenantForm.get('password')?.invalid && createTenantForm.get('password')?.touched">
-                  <span *ngIf="createTenantForm.get('password')?.errors?.['required']">Password is required</span>
-                  <span *ngIf="createTenantForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+                <div class="input-group">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control"
+                    placeholder="Minimum 8 characters"
+                    formControlName="password"
+                    [class.is-invalid]="createTenantForm.get('password')?.invalid && createTenantForm.get('password')?.touched"
+                  >
+                  <button type="button" class="btn btn-outline-secondary" (click)="showPassword = !showPassword" tabindex="-1">
+                    <i class="zmdi" [class.zmdi-eye]="!showPassword" [class.zmdi-eye-off]="showPassword"></i>
+                  </button>
+                  <div class="invalid-feedback" *ngIf="createTenantForm.get('password')?.invalid && createTenantForm.get('password')?.touched">
+                    <span *ngIf="createTenantForm.get('password')?.errors?.['required']">Password is required</span>
+                    <span *ngIf="createTenantForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+                  </div>
                 </div>
               </div>
             </div>

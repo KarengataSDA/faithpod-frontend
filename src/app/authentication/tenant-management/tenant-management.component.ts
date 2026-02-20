@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 interface Tenant {
   id: string;
@@ -28,6 +29,7 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
   isLoading = false;
   isCreating = false;
   isDeleting = false;
+  showPassword = false;
   errorMessage = '';
   successMessage = '';
 
@@ -138,36 +140,48 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
   }
 
   deleteTenant(tenant: Tenant): void {
-    if (!confirm(`Are you sure you want to delete "${tenant.name}"? This action cannot be undone.`)) {
-      return;
-    }
+    Swal.fire({
+      title: 'Delete Tenant?',
+      html: `You are about to permanently delete <strong>${tenant.name}</strong>.<br>This will remove all tenant data and cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (!result.isConfirmed) return;
 
-    this.isDeleting = true;
-    this.errorMessage = '';
+      this.isDeleting = true;
+      this.errorMessage = '';
 
-    this.http
-      .delete(`${this.apiUrl}/tenants/${tenant.id}`, {
-        headers: {
-          'Authorization': `Bearer ${this.authToken}`
-        }
-      })
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(this.handleError.bind(this))
-      )
-      .subscribe({
-        next: () => {
-          this.isDeleting = false;
-          this.successMessage = 'Tenant deleted successfully!';
-          this.loadTenants();
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
-        },
-        error: () => {
-          this.isDeleting = false;
-        }
-      });
+      this.http
+        .delete(`${this.apiUrl}/tenants/${tenant.id}`, {
+          headers: {
+            'Authorization': `Bearer ${this.authToken}`
+          }
+        })
+        .pipe(
+          takeUntil(this.destroy$),
+          catchError(this.handleError.bind(this))
+        )
+        .subscribe({
+          next: () => {
+            this.isDeleting = false;
+            this.loadTenants();
+            Swal.fire({
+              title: 'Deleted!',
+              text: `${tenant.name} has been deleted.`,
+              icon: 'success',
+              timer: 2500,
+              showConfirmButton: false,
+            });
+          },
+          error: () => {
+            this.isDeleting = false;
+          }
+        });
+    });
   }
 
   logout(): void {
