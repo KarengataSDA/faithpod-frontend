@@ -6,7 +6,7 @@ import { RoleService } from 'src/app/shared/services/role.service';
 import Swal from 'sweetalert2';
 import { PrayercellService } from 'src/app/shared/services/prayercell.service';
 import { PopulationGroupService } from 'src/app/shared/services/population-group.service';
-import { catchError, of, Subject } from 'rxjs';
+import { catchError, forkJoin, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Role } from 'src/app/shared/models/role';
 import { PopulationGroup } from 'src/app/shared/models/population-group';
@@ -57,27 +57,26 @@ export class EditMemberComponent implements OnInit, OnDestroy {
       population_group_id: ''
     });
 
-    this.roleService.getAll()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((roles) => (this.roles = roles));
-
-    this.prayercellService.getAll()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(prayercells => this.prayercells = prayercells);
-
-    this.populationGroupService.getAll()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(groups => this.groups = groups);
-
-    this.membershiptypeService.getAll()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(membershiptypes => this.membershiptypes = membershiptypes);
-
     this.id = this.route.snapshot.params.id;
 
-    this.memberService.getUser(this.id)
+    forkJoin({
+      member: this.memberService.getUser(this.id),
+      roles: this.roleService.getAll(),
+      prayercells: this.prayercellService.getAll(),
+      groups: this.populationGroupService.getAll(),
+      membershiptypes: this.membershiptypeService.getAll(),
+    })
       .pipe(takeUntil(this.destroy$))
-      .subscribe((member) => {
+      .subscribe(({ member, roles, prayercells, groups, membershiptypes }) => {
+        this.roles = roles;
+        this.prayercells = prayercells;
+        this.groups = groups;
+        this.membershiptypes = membershiptypes;
+
+        // member.roles is an array of role names e.g. ['user'] — find matching role ID
+        const memberRoleName = Array.isArray(member.roles) ? (member.roles as string[])[0] : null;
+        const matchingRole = roles.find(r => r.name === memberRoleName);
+
         this.form.patchValue({
           first_name: member.first_name,
           middle_name: member.middle_name,
@@ -85,10 +84,10 @@ export class EditMemberComponent implements OnInit, OnDestroy {
           email: member.email,
           phone_number: member.phone_number,
           membership_number: member.membership_number,
-          membership_type_id: member.membership_type?.id || null,
-          role_id: member.role?.id || null,
-          population_group_id: member.population_group?.id || null,
-          prayercell_id: member.prayercell?.id || null
+          membership_type_id: member.membership_type?.id ?? null,
+          role_id: matchingRole?.id ?? null,
+          population_group_id: member.population_group?.id ?? null,
+          prayercell_id: member.prayercell?.id ?? null,
         });
       });
   }

@@ -80,6 +80,7 @@
               class="form-control"
               formControlName="membership_type_id"
             >
+              <option [ngValue]="null">-- Select Membership Type --</option>
               <option *ngFor="let membershiptype of membershiptypes" [ngValue]="membershiptype.id">
                 {{ membershiptype.name }}
               </option>
@@ -93,6 +94,7 @@
               class="form-control"
               formControlName="role_id"
             >
+              <option [ngValue]="null">-- Select Role --</option>
               <option *ngFor="let role of roles" [ngValue]="role.id">
                 {{ role.name }}
               </option>
@@ -106,6 +108,7 @@
               class="form-control"
               formControlName="population_group_id"
             >
+              <option [ngValue]="null">-- Select Population Group --</option>
               <option *ngFor="let group of groups" [ngValue]="group.id">
                 {{ group.name }}
               </option>
@@ -119,6 +122,7 @@
               class="form-control"
               formControlName="prayercell_id"
             >
+              <option [ngValue]="null">-- Select Prayercell --</option>
               <option *ngFor="let prayercell of prayercells" [ngValue]="prayercell.id">
                 {{ prayercell.name }}
               </option>
