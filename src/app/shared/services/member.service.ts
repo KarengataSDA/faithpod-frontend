@@ -17,9 +17,6 @@ export class MemberService {
   private localStorageService = inject(LocalStorageService);
   private tenantService = inject(TenantService);
 
-  private readonly CACHE_KEY_MEMBERS = 'members';
-  private readonly STORAGE_KEY_MEMBERS = 'members';
-  private readonly CACHE_KEY_GENDER = 'gender_count';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
   /**
@@ -29,10 +26,26 @@ export class MemberService {
     return this.tenantService.getApiUrl();
   }
 
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY_MEMBERS(): string {
+    return `${this.tenantPrefix}_members`;
+  }
+
+  private get STORAGE_KEY_MEMBERS(): string {
+    return `${this.tenantPrefix}_members`;
+  }
+
+  private get CACHE_KEY_GENDER(): string {
+    return `${this.tenantPrefix}_gender_count`;
+  }
+
   getAll(): Observable<Member[]> {
-    // Try localStorage first
+    // Try localStorage first (skip if empty array — may be stale)
     const cached = this.localStorageService.get<Member[]>(this.STORAGE_KEY_MEMBERS);
-    if (cached && Array.isArray(cached)) {
+    if (cached && Array.isArray(cached) && cached.length > 0) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();

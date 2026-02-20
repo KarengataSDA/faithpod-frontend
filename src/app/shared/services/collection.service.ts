@@ -42,11 +42,27 @@ export class CollectionService {
     return `${this.baseUrl}/add-user-contributions`;
   }
 
-  private readonly CACHE_KEY_COLLECTIONS = 'collections';
-  private readonly CACHE_KEY_CONTRIBUTIONS = 'contributions';
-  private readonly CACHE_KEY_CHART = 'contributions_chart';
-  private readonly CACHE_KEY_TOTAL = 'contributions_total';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY_COLLECTIONS(): string {
+    return `${this.tenantPrefix}_collections`;
+  }
+
+  private get CACHE_KEY_CONTRIBUTIONS(): string {
+    return `${this.tenantPrefix}_contributions`;
+  }
+
+  private get CACHE_KEY_CHART(): string {
+    return `${this.tenantPrefix}_contributions_chart`;
+  }
+
+  private get CACHE_KEY_TOTAL(): string {
+    return `${this.tenantPrefix}_contributions_total`;
+  }
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -127,8 +143,9 @@ export class CollectionService {
    * Clear all collection-related cache after mutations
    */
   private invalidateCache(): void {
-    this.cacheService.clearPattern(/^collections/);
-    this.cacheService.clearPattern(/^contributions/);
+    const prefix = this.tenantPrefix;
+    this.cacheService.clearPattern(new RegExp(`^${prefix}_collections`));
+    this.cacheService.clearPattern(new RegExp(`^${prefix}_contributions`));
   }
 }
 

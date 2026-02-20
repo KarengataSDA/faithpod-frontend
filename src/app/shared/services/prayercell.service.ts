@@ -22,14 +22,24 @@ export class PrayercellService {
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
-  private readonly CACHE_KEY = 'prayercells';
-  private readonly STORAGE_KEY = 'prayercells';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data
 
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY(): string {
+    return `${this.tenantPrefix}_prayercells`;
+  }
+
+  private get STORAGE_KEY(): string {
+    return `${this.tenantPrefix}_prayercells`;
+  }
+
   getAll(): Observable<Prayercell[]> {
-    // Try localStorage first for reference data
+    // Try localStorage first for reference data (skip if empty array — may be stale)
     const cached = this.localStorageService.get<Prayercell[]>(this.STORAGE_KEY);
-    if (cached && Array.isArray(cached)) {
+    if (cached && Array.isArray(cached) && cached.length > 0) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();

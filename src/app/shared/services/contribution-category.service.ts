@@ -22,14 +22,24 @@ export class ContributionCategoryService {
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
-  private readonly CACHE_KEY = 'contribution_categories';
-  private readonly STORAGE_KEY = 'contribution_categories';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data
 
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY(): string {
+    return `${this.tenantPrefix}_contribution_categories`;
+  }
+
+  private get STORAGE_KEY(): string {
+    return `${this.tenantPrefix}_contribution_categories`;
+  }
+
   getAll(): Observable<ContributionCategory[]> {
-    // Try localStorage first for reference data
+    // Try localStorage first for reference data (skip if empty array — may be stale)
     const cached = this.localStorageService.get<ContributionCategory[]>(this.STORAGE_KEY);
-    if (cached) {
+    if (cached && Array.isArray(cached) && cached.length > 0) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();

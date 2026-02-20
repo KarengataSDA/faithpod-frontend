@@ -22,15 +22,28 @@ export class MembershipTypeService {
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
-  private readonly CACHE_KEY = 'membership_types';
-  private readonly CACHE_KEY_COUNT = 'membership_count';
-  private readonly STORAGE_KEY = 'membership_types';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data
 
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY(): string {
+    return `${this.tenantPrefix}_membership_types`;
+  }
+
+  private get CACHE_KEY_COUNT(): string {
+    return `${this.tenantPrefix}_membership_count`;
+  }
+
+  private get STORAGE_KEY(): string {
+    return `${this.tenantPrefix}_membership_types`;
+  }
+
   getAll(): Observable<Membership[]> {
-    // Try localStorage first for reference data
+    // Try localStorage first for reference data (skip if empty array — may be stale)
     const cached = this.localStorageService.get<Membership[]>(this.STORAGE_KEY);
-    if (cached && Array.isArray(cached)) {
+    if (cached && Array.isArray(cached) && cached.length > 0) {
       return new Observable(observer => {
         observer.next(cached);
         observer.complete();
