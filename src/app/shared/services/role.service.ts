@@ -22,9 +22,19 @@ export class RoleService {
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
-  private readonly CACHE_KEY = 'roles';
-  private readonly STORAGE_KEY = 'roles';
   private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data
+
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY(): string {
+    return `${this.tenantPrefix}_roles`;
+  }
+
+  private get STORAGE_KEY(): string {
+    return `${this.tenantPrefix}_roles`;
+  }
 
   getAll(forceRefresh: boolean = false): Observable<Role[]> {
     // If forceRefresh is true, skip cache and fetch from server
@@ -32,10 +42,10 @@ export class RoleService {
       this.invalidateCache();
     }
 
-    // Try localStorage first for reference data (skip if forceRefresh)
+    // Try localStorage first for reference data (skip if forceRefresh or empty array)
     if (!forceRefresh) {
       const cached = this.localStorageService.get<Role[]>(this.STORAGE_KEY);
-      if (cached && Array.isArray(cached)) {
+      if (cached && Array.isArray(cached) && cached.length > 0) {
         return new Observable(observer => {
           observer.next(cached);
           observer.complete();
@@ -107,9 +117,7 @@ export class RoleService {
    * Clear all role-related cache after mutations
    */
   private invalidateCache(): void {
-    // Pattern matches both "roles" and "roles_<id>" after optional tenant prefix
-    // Examples: "roles", "roles_6", "tenant123_roles", "tenant123_roles_6"
-    this.cacheService.clearPattern(new RegExp(`_?${this.CACHE_KEY}(_\\d+)?$`));
+    this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY}`));
     this.localStorageService.remove(this.STORAGE_KEY);
   }
 }

@@ -19,8 +19,15 @@ export class PaybillTransactionService {
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
-  private readonly CACHE_KEY = 'paybill_transactions';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes for transaction data
+
+  private get tenantPrefix(): string {
+    return this.tenantService.getTenantFromSubdomain() || 'default';
+  }
+
+  private get CACHE_KEY(): string {
+    return `${this.tenantPrefix}_paybill_transactions`;
+  }
 
   getAll(): Observable<PaybillTransaction[]> {
     return this.cacheService.get(
