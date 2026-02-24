@@ -1,11 +1,9 @@
-
-
-name: Deploy Angular to Contabo
+name: Deploy FaithPod Frontend to Contabo
 
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   build-and-deploy:
@@ -21,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Clean and Install Dependencies
         run: |
@@ -30,7 +28,7 @@ jobs:
           npm install --legacy-peer-deps
 
       - name: Build Angular App
-        run: npm run build --configuration=production
+        run: npm run build -- --configuration=production
 
       - name: Debug Check Build Directory
         run: ls -R dist/
@@ -43,7 +41,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 2150
           source: "dist/*"
-          target: "/home/${{ secrets.VPS_USER }}/ksda-frontend-temp"
+          target: "/home/${{ secrets.VPS_USER }}/faithpod-frontend-temp"
 
       - name: Deploy to Contabo Server via SSH
         uses: appleboy/ssh-action@v0.1.6
@@ -53,13 +51,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 2150
           script: |
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S mkdir -p /var/www/html/ksda-frontend
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S rsync -avz --delete /home/${{ secrets.VPS_USER }}/ksda-frontend-temp/ /var/www/html/ksda-frontend/
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chown -R www-data:www-data /var/www/html/ksda-frontend
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chmod -R 755 /var/www/html/ksda-frontend
-            rm -rf /home/${{ secrets.VPS_USER }}/ksda-frontend-temp
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S mkdir -p /var/www/html/faithpod-frontend
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S rsync -avz --delete /home/${{ secrets.VPS_USER }}/faithpod-frontend-temp/ /var/www/html/faithpod-frontend/
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chown -R www-data:www-data /var/www/html/faithpod-frontend
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chmod -R 755 /var/www/html/faithpod-frontend
+            rm -rf /home/${{ secrets.VPS_USER }}/faithpod-frontend-temp
 
-      - name: Restart Server (Optional)
+      - name: Restart Nginx
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -68,4 +66,3 @@ jobs:
           port: 2150
           script: |
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart nginx || echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart apache2
-

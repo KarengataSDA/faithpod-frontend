@@ -17,12 +17,10 @@ export class CacheService {
   private defaultTTL = 5 * 60 * 1000;
 
   /**
-   * Get tenant-scoped cache key
-   * Prevents data leakage between tenants
+   * Returns the key as-is — services already include the tenant prefix.
    */
   private getScopedKey(key: string): string {
-    const tenantId = this.tenantService.getTenantId();
-    return tenantId ? `${tenantId}_${key}` : key;
+    return key;
   }
 
   get<T>(
@@ -69,17 +67,10 @@ export class CacheService {
   }
 
   clearPattern(pattern: string | RegExp): void {
-    const tenantId = this.tenantService.getTenantId();
     const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern;
 
     Array.from(this.cache.keys())
-      .filter(key => {
-        // Only clear keys for current tenant
-        if (tenantId && !key.startsWith(`${tenantId}_`)) {
-          return false;
-        }
-        return regex.test(key);
-      })
+      .filter(key => regex.test(key))
       .forEach(key => this.cache.delete(key));
   }
 
