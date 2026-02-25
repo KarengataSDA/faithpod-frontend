@@ -130,7 +130,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   private centralAdminLogin(): void {
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api/login`;
+    const apiUrl = `${environment.apiUrl}/login`;
 
     this.http
       .post(apiUrl, this.form.getRawValue())

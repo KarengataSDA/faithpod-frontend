@@ -121,7 +121,7 @@ export class TenantConfigurationComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     const token = sessionStorage.getItem('central_admin_token');
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api`;
+    const apiUrl = environment.apiUrl;
     const url = `${apiUrl}/tenants/${this.tenantId}/app-config`;
 
     this.http.get<AppConfig>(url, {
@@ -165,7 +165,7 @@ export class TenantConfigurationComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     const token = sessionStorage.getItem('central_admin_token');
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api`;
+    const apiUrl = environment.apiUrl;
     const url = `${apiUrl}/tenants/${this.tenantId}/app-config`;
 
     // Only send non-empty configuration sections

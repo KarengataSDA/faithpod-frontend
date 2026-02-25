@@ -94,7 +94,7 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     const token = sessionStorage.getItem('central_admin_token');
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api`;
+    const apiUrl = environment.apiUrl;
     const url = `${apiUrl}/tenants/${this.tenantId}/theme-config`;
 
     this.http.get<ThemeConfig>(url, {
@@ -151,7 +151,7 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     const token = sessionStorage.getItem('central_admin_token');
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api`;
+    const apiUrl = environment.apiUrl;
     const url = `${apiUrl}/tenants/${this.tenantId}/theme-config`;
     const formData = this.themeForm.value;
 

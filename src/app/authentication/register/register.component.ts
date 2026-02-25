@@ -217,7 +217,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api/register`;
+    const apiUrl = `${environment.apiUrl}/register`;
     const fullName = `${this.firstName} ${this.middleName} ${this.lastName}`.trim();
 
     this.http.post(apiUrl, {

@@ -51,7 +51,7 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
   }
 
   get apiUrl(): string {
-    return `http://127.0.0.1:${environment.apiPort}/api`;
+    return environment.apiUrl;
   }
 
   get authToken(): string | null {
