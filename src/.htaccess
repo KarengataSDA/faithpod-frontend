@@ -1,0 +1,9 @@
+Options -MultiViews
+RewriteEngine On
+
+# Serve existing files/dirs directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Fallback to index.html for Angular routing
+RewriteRule ^ /index.html [QSA,L]

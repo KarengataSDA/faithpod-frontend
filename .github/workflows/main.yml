@@ -13,9 +13,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Print GITHUB_WORKSPACE
-        run: echo "Workspace:$GITHUB_WORKSPACE"
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -40,8 +37,9 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 2150
-          source: "dist/*"
+          source: "dist/faithpod-frontend/browser/*"
           target: "/home/${{ secrets.VPS_USER }}/faithpod-frontend-temp"
+          strip_components: 3
 
       - name: Deploy to Contabo Server via SSH
         uses: appleboy/ssh-action@v0.1.6
@@ -57,7 +55,7 @@ jobs:
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chmod -R 755 /var/www/html/faithpod-frontend
             rm -rf /home/${{ secrets.VPS_USER }}/faithpod-frontend-temp
 
-      - name: Restart Nginx
+      - name: Restart Apache
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -65,4 +63,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 2150
           script: |
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart nginx || echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart apache2
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S systemctl restart apache2
