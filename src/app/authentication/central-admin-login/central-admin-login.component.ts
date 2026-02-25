@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-central-admin-login',
@@ -46,7 +47,7 @@ export class CentralAdminLoginComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.loginError = '';
 
-    const apiUrl = `${window.location.protocol}//${window.location.hostname}/api/login`;
+    const apiUrl = `${environment.apiUrl}/login`;
 
     this.http
       .post(apiUrl, this.form.getRawValue())

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-central-admin-register',
@@ -66,7 +67,7 @@ export class CentralAdminRegisterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.registerError = '';
 
-    const apiUrl = `${window.location.protocol}//${window.location.hostname}/api/register`;
+    const apiUrl = `${environment.apiUrl}/register`;
 
     this.http
       .post(apiUrl, this.form.getRawValue())

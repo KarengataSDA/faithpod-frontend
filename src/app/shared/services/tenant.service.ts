@@ -82,6 +82,12 @@ export class TenantService {
     // Extract first part as tenant (tenant1.faithpod.com → "tenant1")
     const tenant = parts[0];
 
+    // Reserved subdomains — not tenant identifiers
+    if (['admin', 'api', 'www'].includes(tenant.toLowerCase())) {
+      console.log('[TenantService] Reserved subdomain, no tenant:', tenant);
+      return null;
+    }
+
     // Validate tenant format (alphanumeric and hyphens only)
     if (!/^[a-z0-9-]+$/i.test(tenant)) {
       console.warn(`Invalid tenant format: ${tenant}`);
