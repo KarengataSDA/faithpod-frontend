@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -67,7 +66,7 @@ export class CentralAdminRegisterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.registerError = '';
 
-    const apiUrl = `http://127.0.0.1:${environment.apiPort}/api/register`;
+    const apiUrl = `${window.location.protocol}//${window.location.hostname}/api/register`;
 
     this.http
       .post(apiUrl, this.form.getRawValue())
