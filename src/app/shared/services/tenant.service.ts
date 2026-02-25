@@ -195,7 +195,8 @@ export class TenantService {
    */
   getApiUrl(): string {
     const hostname = window.location.hostname;
-    const protocol = window.location.protocol; // http: or https:
+    // Always use HTTPS in production; HTTP only for local development
+    const protocol = environment.production ? 'https:' : window.location.protocol;
     const port = environment.apiPort;
 
     // Check if we're on a tenant subdomain
