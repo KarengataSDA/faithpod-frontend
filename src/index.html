@@ -2,13 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Karengata SDA Church</title>
+  <title>Faithpod</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:title" content="Karengata SDA Church">
-  <meta property="og:description" content="A centralized platform for Karengata SDA Church members to connect, contribute, access updates, manage profiles, and grow together in faith.">
-  <meta property="og:image" content="https://portal.karengatasda.org/assets/images/brand/share-thumbnail.jpg">
-  <meta property="og:url" content="https://portal.karengatasda.org/">
+
+  <meta property="og:title" content="Faithpod">
+  <meta property="og:description" content="Faithpod — your church management platform.">
+  <meta property="og:image" content="/assets/images/brand/share-thumbnail.jpg">
+  <meta property="og:url" content="/">
+
+  <script>
+    (function () {
+      var hostname = window.location.hostname;
+      var isAdmin = hostname === 'admin.faithpod.io' || hostname.startsWith('admin.');
+
+      var title, description, ogImage, ogUrl;
+
+      if (isAdmin) {
+        title       = 'Faithpod Admin Dashboard';
+        description = 'A centralized administration platform for managing Faithpod tenants, churches, members, content, analytics, and system operations across the Faithpod ecosystem.';
+        ogImage     = 'https://admin.faithpod.io/assets/images/brand/share-thumbnail.jpg';
+        ogUrl       = 'https://admin.faithpod.io/';
+      } else {
+        // Derive tenant name from the first subdomain segment
+        var parts      = hostname.split('.');
+        var tenantSlug = (parts.length > 2) ? parts[0] : '';
+        var tenantName = tenantSlug
+          ? tenantSlug.charAt(0).toUpperCase() + tenantSlug.slice(1)
+          : 'Faithpod';
+
+        title       = tenantName + ' | Faithpod';
+        description = tenantName + ' — powered by Faithpod.';
+        ogImage     = window.location.origin + '/assets/images/brand/share-thumbnail.jpg';
+        ogUrl       = window.location.origin + '/';
+      }
+
+      document.title = title;
+
+      function setMeta(property, value) {
+        var el = document.querySelector('meta[property="' + property + '"]');
+        if (el) { el.setAttribute('content', value); }
+      }
+
+      setMeta('og:title',       title);
+      setMeta('og:description', description);
+      setMeta('og:image',       ogImage);
+      setMeta('og:url',         ogUrl);
+    })();
+  </script>
 
 
   <link rel="icon" type="image/x-icon" href="./assets/images/brand/favicon.ico">
