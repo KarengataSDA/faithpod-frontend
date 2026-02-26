@@ -32,9 +32,9 @@
     </div>
   </div>
 
-  <!-- Dropzone (hidden while uploading) -->
+  <!-- Dropzone (hidden while uploading or image already exists) -->
   <ngx-dropzone
-    *ngIf="!isUploading"
+    *ngIf="!isUploading && !displayUrl"
     [accept]="'image/jpeg,image/png,image/webp'"
     [maxFileSize]="maxSizeBytes"
     [multiple]="false"
