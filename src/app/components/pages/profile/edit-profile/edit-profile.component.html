@@ -8,14 +8,16 @@
                 <div class="card-title">Edit Password</div>
             </div>
             <div class="card-body">
-                <div class="text-center chat-image mb-5">
-                    <!-- <div class="avatar avatar-xxl chat-profile mb-3 brround">
-                        <a class="" routerLink="/pages/profile"><img alt="avatar" src="./assets/images/users/profile.png" class="brround"></a>
-                    </div> -->
-                    <div class="avatar avatar-xxl chat-profile mb-3 brround">
-                    <span  style="height: 50px; width: 50px;" class=" brround bg-primary me-3">
-                        <h2 style="margin-top: 25px; margin-left: 0px; font-weight: bold;" >{{getInitials()}}</h2>
-                      </span>
+                <div class="text-center chat-image mb-4">
+                    <div class="mb-3">
+                      <app-image-upload
+                        collection="avatar"
+                        entityType="member"
+                        label="Upload profile photo"
+                        [currentUrl]="user?.thumb_url || user?.avatar_url"
+                        (uploaded)="onAvatarUploaded($event)"
+                        (removed)="onAvatarRemoved()">
+                      </app-image-upload>
                     </div>
                     <div class="main-chat-msg-name">
                         <a routerLink="/pages/profile">

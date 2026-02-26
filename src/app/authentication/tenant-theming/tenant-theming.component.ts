@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { ImageUploadComponent } from '../../shared/components/image-upload/image-upload.component';
+import { MediaConfirmResponse } from '../../shared/services/media.service';
 
 interface ThemeConfig {
   colors: {
@@ -26,7 +28,7 @@ interface ThemeConfig {
 @Component({
   selector: 'app-tenant-theming',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, ImageUploadComponent],
   templateUrl: './tenant-theming.component.html',
   styleUrl: './tenant-theming.component.scss'
 })
@@ -37,6 +39,9 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   isSaving: boolean = false;
   errorMessage: string = '';
+
+  logoUrl: string | null = null;
+  bannerUrl: string | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -200,6 +205,22 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
     if (colorsGroup) {
       colorsGroup.patchValue({ [field]: color });
     }
+  }
+
+  onLogoUploaded(response: MediaConfirmResponse): void {
+    this.logoUrl = response.thumb_url ?? response.url;
+  }
+
+  onLogoRemoved(): void {
+    this.logoUrl = null;
+  }
+
+  onBannerUploaded(response: MediaConfirmResponse): void {
+    this.bannerUrl = response.medium_url ?? response.url;
+  }
+
+  onBannerRemoved(): void {
+    this.bannerUrl = null;
   }
 
   /**

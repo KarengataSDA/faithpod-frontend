@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from 'src/app/shared/models/user';
 import { Auth } from 'src/app/components/classes/auth';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { MediaConfirmResponse } from 'src/app/shared/services/media.service';
 import Swal from 'sweetalert2';
 
 
@@ -18,15 +19,17 @@ export class EditProfileComponent implements OnInit {
   //user: User
 
   user: any = {
-  first_name: '',
-  middle_name: '',
-  last_name: '',
-  gender: '',
-  date_of_birth: '',
-  email: '',
-  phone_number: '',
-  role: { name: '' }
-};
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    gender: '',
+    date_of_birth: '',
+    email: '',
+    phone_number: '',
+    role: { name: '' },
+    avatar_url: null as string | null,
+    thumb_url: null as string | null,
+  };
 
   maxDate = new Date().toISOString().split('T')[0];
 
@@ -109,5 +112,25 @@ export class EditProfileComponent implements OnInit {
     const firstInitial = this.user?.first_name ? this.user.first_name.charAt(0).toUpperCase() : '';
     const lastInitial = this.user?.last_name ? this.user.last_name.charAt(0).toUpperCase() : '';
     return `${firstInitial}${lastInitial}`;
+  }
+
+  onAvatarUploaded(response: MediaConfirmResponse): void {
+    this.user.avatar_url = response.url;
+    this.user.thumb_url = response.thumb_url ?? response.url;
+    // Persist updated URLs in session storage so header/sidebar reflect the change
+    const stored = sessionStorage.getItem('user');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        parsed.avatar_url = this.user.avatar_url;
+        parsed.thumb_url = this.user.thumb_url;
+        sessionStorage.setItem('user', JSON.stringify(parsed));
+      } catch { /* ignore */ }
+    }
+  }
+
+  onAvatarRemoved(): void {
+    this.user.avatar_url = null;
+    this.user.thumb_url = null;
   }
 }

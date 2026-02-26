@@ -25,6 +25,8 @@ export interface Member {
   //membership_type?: { id: number; name: string };
   contributions?: Contribution[];
   tenant_id?: string;
+  avatar_url?: string;
+  thumb_url?: string;
 }
 
 export interface Gender {

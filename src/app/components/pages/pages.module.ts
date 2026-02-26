@@ -40,6 +40,7 @@ import { ViewMembershipComponent } from './membership/view-membership/view-membe
 import { NgChartsModule } from 'ng2-charts';
 import { HasPermissionDirective } from 'src/app/shared/directives/has-permission.directive';
 import { SkeletonLoaderComponent } from "../../shared/skeleton-loader/skeleton-loader.component";
+import { ImageUploadComponent } from "../../shared/components/image-upload/image-upload.component";
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
@@ -100,7 +101,8 @@ import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboar
     FormsModule,
     NgbModule,
     NgChartsModule,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    ImageUploadComponent,
 ]
 })
 export class PagesModule { }

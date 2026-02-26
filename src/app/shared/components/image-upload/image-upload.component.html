@@ -1,0 +1,53 @@
+<div class="image-upload-wrapper">
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="alert alert-danger alert-sm mb-2 py-2 px-3">
+    <i class="zmdi zmdi-alert-circle me-1"></i>{{ errorMessage }}
+  </div>
+
+  <!-- Current / preview image -->
+  <div *ngIf="displayUrl && !isUploading" class="current-image-container mb-2">
+    <img [src]="displayUrl" alt="Uploaded image" class="uploaded-preview" />
+    <button
+      type="button"
+      class="btn btn-sm btn-danger remove-btn"
+      (click)="onRemove($event)"
+      title="Remove image">
+      <i class="zmdi zmdi-close"></i>
+    </button>
+  </div>
+
+  <!-- Upload progress -->
+  <div *ngIf="isUploading" class="upload-progress mb-2">
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <span class="spinner-border spinner-border-sm text-primary"></span>
+      <small class="text-muted">Uploading... {{ uploadProgress }}%</small>
+    </div>
+    <div class="progress" style="height: 6px;">
+      <div
+        class="progress-bar bg-primary"
+        role="progressbar"
+        [style.width.%]="uploadProgress">
+      </div>
+    </div>
+  </div>
+
+  <!-- Dropzone (hidden while uploading) -->
+  <ngx-dropzone
+    *ngIf="!isUploading"
+    [accept]="'image/jpeg,image/png,image/webp'"
+    [maxFileSize]="maxSizeBytes"
+    [multiple]="false"
+    [expandable]="false"
+    (change)="onSelect($event)"
+    class="image-dropzone">
+    <ngx-dropzone-label>
+      <div class="dropzone-content">
+        <i class="zmdi zmdi-cloud-upload fs-24 text-muted"></i>
+        <p class="mb-0 mt-1 text-muted small">{{ label }}</p>
+        <small class="text-muted">JPEG, PNG, WebP — max 5 MB</small>
+      </div>
+    </ngx-dropzone-label>
+  </ngx-dropzone>
+
+</div>

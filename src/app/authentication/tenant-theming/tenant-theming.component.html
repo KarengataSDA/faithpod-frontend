@@ -179,6 +179,44 @@
 
       <hr class="my-4">
 
+      <!-- Branding Images Section -->
+      <div class="mb-4">
+        <h4 class="mb-3">Branding Images</h4>
+        <div class="row">
+          <!-- Logo -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label fw-semibold">Church Logo</label>
+            <p class="text-muted small mb-2">Displayed in headers and emails. Square crop recommended.</p>
+            <app-image-upload
+              collection="logo"
+              entityType="tenant"
+              [entityId]="tenantId"
+              label="Upload logo"
+              [currentUrl]="logoUrl"
+              (uploaded)="onLogoUploaded($event)"
+              (removed)="onLogoRemoved()">
+            </app-image-upload>
+          </div>
+
+          <!-- Banner -->
+          <div class="col-md-8 mb-3">
+            <label class="form-label fw-semibold">Banner Image</label>
+            <p class="text-muted small mb-2">Displayed on the portal landing banner. Wide/landscape recommended.</p>
+            <app-image-upload
+              collection="banner"
+              entityType="tenant"
+              [entityId]="tenantId"
+              label="Upload banner"
+              [currentUrl]="bannerUrl"
+              (uploaded)="onBannerUploaded($event)"
+              (removed)="onBannerRemoved()">
+            </app-image-upload>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
       <!-- Social Links Section -->
       <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">

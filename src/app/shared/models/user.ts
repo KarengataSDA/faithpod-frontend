@@ -25,6 +25,8 @@ export interface User {
     population_group?: PopulationGroup
     contributions?: Contribution[]
     tenant_id?: string
+    avatar_url?: string
+    thumb_url?: string
 }
 
 
