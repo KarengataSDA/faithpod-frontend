@@ -23,6 +23,8 @@ interface ThemeConfig {
     url: string;
     name: string;
   }>;
+  logo_url: string | null;
+  banner_url: string | null;
 }
 
 @Component({
@@ -109,6 +111,9 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
     .subscribe({
       next: (config) => {
         this.isLoading = false;
+
+        this.logoUrl = config.logo_url;
+        this.bannerUrl = config.banner_url;
 
         // Patch colors
         this.themeForm.patchValue({

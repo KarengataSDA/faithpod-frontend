@@ -1,6 +1,7 @@
 import {
   HttpClient,
   HttpEvent,
+  HttpHeaders,
   HttpRequest,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
@@ -33,7 +34,8 @@ export class MediaService {
   /**
    * Upload a file to Laravel which streams it directly to R2.
    * Returns an observable of HttpEvents so the caller can track upload progress.
-   * entityType 'member' uses tenant API; 'tenant' uses central admin API.
+   * entityType 'member' uses tenant API (token via AuthInterceptor);
+   * entityType 'tenant' uses central admin API (token read from sessionStorage).
    */
   uploadMedia(
     entityType: 'member' | 'tenant',
@@ -49,8 +51,20 @@ export class MediaService {
       ? `${this.tenantApiUrl}/members/me/media`
       : `${this.adminApiUrl}/tenants/${entityId}/media/${collection}`;
 
+    // Admin requests need the central admin token; tenant requests are handled by AuthInterceptor
+    const headers: Record<string, string> = {};
+    if (entityType === 'tenant') {
+      const token = sessionStorage.getItem('central_admin_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+
     const req = new HttpRequest('POST', url, formData, {
       reportProgress: true,
+      headers: Object.keys(headers).length
+        ? new HttpHeaders(headers)
+        : undefined,
     });
 
     return this.http.request<MediaConfirmResponse>(req);
