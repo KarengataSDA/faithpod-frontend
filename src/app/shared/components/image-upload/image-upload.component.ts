@@ -35,6 +35,9 @@ export class ImageUploadComponent implements OnChanges {
   /** Current CDN URL to display as existing image */
   @Input() currentUrl: string | null = null;
 
+  /** Max height of the preview image in px (default 180) */
+  @Input() previewHeight: number = 180;
+
   /** Emitted with the CDN URLs after a successful upload */
   @Output() uploaded = new EventEmitter<MediaConfirmResponse>();
 

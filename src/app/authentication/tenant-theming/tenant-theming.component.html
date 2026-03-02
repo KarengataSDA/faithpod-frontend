@@ -193,6 +193,7 @@
               [entityId]="tenantId"
               label="Upload logo"
               [currentUrl]="logoUrl"
+              [previewHeight]="90"
               (uploaded)="onLogoUploaded($event)"
               (removed)="onLogoRemoved()">
             </app-image-upload>
@@ -208,6 +209,7 @@
               [entityId]="tenantId"
               label="Upload banner"
               [currentUrl]="bannerUrl"
+              [previewHeight]="110"
               (uploaded)="onBannerUploaded($event)"
               (removed)="onBannerRemoved()">
             </app-image-upload>

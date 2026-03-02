@@ -7,7 +7,7 @@
 
   <!-- Current / preview image -->
   <div *ngIf="displayUrl && !isUploading" class="current-image-container mb-2">
-    <img [src]="displayUrl" alt="Uploaded image" class="uploaded-preview" />
+    <img [src]="displayUrl" alt="Uploaded image" class="uploaded-preview" [style.max-height.px]="previewHeight" />
     <button
       type="button"
       class="btn btn-sm btn-danger remove-btn"
