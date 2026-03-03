@@ -1,9 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { Member } from '../models/member';
-import { environment } from 'src/environments/environment';
+import { Member, MemberAudit } from '../models/member';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
 import { TenantService } from './tenant.service';
@@ -19,9 +18,6 @@ export class MemberService {
 
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-  /**
-   * Get dynamic base URL from tenant service
-   */
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
@@ -42,8 +38,9 @@ export class MemberService {
     return `${this.tenantPrefix}_gender_count`;
   }
 
+  // ── Read ──────────────────────────────────────────────────────────────────
+
   getAll(): Observable<Member[]> {
-    // Try localStorage first (skip if empty array — may be stale)
     const cached = this.localStorageService.get<Member[]>(this.STORAGE_KEY_MEMBERS);
     if (cached && Array.isArray(cached) && cached.length > 0) {
       return new Observable(observer => {
@@ -62,7 +59,18 @@ export class MemberService {
         map(response => Array.isArray(response) ? response : (response as any)?.data || [])
       ),
       this.CACHE_TTL,
-      true // Enable shareReplay for proper caching
+      true
+    );
+  }
+
+  getAllFresh(): Observable<Member[]> {
+    this.invalidateCache();
+    return this.http.get<Member[] | { data: Member[] }>(this.baseUrl + '/members').pipe(
+      tap(response => {
+        const data = Array.isArray(response) ? response : (response as any)?.data || [];
+        this.localStorageService.set(this.STORAGE_KEY_MEMBERS, data, { ttl: this.CACHE_TTL });
+      }),
+      map(response => Array.isArray(response) ? response : (response as any)?.data || [])
     );
   }
 
@@ -71,7 +79,7 @@ export class MemberService {
       this.CACHE_KEY_GENDER,
       this.http.get<any>(this.baseUrl + '/gender-count'),
       this.CACHE_TTL,
-      true // Use shareReplay for dashboard data
+      true
     );
   }
 
@@ -81,7 +89,25 @@ export class MemberService {
       cacheKey,
       this.http.get<Member>(this.baseUrl + '/members/' + id),
       this.CACHE_TTL,
-      true // Enable shareReplay for proper caching
+      true
+    );
+  }
+
+  getAuditTrail(id: number): Observable<MemberAudit[]> {
+    return this.http.get<MemberAudit[]>(this.baseUrl + '/members/' + id + '/audit-trail');
+  }
+
+  // ── Write ─────────────────────────────────────────────────────────────────
+
+  create(data: any): Observable<Member> {
+    return this.http.post<Member>(this.baseUrl + '/members', data, {
+      withCredentials: true
+    }).pipe(tap(() => this.invalidateCache()));
+  }
+
+  update(id: number, data: any): Observable<Member> {
+    return this.http.put<Member>(this.baseUrl + '/members/' + id, data).pipe(
+      tap(() => this.invalidateCache())
     );
   }
 
@@ -91,35 +117,62 @@ export class MemberService {
     );
   }
 
-  create(data): Observable<Member> {
-    return this.http.post<Member>(this.baseUrl + '/members', data, {
-      withCredentials: true
-    }).pipe(
-      tap(() => this.invalidateCache())
+  // ── Status management ─────────────────────────────────────────────────────
+
+  verify(id: number): Observable<Member> {
+    return this.http.patch<{ member: Member }>(this.baseUrl + '/members/' + id + '/verify', {}).pipe(
+      tap(() => this.invalidateCache()),
+      map(res => res.member)
     );
   }
 
-  update(id: number, data): Observable<Member> {
-    return this.http.put<Member>(this.baseUrl + '/members/' + id, data).pipe(
-      tap(() => this.invalidateCache())
+  reject(id: number, reason: string): Observable<Member> {
+    return this.http.patch<{ member: Member }>(this.baseUrl + '/members/' + id + '/reject', { reason }).pipe(
+      tap(() => this.invalidateCache()),
+      map(res => res.member)
     );
   }
 
-  createCollection(data): Observable<Member> {
+  suspend(id: number, reason: string): Observable<Member> {
+    return this.http.patch<{ member: Member }>(this.baseUrl + '/members/' + id + '/suspend', { reason }).pipe(
+      tap(() => this.invalidateCache()),
+      map(res => res.member)
+    );
+  }
+
+  reactivate(id: number): Observable<Member> {
+    return this.http.patch<{ member: Member }>(this.baseUrl + '/members/' + id + '/reactivate', {}).pipe(
+      tap(() => this.invalidateCache()),
+      map(res => res.member)
+    );
+  }
+
+  resendInvite(id: number): Observable<any> {
+    return this.http.post(this.baseUrl + '/members/' + id + '/resend-invite', {});
+  }
+
+  acceptInvite(token: string, password: string, passwordConfirmation: string): Observable<any> {
+    return this.http.post(this.baseUrl + '/members/accept-invite', {
+      token,
+      password,
+      password_confirmation: passwordConfirmation,
+    });
+  }
+
+  // ── Contributions ─────────────────────────────────────────────────────────
+
+  createCollection(data: any): Observable<Member> {
     return this.http.post<Member>(this.baseUrl + '/add-user-contributions', data).pipe(
       tap(() => {
-        // Invalidate contribution-related caches
         this.cacheService.clearPattern(/^contributions/);
         this.cacheService.clearPattern(/^collections/);
       })
     );
   }
 
-  // change url to test mpesa  /add-mpesa-contributions
-  createOwnCollection(data): Observable<Member> {
+  createOwnCollection(data: any): Observable<Member> {
     return this.http.post<Member>(this.baseUrl + '/add-mpesa-contributions', data).pipe(
       tap(() => {
-        // Invalidate contribution-related caches
         this.cacheService.clearPattern(/^contributions/);
         this.cacheService.clearPattern(/^collections/);
         this.cacheService.clearPattern(/^transactions/);
@@ -131,37 +184,19 @@ export class MemberService {
     return this.cacheService.get(
       'transactions',
       this.http.get<any>(`${this.baseUrl}/transactions`, { withCredentials: true }),
-      2 * 60 * 1000 // 2 minutes for transactions
+      2 * 60 * 1000
     );
   }
 
-  /**
-   * Clear all member-related cache after mutations
-   */
-  private invalidateCache(): void {
-    this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY_MEMBERS}`));
-    this.cacheService.clear(this.CACHE_KEY_GENDER);
-    this.localStorageService.remove(this.STORAGE_KEY_MEMBERS);
-  }
+  // ── Cache ─────────────────────────────────────────────────────────────────
 
-  /**
-   * Public method to force refresh members data from API
-   */
   clearCache(): void {
     this.invalidateCache();
   }
 
-  /**
-   * Force fetch members from API, bypassing cache
-   */
-  getAllFresh(): Observable<Member[]> {
-    this.invalidateCache();
-    return this.http.get<Member[] | { data: Member[] }>(this.baseUrl + '/members').pipe(
-      tap(response => {
-        const data = Array.isArray(response) ? response : (response as any)?.data || [];
-        this.localStorageService.set(this.STORAGE_KEY_MEMBERS, data, { ttl: this.CACHE_TTL });
-      }),
-      map(response => Array.isArray(response) ? response : (response as any)?.data || [])
-    );
+  private invalidateCache(): void {
+    this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY_MEMBERS}`));
+    this.cacheService.clear(this.CACHE_KEY_GENDER);
+    this.localStorageService.remove(this.STORAGE_KEY_MEMBERS);
   }
 }

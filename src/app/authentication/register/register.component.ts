@@ -158,28 +158,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
         email: this.email,
         phone_number: formattedPhoneNumber,
         password: this.password,
-        password_confirm: this.passwordConfirm,
+        password_confirmation: this.passwordConfirm,
       })
-        .subscribe(() => {
-          Toast.fire({
-            icon: 'success',
-            title: 'Registered Successfully'
-          })
-          this.isLoading = false
-          this.router.navigate(['/auth/verification-notice'], { queryParams: { email: this.email } })
-        },
-          (error) => {
-            if (error.status === 409) {
-              this.errorMessage = 'Email already exists. Please use a different email'
-            }
-            else if (error.status === 422) {
-              this.errorMessage = 'Please enter a valid email address'
-            }
-            else {
-
+        .subscribe({
+          next: () => {
+            Toast.fire({ icon: 'success', title: 'Registered Successfully' });
+            this.isLoading = false;
+            this.router.navigate(['/auth/verification-notice'], { queryParams: { email: this.email } });
+          },
+          error: (error) => {
+            this.isLoading = false;
+            if (error.status === 422 && error.error?.errors) {
+              const messages = Object.values(error.error.errors).flat() as string[];
+              this.errorMessage = messages[0];
+            } else {
+              this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
             }
           }
-        );
+        });
 
       const Toast = Swal.mixin({
         toast: true,

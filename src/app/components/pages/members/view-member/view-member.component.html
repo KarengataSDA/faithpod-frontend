@@ -1,104 +1,130 @@
-<app-page-header  [title]="'User Details'" [items]="['User']" [active_item]="'User Details'"></app-page-header>
+<app-page-header [title]="'Member Details'" [items]="['Members']" [active_item]="'Member Details'"></app-page-header>
 
+<!-- Profile card -->
 <div class="row" id="user-profile">
-    <div class="col-lg-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="wideget-user">
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <div class="card p-0 shadow-none">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="d-flex">
-                                <div class="media p-5">
-                                  <!-- <div class="media-user me-2">
-                                      <img
-                                        alt=""
-                                        class="rounded-circle avatar avatar-md mb-5"
-                                        src="./assets/images/users/profile.png"
-                                        style="height: 100px; width: 100px;"
-                                      />
-                                    
-                                  </div> -->
-                                  <div class="media overflow-visible mt-sm-5" >
-                                    <span  style="height: 60px; width: 60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
-                                      <h3 style="margin-top: 15px; margin-left: 0px; font-weight: bold;" > {{ (member?.first_name?.charAt(0) || '') + (member?.last_name?.charAt(0) || '') }}</h3>
-                                    </span>
-                                    <div class="text-dark">
-                                      <h3 *ngIf="member"> {{member.first_name }} {{ member.last_name}}</h3>
-                                      <button
-                                      class="btn btn-sm d-block"
-                                      [ngClass]="{
-                                        'btn-yellow' : member?.membership_type?.name === 'visitor',
-                                        'btn-green' : member?.membership_type?.name === 'member',
-                                        'btn-success': member?.membership_type?.name === 'sabbath'
-                                      }"
-                                      >{{member?.membership_type?.name}}</button
-                                    >
-                                    </div>
-                                  </div>
-                                  
-                                </div>
-                              </div>
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="wideget-user">
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card p-0 shadow-none">
+                <div class="row">
+
+                  <!-- Avatar + name + status -->
+                  <div class="col-lg-6">
+                    <div class="d-flex">
+                      <div class="media p-5">
+                        <div class="media overflow-visible mt-sm-5">
+                          <span style="height:60px;width:60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
+                            <h3 style="margin-top:15px;font-weight:bold;">
+                              {{ (member?.first_name?.charAt(0) || '') + (member?.last_name?.charAt(0) || '') }}
+                            </h3>
+                          </span>
+                          <div class="text-dark">
+                            <h3 *ngIf="member">{{ member.first_name }} {{ member.last_name }}</h3>
+
+                            <!-- Membership type badge -->
+                            <span class="badge rounded-pill me-2"
+                              [ngClass]="{
+                                'bg-success-transparent text-success': member?.membership_type?.name?.toLowerCase() === 'visitor',
+                                'bg-warning-transparent text-warning': member?.membership_type?.name?.toLowerCase() === 'member',
+                                'bg-danger-transparent text-danger':   member?.membership_type?.name?.toLowerCase() === 'sabbath'
+                              }">
+                              {{ member?.membership_type?.name }}
+                            </span>
+
+                            <!-- Lifecycle status badge -->
+                            <span *ngIf="member?.status"
+                                  class="badge rounded-pill p-2 px-3"
+                                  [ngClass]="badgeClass(member?.status)">
+                              {{ getStatusLabel(member?.status) }}
+                            </span>
+                          </div>
                         </div>
-        <div class="col-lg-6">
-                            
-                             
-          <div class="card-header">
-            <div class="card-title">About</div>
-          </div>
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3 mt-3">
-              <div class="me-4 text-center text-primary">
-                <span><i class="fe fe-calendar fs-20"></i></span>
-              </div>
-              <div>
-                <strong *ngIf="member">{{member.date_of_birth}} </strong>
-              </div>
-            </div>
-            <div class="d-flex align-items-center mb-3 mt-3">
-              <div class="me-4 text-center text-primary">
-                <span><i class="fe fe-phone fs-20"></i></span>
-              </div>
-              <div>
-                <strong *ngIf="member">{{member.phone_number}} </strong>
-              </div>
-            </div>
-            <div class="d-flex align-items-center mb-3 mt-3">
-              <div class="me-4 text-center text-primary">
-                <span><i class="fe fe-mail fs-20"></i></span>
-              </div>
-              <div>
-                <strong *ngIf="member" >{{member.email}} </strong>
-              </div>
-            </div>
-            <div class="d-flex align-items-center mb-3 mt-3">
-              <div class="me-4 text-center text-primary">
-                <span><i class="fe fe-user fs-20"></i></span>
-              </div>
-              <div>
-                <strong *ngIf="member" >{{member.gender}} </strong>
-              </div>
-            </div>
-          </div>
-        </div>
-                        
+                      </div>
                     </div>
+                  </div>
+
+                  <!-- About info -->
+                  <div class="col-lg-6">
+                    <div class="card-header"><div class="card-title">About</div></div>
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-3 mt-3">
+                        <div class="me-4 text-center text-primary"><span><i class="fe fe-calendar fs-20"></i></span></div>
+                        <strong *ngIf="member">{{ member.date_of_birth }}</strong>
+                      </div>
+                      <div class="d-flex align-items-center mb-3 mt-3">
+                        <div class="me-4 text-center text-primary"><span><i class="fe fe-phone fs-20"></i></span></div>
+                        <strong *ngIf="member">{{ member.phone_number }}</strong>
+                      </div>
+                      <div class="d-flex align-items-center mb-3 mt-3">
+                        <div class="me-4 text-center text-primary"><span><i class="fe fe-mail fs-20"></i></span></div>
+                        <strong *ngIf="member">{{ member.email }}</strong>
+                      </div>
+                      <div class="d-flex align-items-center mb-3 mt-3">
+                        <div class="me-4 text-center text-primary"><span><i class="fe fe-user fs-20"></i></span></div>
+                        <strong *ngIf="member">{{ member.gender }}</strong>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-                  
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Governance action buttons -->
+        <div class="d-flex gap-2 flex-wrap mt-2 px-3 pb-3" *ngIf="member && authService.hasPermission('edit members')">
+
+          <!-- Verify -->
+          <button
+            *ngIf="member.status === 'invited' || member.status === 'self_registered' || member.status === 'pending_review'"
+            class="btn btn-success btn-sm"
+            (click)="verifyMember()">
+            <i class="fe fe-check-circle me-1"></i> Verify
+          </button>
+
+          <!-- Reject -->
+          <button
+            *ngIf="member.status === 'invited' || member.status === 'self_registered' || member.status === 'pending_review'"
+            class="btn btn-danger btn-sm"
+            (click)="rejectMember()">
+            <i class="fe fe-x-circle me-1"></i> Reject
+          </button>
+
+          <!-- Suspend -->
+          <button
+            *ngIf="member.status === 'verified'"
+            class="btn btn-warning btn-sm"
+            (click)="suspendMember()">
+            <i class="fe fe-pause-circle me-1"></i> Suspend
+          </button>
+
+          <!-- Reactivate -->
+          <button
+            *ngIf="member.status === 'rejected' || member.status === 'suspended'"
+            class="btn btn-primary btn-sm"
+            (click)="reactivateMember()">
+            <i class="fe fe-refresh-cw me-1"></i> Reactivate
+          </button>
+
+          <!-- Resend invite -->
+          <button
+            *ngIf="member.status === 'invited'"
+            class="btn btn-outline-primary btn-sm"
+            (click)="resendInvite()">
+            <i class="fe fe-mail me-1"></i> Resend Invite
+          </button>
+        </div>
+
       </div>
-     
     </div>
-    <!-- COL-END -->
   </div>
+</div>
 
-
-<!-- ROW-1 OPEN -->
+<!-- Tabs -->
 <div class="row">
   <div class="col-xl-12 col-md-12">
     <div class="card productdesc">
@@ -106,108 +132,141 @@
         <div class="panel panel-primary">
           <div class="tab-menu-heading">
             <div class="tabs-menu1">
-              <!-- Tabs -->
               <ul ngbNav #nav="ngbNav" [activeId]="1" class="panel-tabs">
+
+                <!-- Tab 1: Member Details -->
                 <li [ngbNavItem]="1">
-                  <a ngbNavLink>User Details</a>
+                  <a ngbNavLink>Member Details</a>
                   <ng-template ngbNavContent>
-                    <div class="tab-pane pt-5" id="tab6">
+                    <div class="tab-pane pt-5">
                       <div class="table-responsive">
                         <table class="table table-bordered">
                           <tr>
                             <td class="fw-bold">Population Group</td>
-                            <td>{{member?.population_group?.name}}</td>
+                            <td>{{ member?.population_group?.name || '—' }}</td>
                           </tr>
                           <tr>
                             <td class="fw-bold">Prayercell</td>
-                            <td>{{member?.prayercell?.name}}</td>
+                            <td>{{ member?.prayercell?.name || '—' }}</td>
                           </tr>
-                          
+                          <tr>
+                            <td class="fw-bold">Status</td>
+                            <td>
+                              <span class="badge rounded-pill p-2 px-3" [ngClass]="badgeClass(member?.status)">
+                                {{ getStatusLabel(member?.status) }}
+                              </span>
+                            </td>
+                          </tr>
+                          <tr *ngIf="member?.verified_at">
+                            <td class="fw-bold">Verified At</td>
+                            <td>{{ member?.verified_at | date:'medium' }}</td>
+                          </tr>
+                          <tr *ngIf="member?.rejection_reason">
+                            <td class="fw-bold">Rejection Reason</td>
+                            <td>{{ member?.rejection_reason }}</td>
+                          </tr>
+                          <tr *ngIf="member?.suspension_reason">
+                            <td class="fw-bold">Suspension Reason</td>
+                            <td>{{ member?.suspension_reason }}</td>
+                          </tr>
+                          <tr *ngIf="member?.invite_accepted_at">
+                            <td class="fw-bold">Invite Accepted</td>
+                            <td>{{ member?.invite_accepted_at | date:'medium' }}</td>
+                          </tr>
                         </table>
                       </div>
                     </div>
                   </ng-template>
                 </li>
+
+                <!-- Tab 2: Givings -->
                 <li [ngbNavItem]="2">
                   <a ngbNavLink>Givings</a>
                   <ng-template ngbNavContent>
-                    <div class="tab-pane active  pt-5" id="tab5">
+                    <div class="tab-pane active pt-5">
                       <div class="table-responsive">
-                        <p>Date</p>
                         <table class="table table-bordered text-nowrap mb-0">
-                            <thead class="border-top">
-                                <tr>
-                                  <th>Contribution Date</th>
-                                  <th>No.</th>
-                                  <th>Category</th>
-                                  <th>Total</th>
-                                  <!-- <th>Status(email)</th>
-                                  <th>Action</th> -->
-                                   
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="member?.contributions as contributions">
-                                <tr class="border-bottom" *ngFor="let collection of contributions; index as i">
-                                    <td *ngIf="i === 0 || contributions[i].contribution_date !== contributions[i-1].contribution_date" [attr.rowspan]="getRowspan(contributions, collection.contribution_date)">{{collection.contribution_date}}</td>
-                                    <th>{{i + 1}}</th>
-                                    <td>{{collection.contribution_type?.name}}</td>
-                                    <td>{{collection.contribution_amount}}</td>
-                                    
-                                    <!-- <td>
-                                      <div class="mt-sm-1 text-center" >
-                                          <a  class="btn text-primary btn-sm">
-                                             <ng-template [ngIf] ="collection.status == 0">
-                                              <span (click)="sendMail(collection.id)" class="fs-14"><i class="ri-mail-open-line text-danger fs-14"></i></span>
-                                             </ng-template>
-                                      </a>
-                                      <ng-template [ngIf] ="collection.status == 1">
-                                        <span class="fs-14" style="padding: 10px; margin-right: 30px;"><i class="ri-mail-send-line text-primary fs-14"></i></span>
-                                      </ng-template>
-                                      </div>
-                                  </td> -->
-                                  <!-- <td>
-                                      <div class="g-2">
-                                          <a 
-                                          routerLink="view/users/1/collections" 
-                      
-                                          class="btn text-primary btn-sm"
-                                              data-bs-toggle="tooltip"
-                                              ngbTooltip="View"><span
-                                                  class="fe fe-eye fs-14"></span></a>
-                                          <a class="btn text-danger btn-sm"
-                                              data-bs-toggle="tooltip"
-                                              ngbTooltip="Delete"><span
-                                                  class="fe fe-trash-2 fs-14"></span></a>
-                                      </div>
-                                  </td> -->
-                                </tr>
-                            </tbody>
+                          <thead class="border-top">
+                            <tr>
+                              <th>Contribution Date</th>
+                              <th>No.</th>
+                              <th>Category</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+                          <tbody *ngIf="member?.contributions as contributions">
+                            <tr class="border-bottom" *ngFor="let c of contributions; index as i">
+                              <td *ngIf="i === 0 || contributions[i].contribution_date !== contributions[i-1].contribution_date"
+                                  [attr.rowspan]="getRowspan(contributions, c.contribution_date)">
+                                {{ c.contribution_date }}
+                              </td>
+                              <th>{{ i + 1 }}</th>
+                              <td>{{ c.contribution_type?.name }}</td>
+                              <td>{{ c.contribution_amount }}</td>
+                            </tr>
+                          </tbody>
                         </table>
-                    </div>
+                      </div>
                     </div>
                   </ng-template>
                 </li>
-               
-                <li [ngbNavItem]="3">
-                  <a ngbNavLink>Descriptions</a>
+
+                <!-- Tab 3: Activity (Audit Trail) -->
+                <li [ngbNavItem]="3" (click)="loadAuditTrail()">
+                  <a ngbNavLink>Activity</a>
                   <ng-template ngbNavContent>
-                    <div class="tab-pane" id="tab7">
-                      <ul class="p-5">
-                        <li>
-                          <i class="fa fa-check me-3 text-success mb-5"></i
-                          >Can Sing
-                        </li>
-                        <li>
-                          <i class="fa fa-check me-3 text-success mb-5"></i>Can play instrument
-                        </li>
-                        <li>
-                          <i class="fa fa-check me-3 text-success mb-5"></i>can help in church
-                        </li>
-                        
-                      </ul>
+                    <div class="tab-pane pt-5">
+
+                      <div *ngIf="isLoadingAudit" class="text-center py-4">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        <span class="ms-2 text-muted">Loading activity...</span>
+                      </div>
+
+                      <div *ngIf="!isLoadingAudit && auditTrail.length === 0" class="text-center text-muted py-4">
+                        No activity recorded yet.
+                      </div>
+
+                      <!-- Timeline -->
+                      <div *ngIf="!isLoadingAudit && auditTrail.length > 0" class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Action</th>
+                              <th>From</th>
+                              <th>To</th>
+                              <th>Reason</th>
+                              <th>By</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let entry of auditTrail">
+                              <td class="text-nowrap">{{ entry.created_at | date:'medium' }}</td>
+                              <td>{{ actionLabel(entry.action) }}</td>
+                              <td>
+                                <span *ngIf="entry.old_status"
+                                      class="badge rounded-pill"
+                                      [ngClass]="badgeClass(entry.old_status)">
+                                  {{ getStatusLabel(entry.old_status) }}
+                                </span>
+                                <span *ngIf="!entry.old_status" class="text-muted">—</span>
+                              </td>
+                              <td>
+                                <span class="badge rounded-pill" [ngClass]="badgeClass(entry.new_status)">
+                                  {{ getStatusLabel(entry.new_status) }}
+                                </span>
+                              </td>
+                              <td>{{ entry.reason || '—' }}</td>
+                              <td>{{ entry.changed_by ? '#' + entry.changed_by : 'System' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
                     </div>
                   </ng-template>
                 </li>
+
               </ul>
             </div>
           </div>
@@ -219,4 +278,3 @@
     </div>
   </div>
 </div>
-<!-- ROW-1 CLOSED -->

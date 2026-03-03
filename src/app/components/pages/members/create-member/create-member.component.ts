@@ -1,16 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from '../../../../shared/services/member.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { RoleService } from 'src/app/shared/services/role.service';
-import { PrayercellService } from 'src/app/shared/services/prayercell.service';
-import { PopulationGroupService } from 'src/app/shared/services/population-group.service';
-import { Role } from 'src/app/shared/models/role';
-import { PopulationGroup } from 'src/app/shared/models/population-group';
-import { Prayercell } from 'src/app/shared/models/prayercell';
-import { MembershipTypeService } from 'src/app/shared/services/membership-type.service';
-import { Membership } from 'src/app/shared/models/membership';
 import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
 
 @Component({
@@ -21,80 +13,46 @@ import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
 })
 export class CreateMemberComponent implements OnInit {
   form: FormGroup;
-  roles: Role[] = [];
-  membershiptypes: Membership[] = [];
-  groups: PopulationGroup[] = [];
-  prayercells: Prayercell[] = [];
+  isSubmitting = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private memberService: MemberService,
-    private roleService: RoleService,
-    private prayercellService: PrayercellService,
-    private populationGroupService: PopulationGroupService,
-    private membershipTypeService: MembershipTypeService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.form =  this.formBuilder.group({
-      first_name: '',
-      middle_name: '',
-      last_name: '',
-      email: '',
-      phone_number: '',
-      membership_number: '',
-      membership_type_id: '',
-      role_id: '',
-      population_group_id: '',
-      prayercell_id: ''
+    this.form = this.formBuilder.group({
+      first_name:   ['', Validators.required],
+      middle_name:  [''],
+      last_name:    ['', Validators.required],
+      email:        ['', [Validators.required, Validators.email]],
+      phone_number: ['', Validators.required],
     });
-
-    this.roleService.getAll().subscribe(
-      roles => this.roles = roles 
-    )
-
-    this.prayercellService.getAll().subscribe(
-      prayercells => this.prayercells = prayercells
-    )
-
-    this.populationGroupService.getAll().subscribe(
-      groups => this.groups = groups
-    )
-
-    this.membershipTypeService.getAll().subscribe(
-      membershiptypes => this.membershiptypes = membershiptypes
-    )
-    
   }
 
   submit() {
+    if (this.form.invalid || this.isSubmitting) return;
+
+    this.isSubmitting = true;
     const formData = { ...this.form.value };
     formData.phone_number = normalizePhoneNumber(formData.phone_number);
 
-    this.memberService.create(formData).subscribe(res => {
-      this.form.reset()
-      Toast.fire({
-        icon: 'success',
-        title: 'Member added Successfully'
-      });
-
-     this.router.navigateByUrl('pages/members');
-
-    })
-
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
+    this.memberService.create(formData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Invitation Sent',
+          text: 'An invite email has been sent to the member.',
+          confirmButtonText: 'OK',
+        }).then(() => this.router.navigateByUrl('pages/members'));
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        const message = err?.error?.message || 'Failed to send invitation. Please try again.';
+        Swal.fire({ icon: 'error', title: 'Error', text: message });
       },
     });
-
   }
-  
 }

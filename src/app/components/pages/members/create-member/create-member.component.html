@@ -1,124 +1,68 @@
 <app-page-header
-  [title]="'Add Member'"
+  [title]="'Invite Member'"
   [items]="['Members']"
-  [active_item]="'Add Member'"
+  [active_item]="'Invite Member'"
 ></app-page-header>
 
 <div class="row justify-content-center">
-  <div class="col-xl-8">
+  <div class="col-xl-6 col-lg-8">
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Add Member</h3>
+          <h3 class="card-title">Send Invitation</h3>
+          <p class="text-muted mb-0 mt-1" style="font-size:0.85rem">
+            The member will receive an email with a link to set their password and complete registration.
+          </p>
         </div>
+
         <div class="card-body">
-          <div class="form-group">
-            <label for="">First Name</label>
-            <input type="text" class="form-control" formControlName="first_name" id="first_name" />
-            
-            <div *ngIf="form.get('first_name')?.touched && form.get('first_name')?.hasError('required')" class="error">
-              First Name is required
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="first_name" />
+                <div *ngIf="form.get('first_name')?.touched && form.get('first_name')?.hasError('required')"
+                     class="text-danger small mt-1">First name is required.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Middle Name</label>
+                <input type="text" class="form-control" formControlName="middle_name" />
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="">Middle Name</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="middle_name"
-              id="middle_name"
-            />
-          </div>
-          <div class="form-group">
-            <label for="">Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="last_name"
-              id="last_name"
-            />
-          </div>
-          <div class="form-group">
-            <label for="">Email Address</label>
-            <input
-              type="email"
-              class="form-control"
-              formControlName="email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="">Phone Number</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="phone_number"
-            />
-          </div>
-          <div class="form-group">
-            <label for="">Membership Number</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="membership_number"
-              id="membership_number"
-            />
+
+          <div class="mb-3">
+            <label class="form-label">Last Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="last_name" />
+            <div *ngIf="form.get('last_name')?.touched && form.get('last_name')?.hasError('required')"
+                 class="text-danger small mt-1">Last name is required.</div>
           </div>
 
-          <div class="form-group">
-            <label for="">Membership Type</label>
-            <select
-              name="membership_type_id"
-              class="form-control"
-              formControlName="membership_type_id"
-            >
-              <option *ngFor="let membershiptype of membershiptypes" [ngValue]="membershiptype.id">
-                {{ membershiptype.name }}
-              </option>
-            </select>
+          <div class="mb-3">
+            <label class="form-label">Email Address <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" formControlName="email" />
+            <div *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')"
+                 class="text-danger small mt-1">Email is required.</div>
+            <div *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')"
+                 class="text-danger small mt-1">Enter a valid email address.</div>
           </div>
 
-          <div class="form-group">
-            <label for="">Role</label>
-            <select
-              name="role_id"
-              class="form-control"
-              formControlName="role_id"
-            >
-              <option *ngFor="let role of roles" [ngValue]="role.id">
-                {{ role.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="">Population Group</label>
-            <select
-              name="population_group_id"
-              class="form-control"
-              formControlName="population_group_id"
-            >
-              <option *ngFor="let group of groups" [ngValue]="group.id">
-                {{ group.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="">Prayercell</label>
-            <select
-              name="prayercell_id"
-              class="form-control"
-              formControlName="prayercell_id"
-            >
-              <option *ngFor="let prayercell of prayercells" [ngValue]="prayercell.id">
-                {{ prayercell.name }}
-              </option>
-            </select>
+          <div class="mb-3">
+            <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="phone_number" placeholder="07XX or 01XX" />
+            <div *ngIf="form.get('phone_number')?.touched && form.get('phone_number')?.hasError('required')"
+                 class="text-danger small mt-1">Phone number is required.</div>
           </div>
         </div>
-        <div class="card-footer text-end">
-          <button type="submit" class="btn ms-2 btn-primary my-1">Save</button>
-          <a href="" class="btn ms-2 btn-danger my-1">Cancel</a>
+
+        <div class="card-footer d-flex justify-content-end gap-2">
+          <a routerLink="/pages/members" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
+            {{ isSubmitting ? 'Sending...' : 'Send Invitation' }}
+          </button>
         </div>
       </div>
     </form>

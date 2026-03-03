@@ -65,7 +65,7 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
   initializeForm(): void {
     this.themeForm = this.formBuilder.group({
       colors: this.formBuilder.group({
-        primaryColor: ['#ffd300'],
+        primaryColor: ['#175351'],
         secondaryColor: ['#433B97'],
         backgroundColor: ['#f5f5f5'],
         successColor: ['#28a745'],
@@ -118,7 +118,7 @@ export class TenantThemingComponent implements OnInit, OnDestroy {
         // Patch colors
         this.themeForm.patchValue({
           colors: {
-            primaryColor: config.colors.primaryColor || '#ffd300',
+            primaryColor: config.colors.primaryColor || '#175351',
             secondaryColor: config.colors.secondaryColor || '#433B97',
             backgroundColor: config.colors.backgroundColor || '#f5f5f5',
             successColor: config.colors.successColor || '#28a745',

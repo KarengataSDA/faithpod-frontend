@@ -37,7 +37,7 @@
                                                         <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
                                                             <i class="zmdi zmdi-email" aria-hidden="true"></i>
                                                         </a>
-                                                        <input class="input100  ms-0 form-control" type="email" [(ngModel)]="email" [(ngModel)]="email" placeholder="Email Address" name="email" required>
+                                                        <input class="input100  ms-0 form-control" type="email" [(ngModel)]="email" placeholder="Email Address" name="email" required>
                                                     </div>
                                                     <div class="wrap-input100 validate-input input-group" >
                                                         <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
@@ -51,7 +51,7 @@
                                                         <a (click)="togglePassword()" class="input-group-text bg-white text-muted">
                                                             <i [ngClass]="{'zmdi zmdi-eye-off text-muted': !showPassword, 'mdi mdi-eye text-muted': showPassword}" aria-hidden="true"></i>
                                                         </a>
-                                                        <input class="input100 border-start-0 ms-0 form-control"  type="{{ showPassword ? 'text' : 'password' }}"  [(ngModel)]="password"  [(ngModel)]="password" name="password" placeholder="Enter Password" required>
+                                                        <input class="input100 border-start-0 ms-0 form-control"  type="{{ showPassword ? 'text' : 'password' }}"  [(ngModel)]="password" name="password" placeholder="Enter Password" required>
                                                         
 
                                                     </div>
@@ -63,7 +63,7 @@
                                                     </div>
                                                     
                                                     <label class="custom-control custom-checkbox mt-4">
-                                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="isTermsChecked">
+                                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="isTermsChecked" name="terms">
                                                         <span class="custom-control-label">Agree the <a routerLink="/auth/terms">terms and policies</a></span>
                                                     </label>
                                                     <div class="container-login100-form-btn">

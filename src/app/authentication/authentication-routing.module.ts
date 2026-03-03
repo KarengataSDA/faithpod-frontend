@@ -13,17 +13,19 @@ import { CentralAdminLoginComponent } from './central-admin-login/central-admin-
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
 import { TenantViewComponent } from './tenant-view/tenant-view.component';
 import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
+import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
 
 const routes: Routes = [
   {
     path: 'auth', children:[
       { path: 'login', component: LoginPageComponent },
       { path: 'register', component: RegisterComponent },
-      {path: 'email-verification/:id/:hash', component: VerifyEmailComponent},
-      {path: 'forgot-password', component: ForgotPasswordComponent},
-      {path: 'reset-password', component: ResetPasswordComponent},
-      {path: 'terms', component: TermsComponent},
-      {path: 'verification-notice', component: VerificationNoticeComponent}
+      { path: 'accept-invite', component: AcceptInviteComponent },
+      { path: 'email-verification/:id/:hash', component: VerifyEmailComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'terms', component: TermsComponent },
+      { path: 'verification-notice', component: VerificationNoticeComponent }
     ]
   },
   // Central Admin routes (accessible only on root domain)

@@ -5,129 +5,198 @@
 ></app-page-header>
 
 <div class="card-footer text-end" *ngIf="authService.hasPermission('create members')">
-  <a  class="btn ms-2 btn-primary my-1" routerLink="/pages/members/create-member">
-    <i class="fe fe-plus"></i>  Add Member
+  <a class="btn ms-2 btn-primary my-1" routerLink="/pages/members/create-member">
+    <i class="fe fe-plus"></i> Add Member
   </a>
 </div>
 
-<!-- row opened -->
 <div class="row row-sm">
   <div class="col-xl-12">
     <div class="card overflow-visible">
+
+      <!-- Status tabs -->
       <div class="card-header pb-0">
-        <div>
-          <h6 class="main-content-label mb-1">Members</h6>
-          <p class="text-muted card-sub-title">List of all Church Members.</p>
-        </div>
+        <ul class="nav nav-tabs nav-tabs-bottom mb-0">
+          <li class="nav-item" *ngFor="let tab of tabs">
+            <a class="nav-link d-flex align-items-center gap-1"
+               [class.active]="activeTab === tab.key"
+               style="cursor:pointer"
+               (click)="setTab(tab.key)">
+              {{ tab.label }}
+              <span class="badge rounded-pill bg-secondary ms-1">{{ countForTab(tab.key) }}</span>
+            </a>
+          </li>
+        </ul>
       </div>
+
       <div class="card-body">
-        <div class="">
-          <form action="" class="ngb-table">
-            <div class="form-group form-inline">
-              Search
-              <input class="form-control ms-2" type="text" (input)="onSearchChange($event)" />
-            </div>
-            <div class="table-responsive">
-              <table class="table table-striped border">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th>Member No</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email Address</th>
-                    <th>Phone Number</th>
-                    <th>Role</th>
-                    <th>Membership</th>
-                    <th *ngIf="authService.hasPermission('view members')">Actions</th>
-                  </tr>
-                </thead>
-                  <tbody *ngIf="isLoading">
-                  <tr *ngFor="let item of [1,2,3,4,5,6]">
-                    <td><div class="skeleton skeleton-text"></div></td>
-                    <td><div class="skeleton skeleton-text"></div></td>
-                    <td><div class="skeleton skeleton-btn"></div></td>
-                    <td><div class="skeleton skeleton-text"></div></td>
-                    <td><div class="skeleton skeleton-text"></div></td>
-                    <td><div class="skeleton skeleton-btn"></div></td>
-                    <td><div class="skeleton skeleton-text"></div></td>
-                    <td><div class="skeleton skeleton-text"></div></td>
-                    <td><div class="skeleton skeleton-btn"></div></td>
-                  </tr>
-                </tbody>
+        <div class="form-group form-inline mb-3">
+          Search
+          <input class="form-control ms-2" type="text" (input)="onSearchChange($event)" />
+        </div>
 
-                <tbody *ngIf="!isLoading">
-                  <tr *ngFor="let member of paginatedMembers; let i = index">
-                    <td>{{(currentPage -1 ) * pageSize + i + 1}}</td>
-                    <!-- <th>{{ member.membership_number ? 'KSDA-' + member.membership_number : 'No Number' }}</th> -->
-                    <th>{{ member.membership_number ?  member.membership_number : 'No Number' }}</th>
-                    <td>{{member.first_name}}</td>
-                    <td>{{ member.last_name }}</td>
-                    <td>{{ member.email }}</td>
-                    <td>{{ member.phone_number }}</td>
-                    <td>{{member.roles?.join(', ') || '-'}}</td>
-                    <td>
-                      <span
-                        class="badge  rounded-pill p-2 px-3"
-                        [ngClass]="{
-                          ' bg-success-transparent text-success': member?.membership_type?.name?.toLowerCase() === 'visitor',
-                          ' bg-warning-transparent text-warning': member?.membership_type?.name?.toLowerCase() === 'member',
-                          ' bg-danger-transparent text-danger': member?.membership_type?.name?.toLowerCase() === 'sabbath'
-                        }"
-                        >{{member?.membership_type?.name || '-'}}</span
-                      >
-                    </td>
-                    <td>
-                      <div class="g-2">
-                        <a
-                        *ngIf="authService.hasPermission('view members')"
-                          routerLink="view/{{ member.id }}"
-                          class="btn text-primary btn-sm"
-                          data-bs-toggle="tooltip"
-                          ngbTooltip="View"
-                          ><span class="fe fe-eye fs-14"></span
-                        ></a>
+        <div class="table-responsive">
+          <table class="table table-striped border">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Member No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Role</th>
+                <th>Membership</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-                        <a
-                        *ngIf="authService.hasPermission('edit members')"
-                        routerLink="edit/{{ member.id }}"
-                        class="btn text-primary btn-sm"
+            <!-- skeleton -->
+            <tbody *ngIf="isLoading">
+              <tr *ngFor="let _ of [1,2,3,4,5,6]">
+                <td *ngFor="let __ of [1,2,3,4,5,6,7,8,9]">
+                  <div class="skeleton skeleton-text"></div>
+                </td>
+              </tr>
+            </tbody>
 
-                        ><span class="fe fe-edit fs-14"></span
-                      ></a>
-                        <a
-                        *ngIf="authService.hasPermission('delete members')"
-                          (click)="deleteMember(member.id)"
-                          class="btn text-danger btn-sm"
-                          data-bs-toggle="tooltip"
-                          ngbTooltip="Delete"
-                          ><span class="fe fe-trash-2 fs-14"></span
-                        ></a>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px;">
-                <div>
-                  <p>showing {{(currentPage - 1 ) * pageSize + 1}} to {{(currentPage - 1) * pageSize + paginatedMembers.length}} of {{totalLength}} members</p>
-                </div>
-                <div>
-                    <ul class="pagination">
-                        <li class="page-item page-prev" [class.disabled]="currentPage === 1">
-                            <a class="page-link"  (click)="onPageChange(currentPage - 1)" tabindex="-1">Prev</a>
-                        </li>
-                        <li *ngFor="let page of [].constructor(totalPages); let index = index" class="page-item" [class.active]="currentPage === index + 1">
-                          <a class="page-link" (click)="onPageChange(index + 1)">{{index + 1}}</a>
-                        </li>
-                        <li class="page-item" [class.disabled]="currentPage == totalPages">
-                            <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            </div>
-          </form>
+            <tbody *ngIf="!isLoading">
+              <tr *ngFor="let member of paginatedMembers; let i = index">
+                <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td>{{ member.membership_number || 'No Number' }}</td>
+                <td>{{ member.first_name }} {{ member.last_name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.phone_number }}</td>
+
+                <!-- Status badge -->
+                <td>
+                  <span class="badge rounded-pill p-2 px-3" [ngClass]="badgeClass(member.status)">
+                    {{ getStatusLabel(member.status) }}
+                  </span>
+                </td>
+
+                <td>{{ member.roles?.join(', ') || '-' }}</td>
+
+                <td>
+                  <span
+                    class="badge rounded-pill p-2 px-3"
+                    [ngClass]="{
+                      'bg-success-transparent text-success': member?.membership_type?.name?.toLowerCase() === 'visitor',
+                      'bg-warning-transparent text-warning': member?.membership_type?.name?.toLowerCase() === 'member',
+                      'bg-danger-transparent text-danger':  member?.membership_type?.name?.toLowerCase() === 'sabbath'
+                    }">
+                    {{ member?.membership_type?.name || '-' }}
+                  </span>
+                </td>
+
+                <!-- Actions -->
+                <td>
+                  <div class="d-flex gap-1 flex-wrap">
+
+                    <!-- View -->
+                    <a *ngIf="authService.hasPermission('view members')"
+                       routerLink="view/{{ member.id }}"
+                       class="btn btn-sm text-primary"
+                       ngbTooltip="View">
+                      <span class="fe fe-eye fs-14"></span>
+                    </a>
+
+                    <!-- Edit -->
+                    <a *ngIf="authService.hasPermission('edit members')"
+                       routerLink="edit/{{ member.id }}"
+                       class="btn btn-sm text-primary"
+                       ngbTooltip="Edit">
+                      <span class="fe fe-edit fs-14"></span>
+                    </a>
+
+                    <!-- Verify (for invited / self_registered / pending_review) -->
+                    <button
+                      *ngIf="authService.hasPermission('edit members') &&
+                             (member.status === 'invited' || member.status === 'self_registered' || member.status === 'pending_review')"
+                      class="btn btn-sm text-success"
+                      ngbTooltip="Verify"
+                      (click)="quickVerify(member)">
+                      <span class="fe fe-check-circle fs-14"></span>
+                    </button>
+
+                    <!-- Reject (for invited / self_registered / pending_review) -->
+                    <button
+                      *ngIf="authService.hasPermission('edit members') &&
+                             (member.status === 'invited' || member.status === 'self_registered' || member.status === 'pending_review')"
+                      class="btn btn-sm text-danger"
+                      ngbTooltip="Reject"
+                      (click)="quickReject(member)">
+                      <span class="fe fe-x-circle fs-14"></span>
+                    </button>
+
+                    <!-- Suspend (for verified only) -->
+                    <button
+                      *ngIf="authService.hasPermission('edit members') && member.status === 'verified'"
+                      class="btn btn-sm text-warning"
+                      ngbTooltip="Suspend"
+                      (click)="quickSuspend(member)">
+                      <span class="fe fe-pause-circle fs-14"></span>
+                    </button>
+
+                    <!-- Reactivate (for rejected / suspended) -->
+                    <button
+                      *ngIf="authService.hasPermission('edit members') &&
+                             (member.status === 'rejected' || member.status === 'suspended')"
+                      class="btn btn-sm text-primary"
+                      ngbTooltip="Reactivate"
+                      (click)="quickReactivate(member)">
+                      <span class="fe fe-refresh-cw fs-14"></span>
+                    </button>
+
+                    <!-- Resend Invite (for invited with unexpired token) -->
+                    <button
+                      *ngIf="authService.hasPermission('edit members') && member.status === 'invited'"
+                      class="btn btn-sm text-info"
+                      ngbTooltip="Resend Invite"
+                      (click)="quickResendInvite(member)">
+                      <span class="fe fe-mail fs-14"></span>
+                    </button>
+
+                    <!-- Delete -->
+                    <button
+                      *ngIf="authService.hasPermission('delete members')"
+                      class="btn btn-sm text-danger"
+                      ngbTooltip="Delete"
+                      (click)="deleteMember(member.id)">
+                      <span class="fe fe-trash-2 fs-14"></span>
+                    </button>
+
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="paginatedMembers.length === 0">
+                <td colspan="9" class="text-center text-muted py-4">No members found.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div class="d-flex justify-content-between align-items-center pt-3">
+            <p class="mb-0">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} –
+              {{ (currentPage - 1) * pageSize + paginatedMembers.length }}
+              of {{ totalLength }} members
+            </p>
+            <ul class="pagination mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+              </li>
+              <li *ngFor="let _ of [].constructor(totalPages); let idx = index"
+                  class="page-item" [class.active]="currentPage === idx + 1">
+                <a class="page-link" (click)="onPageChange(idx + 1)">{{ idx + 1 }}</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>

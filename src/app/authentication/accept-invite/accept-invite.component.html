@@ -1,0 +1,79 @@
+<div class="page">
+  <div class="page-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto my-auto">
+
+          <div class="card-group mb-0">
+            <div class="card p-4">
+              <div class="card-body">
+
+                <!-- Logo / Church name -->
+                <div class="text-center mb-4">
+                  <h4 class="fw-bold mb-1">{{ tenantName || 'FaithPod' }}</h4>
+                  <p class="text-muted">You've been invited to join. Set your password to activate your account.</p>
+                </div>
+
+                <!-- Error banner -->
+                <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-3">
+                  {{ errorMessage }}
+                </div>
+
+                <!-- Form — only show when token is valid -->
+                <form *ngIf="token" (ngSubmit)="submit()" autocomplete="off">
+
+                  <!-- Password -->
+                  <div class="input-group mb-3">
+                    <input
+                      [type]="showPassword ? 'text' : 'password'"
+                      class="form-control"
+                      placeholder="New password"
+                      [(ngModel)]="password"
+                      name="password"
+                      required
+                      minlength="8"
+                    />
+                    <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+                      <i [class]="showPassword ? 'fe fe-eye-off' : 'fe fe-eye'"></i>
+                    </button>
+                  </div>
+
+                  <!-- Confirm password -->
+                  <div class="input-group mb-4">
+                    <input
+                      [type]="showConfirmPassword ? 'text' : 'password'"
+                      class="form-control"
+                      placeholder="Confirm password"
+                      [(ngModel)]="passwordConfirm"
+                      name="passwordConfirm"
+                      required
+                    />
+                    <button type="button" class="btn btn-outline-secondary" (click)="toggleConfirmPassword()">
+                      <i [class]="showConfirmPassword ? 'fe fe-eye-off' : 'fe fe-eye'"></i>
+                    </button>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
+                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        {{ isLoading ? 'Activating...' : 'Activate Account' }}
+                      </button>
+                    </div>
+                  </div>
+
+                </form>
+
+                <div class="mt-4 text-center">
+                  <a routerLink="/auth/login" class="text-muted small">Back to Login</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
