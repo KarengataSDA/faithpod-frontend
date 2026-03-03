@@ -54,8 +54,8 @@ export class TenantService {
       const parts = hostname.split('.');
       const tenant = parts[0];
 
-      // Validate tenant format (alphanumeric and hyphens only)
-      if (!/^[a-z0-9-]+$/i.test(tenant)) {
+      // Validate tenant format (alphanumeric, hyphens, and underscores)
+      if (!/^[a-z0-9_-]+$/i.test(tenant)) {
         console.warn(`Invalid tenant format: ${tenant}`);
         return null;
       }
@@ -88,8 +88,8 @@ export class TenantService {
       return null;
     }
 
-    // Validate tenant format (alphanumeric and hyphens only)
-    if (!/^[a-z0-9-]+$/i.test(tenant)) {
+    // Validate tenant format (alphanumeric, hyphens, and underscores)
+    if (!/^[a-z0-9_-]+$/i.test(tenant)) {
       console.warn(`Invalid tenant format: ${tenant}`);
       return null;
     }
