@@ -52,7 +52,7 @@ jobs:
           port: 2150
           script: |
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S mkdir -p /var/www/html/faithpod-frontend
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S rsync -avz --delete /home/${{ secrets.VPS_USER }}/faithpod-frontend-temp/ /var/www/html/faithpod-frontend/
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S rsync -avz --delete /home/${{ secrets.VPS_USER }}/faithpod-frontend-temp/dist/faithpod-frontend/browser/ /var/www/html/faithpod-frontend/
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chown -R www-data:www-data /var/www/html/faithpod-frontend
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S chmod -R 755 /var/www/html/faithpod-frontend
             rm -rf /home/${{ secrets.VPS_USER }}/faithpod-frontend-temp
