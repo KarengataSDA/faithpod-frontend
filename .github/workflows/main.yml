@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 2150
-          source: "dist/*"
+          source: "dist/faithpod-frontend/browser/*"
           target: "/home/${{ secrets.VPS_USER }}/faithpod-frontend-temp"
 
       - name: Deploy to Contabo Server via SSH
