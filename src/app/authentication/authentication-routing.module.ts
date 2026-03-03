@@ -8,8 +8,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { VerificationNoticeComponent } from './verification-notice/verification-notice.component';
 import { UnauthorizedComponent } from '../components/pages/unauthorized/unauthorized.component';
-import { CentralAdminRegisterComponent } from './central-admin-register/central-admin-register.component';
-import { CentralAdminLoginComponent } from './central-admin-login/central-admin-login.component';
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
 import { TenantViewComponent } from './tenant-view/tenant-view.component';
 import { TenantEditComponent } from './tenant-edit/tenant-edit.component';

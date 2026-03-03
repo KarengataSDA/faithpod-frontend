@@ -11,8 +11,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { TermsComponent } from './terms/terms.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { CentralAdminRegisterComponent } from './central-admin-register/central-admin-register.component';
-import { CentralAdminLoginComponent } from './central-admin-login/central-admin-login.component';
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
 import { TenantViewComponent } from './tenant-view/tenant-view.component';
 import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
@@ -27,8 +25,6 @@ import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
     ForgotPasswordComponent,
     TermsComponent,
     ResetPasswordComponent,
-    CentralAdminRegisterComponent,
-    CentralAdminLoginComponent,
     TenantManagementComponent,
     TenantViewComponent,
     TenantEditComponent,
