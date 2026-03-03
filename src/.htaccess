@@ -1,9 +1,19 @@
 Options -MultiViews
 RewriteEngine On
 
-# Serve existing files/dirs directly
+# Never cache index.html so browsers always fetch the latest build
+<Files "index.html">
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</Files>
+
+# Return 404 for missing static assets (JS/CSS/etc) — do NOT fall back to index.html
+# This prevents the "wrong MIME type" error when a chunk file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule \.(js|css|map|ico|svg|png|jpg|jpeg|gif|woff|woff2|ttf|eot)$ - [R=404,L]
+
+# Fallback to index.html for Angular routing (HTML routes only)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# Fallback to index.html for Angular routing
 RewriteRule ^ /index.html [QSA,L]
