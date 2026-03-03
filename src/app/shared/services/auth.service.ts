@@ -239,11 +239,11 @@ export class AuthService {
 
   // Central Admin password reset
   sendCentralAdminResetLink(email: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/password/forgot`, {email});
+    return this.http.post(`${environment.apiUrl}/auth/password/forgot`, {email});
   }
 
   resetCentralAdminPassword(data: { token: string, email: string, password: string, password_confirmation: string}): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/password/reset`, data)
+    return this.http.post(`${environment.apiUrl}/auth/password/reset`, data)
   }
 
 }
