@@ -43,7 +43,7 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
     this.createTenantForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      domain: ['', Validators.required],
+      domain: ['', [Validators.required, Validators.pattern(/^[a-z0-9][a-z0-9-]*\.[a-z0-9.-]+$/i)]],
       password: ['', [Validators.required, Validators.minLength(8)]]
     });
 

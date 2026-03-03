@@ -82,9 +82,10 @@
                   [class.is-invalid]="createTenantForm.get('domain')?.invalid && createTenantForm.get('domain')?.touched"
                 >
                 <div class="invalid-feedback" *ngIf="createTenantForm.get('domain')?.invalid && createTenantForm.get('domain')?.touched">
-                  Domain is required
+                  <span *ngIf="createTenantForm.get('domain')?.errors?.['required']">Domain is required</span>
+                  <span *ngIf="createTenantForm.get('domain')?.errors?.['pattern']">Subdomain may only contain letters (a-z), numbers (0-9), and hyphens (-). No underscores allowed.</span>
                 </div>
-                <small class="form-hint">Example: demo.localhost or demo.faithpod.io</small>
+                <small class="form-hint">Example: demo-church.faithpod.io — only letters, numbers, and hyphens</small>
               </div>
 
               <div class="col-md-6 mb-3">
