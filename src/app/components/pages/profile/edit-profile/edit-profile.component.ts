@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { User } from 'src/app/shared/models/user';
 import { Auth } from 'src/app/components/classes/auth';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MediaConfirmResponse } from 'src/app/shared/services/media.service';
@@ -49,7 +48,12 @@ export class EditProfileComponent implements OnInit {
     this.authService.user().subscribe(
       (user) => {
         this.user = user;
-        this.infoForm.patchValue(user);
+        this.infoForm.patchValue({
+          ...user,
+          date_of_birth: user.date_of_birth
+            ? user.date_of_birth.split('T')[0]
+            : ''
+        });
       }
     )
 
@@ -60,8 +64,13 @@ export class EditProfileComponent implements OnInit {
     })
 
     Auth.userEmitter.subscribe(
-      user=> {
-        this.infoForm.patchValue(user)
+      user => {
+        this.infoForm.patchValue({
+          ...user,
+          date_of_birth: user.date_of_birth
+            ? user.date_of_birth.split('T')[0]
+            : ''
+        });
       }
     )
   }

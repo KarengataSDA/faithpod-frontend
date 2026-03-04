@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from 'src/app/shared/models/user';
 import { environment } from 'src/environments/environment';
@@ -155,7 +155,8 @@ export class AuthService {
   }
 
   updateInfo(data: any): Observable<User> {
-    return this.http.put<User>(this.baseUrl + '/members/update-info', data).pipe(
+    return this.http.put<any>(this.baseUrl + '/members/update-info', data).pipe(
+      map((response: any) => response.member ?? response),
       tap((user: User) => {
         this.setUser(user)
       })
