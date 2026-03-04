@@ -20,8 +20,8 @@ import { MediaConfirmResponse, MediaService } from '../../services/media.service
   styleUrl: './image-upload.component.scss',
 })
 export class ImageUploadComponent implements OnChanges {
-  /** 'member' uploads go to /members/me/media; 'tenant' go to /tenants/{entityId}/media */
-  @Input() entityType: 'member' | 'tenant' = 'member';
+  /** 'member' → /members/me/media; 'tenant' → /tenants/{entityId}/media; 'tenant-self' → /tenant/media/{collection} */
+  @Input() entityType: 'member' | 'tenant' | 'tenant-self' = 'member';
 
   /** Required when entityType === 'tenant' */
   @Input() entityId: string | null = null;

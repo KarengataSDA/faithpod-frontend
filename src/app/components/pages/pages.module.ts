@@ -45,6 +45,8 @@ import { PaybillTransactionsComponent } from './treasury/paybill-transactions/pa
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
+import { BrandingComponent } from './settings/branding/branding.component';
+import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
 
 
 
@@ -88,9 +90,11 @@ import { MemberActivityLogComponent } from './settings/member-activity-log/membe
     ViewMembershipComponent,
     PaybillTransactionsComponent,
     DashboardMonitorComponent,
-    MemberActivityLogComponent
-    
-    
+    MemberActivityLogComponent,
+    BrandingComponent,
+    AppSettingsComponent
+
+
 
     
   ],

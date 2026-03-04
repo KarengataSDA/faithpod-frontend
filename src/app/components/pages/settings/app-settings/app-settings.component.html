@@ -1,0 +1,281 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="page-title">App Settings</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/pages/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item active">App Settings</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Integration Settings</h3>
+      <p class="text-muted mb-0">Configure email, payments, and messaging integrations for your portal.</p>
+    </div>
+
+    <!-- Error Message -->
+    <div class="alert alert-danger m-3" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading configuration...</p>
+    </div>
+
+    <div class="card-body" *ngIf="!isLoading">
+      <form [formGroup]="configForm" (ngSubmit)="saveAppConfig()">
+
+        <!-- ── Mail Configuration ────────────────────────────────────────── -->
+        <div class="accordion-item mb-3 border rounded">
+          <div class="accordion-header p-3 d-flex justify-content-between align-items-center"
+            style="cursor: pointer;" (click)="toggleSection('mail')">
+            <div>
+              <h5 class="mb-0"><i class="zmdi zmdi-email me-2"></i>Email (SMTP)</h5>
+              <small class="text-muted">Configure outgoing mail server for notifications and invites</small>
+            </div>
+            <i class="zmdi" [class.zmdi-chevron-up]="expandedSections['mail']"
+              [class.zmdi-chevron-down]="!expandedSections['mail']"></i>
+          </div>
+          <div *ngIf="expandedSections['mail']" class="p-3 border-top" formGroupName="mail">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Mailer</label>
+                <input type="text" class="form-control" formControlName="mailer" placeholder="smtp" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Encryption</label>
+                <select class="form-select" formControlName="encryption">
+                  <option value="">Select...</option>
+                  <option value="tls">TLS</option>
+                  <option value="ssl">SSL</option>
+                </select>
+              </div>
+              <div class="col-md-8 mb-3">
+                <label class="form-label">SMTP Host</label>
+                <input type="text" class="form-control" formControlName="host" placeholder="smtp.gmail.com" />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Port</label>
+                <input type="number" class="form-control" formControlName="port" placeholder="587" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" formControlName="username" placeholder="your@email.com" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('mail_password') ? 'text' : 'password'"
+                    class="form-control" formControlName="password" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('mail_password')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('mail_password')"
+                      [class.zmdi-eye-off]="isFieldVisible('mail_password')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">From Address</label>
+                <input type="email" class="form-control" formControlName="from_address" placeholder="noreply@yourchurch.org" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">From Name</label>
+                <input type="text" class="form-control" formControlName="from_name" placeholder="Your Church Name" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── M-Pesa Configuration ──────────────────────────────────────── -->
+        <div class="accordion-item mb-3 border rounded">
+          <div class="accordion-header p-3 d-flex justify-content-between align-items-center"
+            style="cursor: pointer;" (click)="toggleSection('mpesa')">
+            <div>
+              <h5 class="mb-0"><i class="zmdi zmdi-money me-2"></i>M-Pesa</h5>
+              <small class="text-muted">Configure Safaricom M-Pesa for collecting contributions</small>
+            </div>
+            <i class="zmdi" [class.zmdi-chevron-up]="expandedSections['mpesa']"
+              [class.zmdi-chevron-down]="!expandedSections['mpesa']"></i>
+          </div>
+          <div *ngIf="expandedSections['mpesa']" class="p-3 border-top" formGroupName="mpesa">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Consumer Key</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('mpesa_consumer_key') ? 'text' : 'password'"
+                    class="form-control" formControlName="consumer_key" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('mpesa_consumer_key')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('mpesa_consumer_key')"
+                      [class.zmdi-eye-off]="isFieldVisible('mpesa_consumer_key')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Consumer Secret</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('mpesa_consumer_secret') ? 'text' : 'password'"
+                    class="form-control" formControlName="consumer_secret" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('mpesa_consumer_secret')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('mpesa_consumer_secret')"
+                      [class.zmdi-eye-off]="isFieldVisible('mpesa_consumer_secret')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Passkey</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('mpesa_passkey') ? 'text' : 'password'"
+                    class="form-control" formControlName="passkey" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('mpesa_passkey')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('mpesa_passkey')"
+                      [class.zmdi-eye-off]="isFieldVisible('mpesa_passkey')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Shortcode (Paybill/Till)</label>
+                <input type="text" class="form-control" formControlName="shortcode" placeholder="174379" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Environment</label>
+                <select class="form-select" formControlName="environment">
+                  <option value="">Select...</option>
+                  <option value="sandbox">Sandbox (Testing)</option>
+                  <option value="production">Production</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Callback URL</label>
+                <input type="text" class="form-control" formControlName="callback_url"
+                  placeholder="https://yourdomain.com/api/stk-callback" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SMS Configuration ─────────────────────────────────────────── -->
+        <div class="accordion-item mb-3 border rounded">
+          <div class="accordion-header p-3 d-flex justify-content-between align-items-center"
+            style="cursor: pointer;" (click)="toggleSection('sms')">
+            <div>
+              <h5 class="mb-0"><i class="zmdi zmdi-comment-text me-2"></i>SMS</h5>
+              <small class="text-muted">Configure SMS provider for member notifications</small>
+            </div>
+            <i class="zmdi" [class.zmdi-chevron-up]="expandedSections['sms']"
+              [class.zmdi-chevron-down]="!expandedSections['sms']"></i>
+          </div>
+          <div *ngIf="expandedSections['sms']" class="p-3 border-top" formGroupName="sms">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Partner ID</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('sms_partner_id') ? 'text' : 'password'"
+                    class="form-control" formControlName="partner_id" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('sms_partner_id')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('sms_partner_id')"
+                      [class.zmdi-eye-off]="isFieldVisible('sms_partner_id')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">API Key</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('sms_api_key') ? 'text' : 'password'"
+                    class="form-control" formControlName="api_key" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('sms_api_key')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('sms_api_key')"
+                      [class.zmdi-eye-off]="isFieldVisible('sms_api_key')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Shortcode / Sender ID</label>
+                <input type="text" class="form-control" formControlName="shortcode" placeholder="YourChurch" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">API URL</label>
+                <input type="text" class="form-control" formControlName="url" placeholder="https://api.provider.com/sms" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Hashlix Configuration ─────────────────────────────────────── -->
+        <div class="accordion-item mb-3 border rounded">
+          <div class="accordion-header p-3 d-flex justify-content-between align-items-center"
+            style="cursor: pointer;" (click)="toggleSection('hashlix')">
+            <div>
+              <h5 class="mb-0"><i class="zmdi zmdi-swap me-2"></i>Hashlix</h5>
+              <small class="text-muted">Configure Hashlix integration</small>
+            </div>
+            <i class="zmdi" [class.zmdi-chevron-up]="expandedSections['hashlix']"
+              [class.zmdi-chevron-down]="!expandedSections['hashlix']"></i>
+          </div>
+          <div *ngIf="expandedSections['hashlix']" class="p-3 border-top" formGroupName="hashlix">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">API Key</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('hashlix_api_key') ? 'text' : 'password'"
+                    class="form-control" formControlName="api_key" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('hashlix_api_key')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('hashlix_api_key')"
+                      [class.zmdi-eye-off]="isFieldVisible('hashlix_api_key')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">API Secret</label>
+                <div class="input-group">
+                  <input [type]="isFieldVisible('hashlix_api_secret') ? 'text' : 'password'"
+                    class="form-control" formControlName="api_secret" placeholder="••••••••" />
+                  <button type="button" class="btn btn-outline-secondary"
+                    (click)="toggleFieldVisibility('hashlix_api_secret')">
+                    <i class="zmdi" [class.zmdi-eye]="!isFieldVisible('hashlix_api_secret')"
+                      [class.zmdi-eye-off]="isFieldVisible('hashlix_api_secret')"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Sender ID</label>
+                <input type="text" class="form-control" formControlName="sender_id" placeholder="YourChurch" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">API URL</label>
+                <input type="text" class="form-control" formControlName="url" placeholder="https://api.hashlix.com" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-secondary" (click)="resetForm()" [disabled]="isSaving">
+            <i class="zmdi zmdi-refresh me-2"></i>Reset
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+            <span *ngIf="!isSaving">
+              <i class="zmdi zmdi-save me-2"></i>Save Settings
+            </span>
+            <span *ngIf="isSaving">
+              <span class="spinner-border spinner-border-sm me-2"></span>Saving...
+            </span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

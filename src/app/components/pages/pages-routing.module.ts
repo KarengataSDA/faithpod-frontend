@@ -36,6 +36,8 @@ import { PaybillTransactionsComponent } from './treasury/paybill-transactions/pa
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
+import { BrandingComponent } from './settings/branding/branding.component';
+import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
 
 
 
@@ -86,6 +88,8 @@ const routes: Routes = [
       {path: 'memberships/view/:id', title: "View Membership", component:ViewMembershipComponent, canActivate: [AuthGuard], data: { permission: 'view membership types'}},
 
       {path: 'settings/activity-log', title: "Member Activity Log", component: MemberActivityLogComponent, canActivate: [AuthGuard], data: { permission: 'edit members'}},
+      {path: 'settings/branding', title: "Branding", component: BrandingComponent, canActivate: [AuthGuard], data: { permission: 'view roles'}},
+      {path: 'settings/app-settings', title: "App Settings", component: AppSettingsComponent, canActivate: [AuthGuard], data: { permission: 'view roles'}},
     ]
   }
 ];

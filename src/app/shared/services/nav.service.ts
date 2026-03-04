@@ -52,15 +52,19 @@ export class NavService implements OnDestroy {
     }
   }
 
-  filterMenuItems(userPermissions: string[]): void {
+  filterMenuItems(userPermissions: string[], userRoles: string[] = []): void {
+    const isSuperAdmin = userRoles.includes('super_admin');
     const filteredItems = this.MENUITEMS.filter(menu => {
       if (!menu.permissions || menu.permissions.length === 0) {
-        return true
+        return true;
       }
-
-      return menu.permissions.some(permission => userPermissions.includes(permission))
+      // super_admin sees everything
+      if (isSuperAdmin) {
+        return true;
+      }
+      return menu.permissions.some(permission => userPermissions.includes(permission));
     });
-    this.items.next(filteredItems)
+    this.items.next(filteredItems);
   }
 
   ngOnDestroy() {
@@ -282,6 +286,42 @@ export class NavService implements OnDestroy {
           type: 'link',
           selected: false,
           permissions: ['edit members']
+        }
+      ]
+    },
+    {
+      title: 'Branding',
+      selected: false,
+      icon: 'image',
+      type: 'sub',
+      Menusub: true,
+      active: false,
+      permissions: ['view roles'],
+      children: [
+        {
+          path: '/pages/settings/branding',
+          title: 'Branding',
+          type: 'link',
+          selected: false,
+          permissions: ['view roles']
+        }
+      ]
+    },
+    {
+      title: 'App Settings',
+      selected: false,
+      icon: 'settings',
+      type: 'sub',
+      Menusub: true,
+      active: false,
+      permissions: ['view roles'],
+      children: [
+        {
+          path: '/pages/settings/app-settings',
+          title: 'App Settings',
+          type: 'link',
+          selected: false,
+          permissions: ['view roles']
         }
       ]
     },
