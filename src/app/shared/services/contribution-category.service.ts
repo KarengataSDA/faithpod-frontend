@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ContributionCategory } from 'src/app/shared/models/collection';
 import { CacheService } from './cache.service';
-import { LocalStorageService } from './local-storage.service';
 import { TenantService } from './tenant.service';
 
 @Injectable({
@@ -13,16 +12,13 @@ import { TenantService } from './tenant.service';
 export class ContributionCategoryService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
-  private localStorageService = inject(LocalStorageService);
   private tenantService = inject(TenantService);
 
-  /**
-   * Get dynamic base URL from tenant service
-   */
   get baseUrl(): string {
     return this.tenantService.getApiUrl();
   }
-  private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes for reference data
+
+  private readonly CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
   private get tenantPrefix(): string {
     return this.tenantService.getTenantFromSubdomain() || 'default';
@@ -32,27 +28,12 @@ export class ContributionCategoryService {
     return `${this.tenantPrefix}_contribution_categories`;
   }
 
-  private get STORAGE_KEY(): string {
-    return `${this.tenantPrefix}_contribution_categories`;
-  }
-
   getAll(): Observable<ContributionCategory[]> {
-    // Try localStorage first for reference data (skip if empty array — may be stale)
-    const cached = this.localStorageService.get<ContributionCategory[]>(this.STORAGE_KEY);
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return new Observable(observer => {
-        observer.next(cached);
-        observer.complete();
-      });
-    }
-
     return this.cacheService.get(
       this.CACHE_KEY,
-      this.http.get<ContributionCategory[]>(this.baseUrl + '/contribution-types').pipe(
-        tap(data => this.localStorageService.set(this.STORAGE_KEY, data, { ttl: this.CACHE_TTL }))
-      ),
+      this.http.get<ContributionCategory[]>(this.baseUrl + '/contribution-types'),
       this.CACHE_TTL,
-      true // Enable shareReplay for proper caching
+      true
     );
   }
 
@@ -68,7 +49,7 @@ export class ContributionCategoryService {
       cacheKey,
       this.http.get<ContributionCategory>(`${this.baseUrl}/contribution-types/${id}/contributions`),
       this.CACHE_TTL,
-      true // Enable shareReplay for proper caching
+      true
     );
   }
 
@@ -95,7 +76,7 @@ export class ContributionCategoryService {
       cacheKey,
       this.http.get(`${this.baseUrl}/contribution-types/${id}/chart`),
       this.CACHE_TTL,
-      true // Use shareReplay for dashboard chart data
+      true
     );
   }
 
@@ -105,12 +86,11 @@ export class ContributionCategoryService {
       cacheKey,
       this.http.get(`${this.baseUrl}/contribution-types-chart`),
       this.CACHE_TTL,
-      true // Use shareReplay for dashboard chart data
+      true
     );
   }
 
-  private invalidateCache(): void {
+  invalidateCache(): void {
     this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY}`));
-    this.localStorageService.remove(this.STORAGE_KEY);
   }
 }

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { Member, MemberAudit } from '../models/member';
 import { CacheService } from './cache.service';
-import { LocalStorageService } from './local-storage.service';
 import { TenantService } from './tenant.service';
 
 @Injectable({
@@ -13,7 +12,6 @@ import { TenantService } from './tenant.service';
 export class MemberService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
-  private localStorageService = inject(LocalStorageService);
   private tenantService = inject(TenantService);
 
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -30,10 +28,6 @@ export class MemberService {
     return `${this.tenantPrefix}_members`;
   }
 
-  private get STORAGE_KEY_MEMBERS(): string {
-    return `${this.tenantPrefix}_members`;
-  }
-
   private get CACHE_KEY_GENDER(): string {
     return `${this.tenantPrefix}_gender_count`;
   }
@@ -41,21 +35,9 @@ export class MemberService {
   // ── Read ──────────────────────────────────────────────────────────────────
 
   getAll(): Observable<Member[]> {
-    const cached = this.localStorageService.get<Member[]>(this.STORAGE_KEY_MEMBERS);
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return new Observable(observer => {
-        observer.next(cached);
-        observer.complete();
-      });
-    }
-
     return this.cacheService.get(
       this.CACHE_KEY_MEMBERS,
       this.http.get<Member[] | { data: Member[] }>(this.baseUrl + '/members').pipe(
-        tap(response => {
-          const data = Array.isArray(response) ? response : (response as any)?.data || [];
-          this.localStorageService.set(this.STORAGE_KEY_MEMBERS, data, { ttl: this.CACHE_TTL });
-        }),
         map(response => Array.isArray(response) ? response : (response as any)?.data || [])
       ),
       this.CACHE_TTL,
@@ -66,10 +48,6 @@ export class MemberService {
   getAllFresh(): Observable<Member[]> {
     this.invalidateCache();
     return this.http.get<Member[] | { data: Member[] }>(this.baseUrl + '/members').pipe(
-      tap(response => {
-        const data = Array.isArray(response) ? response : (response as any)?.data || [];
-        this.localStorageService.set(this.STORAGE_KEY_MEMBERS, data, { ttl: this.CACHE_TTL });
-      }),
       map(response => Array.isArray(response) ? response : (response as any)?.data || [])
     );
   }
@@ -171,21 +149,12 @@ export class MemberService {
   }
 
   createOwnCollection(data: any): Observable<Member> {
-    return this.http.post<Member>(this.baseUrl + '/add-mpesa-contributions', data).pipe(
-      tap(() => {
-        this.cacheService.clearPattern(/^contributions/);
-        this.cacheService.clearPattern(/^collections/);
-        this.cacheService.clearPattern(/^transactions/);
-      })
-    );
+    return this.http.post<Member>(this.baseUrl + '/add-mpesa-contributions', data);
   }
 
+  // Always fetches fresh — this is a polling endpoint, never cache it
   getTransactionStatus(): Observable<any> {
-    return this.cacheService.get(
-      'transactions',
-      this.http.get<any>(`${this.baseUrl}/transactions`, { withCredentials: true }),
-      2 * 60 * 1000
-    );
+    return this.http.get<any>(`${this.baseUrl}/transactions`, { withCredentials: true });
   }
 
   // ── Cache ─────────────────────────────────────────────────────────────────
@@ -197,6 +166,5 @@ export class MemberService {
   private invalidateCache(): void {
     this.cacheService.clearPattern(new RegExp(`^${this.CACHE_KEY_MEMBERS}`));
     this.cacheService.clear(this.CACHE_KEY_GENDER);
-    this.localStorageService.remove(this.STORAGE_KEY_MEMBERS);
   }
 }
