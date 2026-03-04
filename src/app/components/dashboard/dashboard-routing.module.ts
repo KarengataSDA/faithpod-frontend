@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path:'',
     children:[
-      {path:'', title:"Karengata - Dashboard", component: DashboardComponent},
+      {path:'', title:"Dashboard", component: DashboardComponent},
       
     ]
   }

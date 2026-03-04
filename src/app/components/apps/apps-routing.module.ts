@@ -5,7 +5,7 @@ import { WidgetsComponent } from './widgets/widgets.component';
 const routes: Routes = [
   {
     path:'', children:[
-      {path:'widgets', title:"Karengata - Widgets", component: WidgetsComponent},
+      {path:'widgets', title:"Widgets", component: WidgetsComponent},
      
     ]
   }

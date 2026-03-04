@@ -2,7 +2,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { TitleStrategy } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { TenantTitleStrategy } from './shared/services/tenant-title-strategy.service';
 import { AppComponent } from './app.component';
 import { ToastrModule } from 'ngx-toastr';
 import { ColorPickerService } from 'ngx-color-picker';
@@ -53,5 +55,6 @@ import { TenantInterceptor } from './shared/interceptors/tenant.interceptor';
             multi: true,
         },
         provideHttpClient(withInterceptorsFromDi()),
+        { provide: TitleStrategy, useClass: TenantTitleStrategy },
     ] })
 export class AppModule {}
