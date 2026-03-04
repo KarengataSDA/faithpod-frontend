@@ -131,8 +131,8 @@ export class CollectionService {
   }
 
   getUserContributions(): Observable<Contribution[]> {
-    return this.http.get<{data: {contributions: Contribution[]}}>(this.baseUrl + '/user-contributions').pipe(
-      map(response => response.data?.contributions || [])
+    return this.http.get<{data: Contribution[]}>(this.baseUrl + '/user-contributions').pipe(
+      map(response => response.data || [])
     );
   }
 
