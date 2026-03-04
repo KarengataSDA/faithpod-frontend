@@ -44,6 +44,7 @@ import { ImageUploadComponent } from "../../shared/components/image-upload/image
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
+import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 
 
 
@@ -86,7 +87,8 @@ import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboar
     MembershipComponent,
     ViewMembershipComponent,
     PaybillTransactionsComponent,
-    DashboardMonitorComponent
+    DashboardMonitorComponent,
+    MemberActivityLogComponent
     
     
 

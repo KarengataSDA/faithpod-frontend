@@ -247,7 +247,7 @@ export class NavService implements OnDestroy {
     },
     {
       headTitle: 'Settings',
-      permissions: ['view roles']
+      permissions: ['view roles', 'edit members']
     },
     {
       title: 'Roles',
@@ -264,6 +264,24 @@ export class NavService implements OnDestroy {
           type: 'link',
           selected: false,
           permissions: ['view roles']
+        }
+      ]
+    },
+    {
+      title: 'Member Activity Log',
+      selected: false,
+      icon: 'activity',
+      type: 'sub',
+      Menusub: true,
+      active: false,
+      permissions: ['edit members'],
+      children: [
+        {
+          path: '/pages/settings/activity-log',
+          title: 'Member Activity Log',
+          type: 'link',
+          selected: false,
+          permissions: ['edit members']
         }
       ]
     },

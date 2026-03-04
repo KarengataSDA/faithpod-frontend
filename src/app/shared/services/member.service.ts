@@ -75,6 +75,10 @@ export class MemberService {
     return this.http.get<MemberAudit[]>(this.baseUrl + '/members/' + id + '/audit-trail');
   }
 
+  getActivityLog(): Observable<MemberAudit[]> {
+    return this.http.get<MemberAudit[]>(this.baseUrl + '/member-activity-log');
+  }
+
   // ── Write ─────────────────────────────────────────────────────────────────
 
   create(data: any): Observable<Member> {

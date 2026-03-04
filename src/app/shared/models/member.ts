@@ -16,6 +16,7 @@ export type MemberStatus =
 export interface MemberAudit {
   id: number;
   member_id: number;
+  member?: { id: number; first_name: string; last_name: string } | null;
   changed_by: { id: number; first_name: string; last_name: string } | null;
   old_status: MemberStatus | null;
   new_status: MemberStatus;

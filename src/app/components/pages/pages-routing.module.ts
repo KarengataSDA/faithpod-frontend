@@ -35,6 +35,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
+import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 
 
 
@@ -83,6 +84,8 @@ const routes: Routes = [
 
       {path: 'memberships', title: "Membership", component: MembershipComponent, canActivate: [AuthGuard], data: { permission: 'view membership types'}},
       {path: 'memberships/view/:id', title: "View Membership", component:ViewMembershipComponent, canActivate: [AuthGuard], data: { permission: 'view membership types'}},
+
+      {path: 'settings/activity-log', title: "Member Activity Log", component: MemberActivityLogComponent, canActivate: [AuthGuard], data: { permission: 'edit members'}},
     ]
   }
 ];

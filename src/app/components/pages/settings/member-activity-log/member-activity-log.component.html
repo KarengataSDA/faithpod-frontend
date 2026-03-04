@@ -1,0 +1,100 @@
+<app-page-header
+  [title]="'Member Activity Log'"
+  [items]="['Settings']"
+  [active_item]="'Member Activity Log'"
+></app-page-header>
+
+<div class="row row-sm">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <div>
+          <h6 class="main-content-label mb-1">Member Activity Log</h6>
+          <p class="text-muted card-sub-title">
+            A complete record of all membership status changes across the organisation.
+          </p>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Loading skeleton -->
+        <div *ngIf="isLoading">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th><th>Member</th><th>Action</th><th>From</th><th>To</th><th>Reason</th><th>By</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let _ of [1,2,3,4,5]">
+                <td><div class="skeleton skeleton-text"></div></td>
+                <td><div class="skeleton skeleton-text"></div></td>
+                <td><div class="skeleton skeleton-text"></div></td>
+                <td><div class="skeleton skeleton-text"></div></td>
+                <td><div class="skeleton skeleton-text"></div></td>
+                <td><div class="skeleton skeleton-text"></div></td>
+                <td><div class="skeleton skeleton-text"></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="!isLoading && entries.length === 0" class="text-center text-muted py-5">
+          <i class="fe fe-activity fs-40 d-block mb-2"></i>
+          No activity has been recorded yet.
+        </div>
+
+        <!-- Table -->
+        <div *ngIf="!isLoading && entries.length > 0" class="table-responsive">
+          <table class="table table-bordered table-striped text-nowrap mb-0">
+            <thead class="border-top">
+              <tr>
+                <th>Date</th>
+                <th>Member</th>
+                <th>Action</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Reason</th>
+                <th>By</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entry of entries">
+                <td>{{ entry.created_at | date:'medium' }}</td>
+                <td>
+                  <a *ngIf="entry.member" routerLink="/pages/members/view/{{ entry.member.id }}">
+                    {{ entry.member.first_name }} {{ entry.member.last_name }}
+                  </a>
+                  <span *ngIf="!entry.member" class="text-muted">—</span>
+                </td>
+                <td>{{ actionLabel(entry.action) }}</td>
+                <td>
+                  <span *ngIf="entry.old_status"
+                        class="badge rounded-pill"
+                        [ngClass]="badgeClass(entry.old_status)">
+                    {{ getStatusLabel(entry.old_status) }}
+                  </span>
+                  <span *ngIf="!entry.old_status" class="text-muted">—</span>
+                </td>
+                <td>
+                  <span class="badge rounded-pill" [ngClass]="badgeClass(entry.new_status)">
+                    {{ getStatusLabel(entry.new_status) }}
+                  </span>
+                </td>
+                <td>{{ entry.reason || '—' }}</td>
+                <td>
+                  {{ entry.changed_by
+                    ? (entry.changed_by.first_name + ' ' + entry.changed_by.last_name)
+                    : 'System' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

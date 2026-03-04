@@ -3,7 +3,7 @@ import { MemberService } from '../../../../shared/services/member.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CollectionService } from '../../../../shared/services/collection.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { Member, MemberAudit, MemberStatus, statusBadgeClass, statusLabel } from 'src/app/shared/models/member';
+import { Member, MemberStatus, statusBadgeClass, statusLabel } from 'src/app/shared/models/member';
 import { Collection, Contribution } from 'src/app/shared/models/collection';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -18,8 +18,6 @@ import Swal from 'sweetalert2';
 export class ViewMemberComponent implements OnInit, OnDestroy {
   id!: number;
   member: Member | null = null;
-  auditTrail: MemberAudit[] = [];
-  isLoadingAudit = false;
   collection: Collection;
 
   private destroy$ = new Subject<void>();
@@ -54,33 +52,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
     return statusLabel(status);
   }
 
-  // ── Audit trail ───────────────────────────────────────────────────────────
-
-  loadAuditTrail(): void {
-    if (this.auditTrail.length > 0) return;
-    this.isLoadingAudit = true;
-    this.memberService.getAuditTrail(this.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: data => { this.auditTrail = data; this.isLoadingAudit = false; },
-        error: () => { this.isLoadingAudit = false; }
-      });
-  }
-
-  actionLabel(action: string | null): string {
-    const map: Record<string, string> = {
-      invite_sent:     'Invite Sent',
-      invite_accepted: 'Invite Accepted',
-      self_registered: 'Self Registered',
-      verified:        'Verified',
-      rejected:        'Rejected',
-      suspended:       'Suspended',
-      reactivated:     'Reactivated',
-      profile_updated: 'Profile Updated',
-    };
-    return action ? (map[action] ?? action) : '—';
-  }
-
   // ── Status actions ────────────────────────────────────────────────────────
 
   verifyMember(): void {
@@ -96,7 +67,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe(updated => {
             this.member = { ...this.member!, ...updated };
-            this.auditTrail = [];
             this.toast('success', 'Member verified successfully');
           });
       }
@@ -118,7 +88,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe(updated => {
             this.member = { ...this.member!, ...updated };
-            this.auditTrail = [];
             this.toast('success', 'Member rejected');
           });
       }
@@ -140,7 +109,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe(updated => {
             this.member = { ...this.member!, ...updated };
-            this.auditTrail = [];
             this.toast('success', 'Member suspended');
           });
       }
@@ -161,7 +129,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe(updated => {
             this.member = { ...this.member!, ...updated };
-            this.auditTrail = [];
             this.toast('success', 'Member reactivated');
           });
       }
