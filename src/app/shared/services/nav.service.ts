@@ -268,7 +268,7 @@ export class NavService implements OnDestroy {
       ]
     },
     {
-      title: 'Member Activity Log',
+      title: 'Activity Log',
       selected: false,
       icon: 'activity',
       type: 'sub',

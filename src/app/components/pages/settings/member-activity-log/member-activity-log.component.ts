@@ -13,24 +13,44 @@ import { MemberService } from 'src/app/shared/services/member.service';
 export class MemberActivityLogComponent implements OnInit, OnDestroy {
   entries: MemberAudit[] = [];
   isLoading = true;
+  currentPage = 1;
+  lastPage = 1;
+  total = 0;
+  perPage = 50;
 
   private destroy$ = new Subject<void>();
 
   constructor(private memberService: MemberService) {}
 
-  ngOnInit(): void {
-    this.memberService.getActivityLog()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: data => { this.entries = data; this.isLoading = false; },
-        error: ()  => { this.isLoading = false; }
-      });
-  }
+  ngOnInit(): void { this.load(); }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  load(page = 1): void {
+    this.isLoading = true;
+    this.memberService.getActivityLog(page)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.entries     = res.data;
+          this.currentPage = res.current_page;
+          this.lastPage    = res.last_page;
+          this.total       = res.total;
+          this.perPage     = res.per_page;
+          this.isLoading   = false;
+        },
+        error: () => { this.isLoading = false; }
+      });
+  }
+
+  prevPage(): void { if (this.currentPage > 1) this.load(this.currentPage - 1); }
+  nextPage(): void { if (this.currentPage < this.lastPage) this.load(this.currentPage + 1); }
+
+  get from(): number { return (this.currentPage - 1) * this.perPage + 1; }
+  get to(): number   { return Math.min(this.currentPage * this.perPage, this.total); }
 
   badgeClass(status: MemberStatus | undefined): string {
     return statusBadgeClass(status);

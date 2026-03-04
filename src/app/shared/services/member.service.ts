@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { Member, MemberAudit } from '../models/member';
+import { Member, MemberAudit, Paginated } from '../models/member';
 import { CacheService } from './cache.service';
 import { TenantService } from './tenant.service';
 
@@ -75,8 +75,8 @@ export class MemberService {
     return this.http.get<MemberAudit[]>(this.baseUrl + '/members/' + id + '/audit-trail');
   }
 
-  getActivityLog(): Observable<MemberAudit[]> {
-    return this.http.get<MemberAudit[]>(this.baseUrl + '/member-activity-log');
+  getActivityLog(page = 1): Observable<Paginated<MemberAudit>> {
+    return this.http.get<Paginated<MemberAudit>>(this.baseUrl + '/member-activity-log', { params: { page } });
   }
 
   // ── Write ─────────────────────────────────────────────────────────────────

@@ -13,6 +13,14 @@ export type MemberStatus =
   | 'rejected'
   | 'suspended';
 
+export interface Paginated<T> {
+  data: T[];
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+}
+
 export interface MemberAudit {
   id: number;
   member_id: number;
