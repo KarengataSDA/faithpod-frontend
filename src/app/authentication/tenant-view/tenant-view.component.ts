@@ -4,14 +4,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-interface Tenant {
-  id: string;
-  name: string;
-  email: string;
-  domains?: Array<{ domain: string }>;
-  created_at?: string;
-}
+import Swal from 'sweetalert2';
+import { Tenant, TenantStatus } from '../tenant-management/tenant-management.component';
 
 @Component({
     selector: 'app-tenant-view',
@@ -23,6 +17,7 @@ export class TenantViewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   tenant: Tenant | null = null;
   isLoading = false;
+  isUpdating = false;
   errorMessage = '';
   activeTab: string = 'details';
 
@@ -53,14 +48,9 @@ export class TenantViewComponent implements OnInit, OnDestroy {
 
     this.http
       .get<Tenant>(`${this.apiUrl}/tenants/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${this.authToken}`
-        }
+        headers: { 'Authorization': `Bearer ${this.authToken}` }
       })
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(this.handleError.bind(this))
-      )
+      .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
@@ -73,6 +63,100 @@ export class TenantViewComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  updateStatus(newStatus: TenantStatus): void {
+    if (!this.tenant) return;
+
+    const labels: Record<TenantStatus, string> = {
+      active:    'Activate',
+      suspended: 'Suspend',
+      cancelled: 'Cancel Subscription',
+      archived:  'Archive',
+      trial:     'Set to Trial',
+      past_due:  'Mark as Past Due',
+      pending:   'Set to Pending',
+    };
+
+    const colors: Record<string, string> = {
+      active:    '#28a745',
+      suspended: '#dc3545',
+      cancelled: '#6c757d',
+      archived:  '#343a40',
+    };
+
+    Swal.fire({
+      title: `${labels[newStatus]} Tenant?`,
+      text: `Change the status of "${this.tenant.name}" to "${newStatus}"?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: colors[newStatus] ?? '#175351',
+      confirmButtonText: 'Yes, proceed',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (!result.isConfirmed || !this.tenant) return;
+
+      this.isUpdating = true;
+
+      this.http
+        .patch(`${this.apiUrl}/tenants/${this.tenant.id}/status`, { status: newStatus }, {
+          headers: { 'Authorization': `Bearer ${this.authToken}` }
+        })
+        .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
+        .subscribe({
+          next: (response: any) => {
+            this.isUpdating = false;
+            this.tenant = response.data;
+            Swal.fire({
+              title: 'Updated!',
+              text: `Tenant status changed to "${newStatus}".`,
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          },
+          error: () => {
+            this.isUpdating = false;
+          }
+        });
+    });
+  }
+
+  getStatusBadgeClass(status: TenantStatus): string {
+    const map: Record<TenantStatus, string> = {
+      trial:     'bg-info text-white',
+      active:    'bg-success text-white',
+      past_due:  'bg-warning text-dark',
+      suspended: 'bg-danger text-white',
+      cancelled: 'bg-secondary text-white',
+      archived:  'bg-dark text-white',
+      pending:   'bg-light text-dark border',
+    };
+    return map[status] ?? 'bg-secondary text-white';
+  }
+
+  getStatusLabel(status: TenantStatus): string {
+    const map: Record<TenantStatus, string> = {
+      trial:     'Trial',
+      active:    'Active',
+      past_due:  'Past Due',
+      suspended: 'Suspended',
+      cancelled: 'Cancelled',
+      archived:  'Archived',
+      pending:   'Pending',
+    };
+    return map[status] ?? status;
+  }
+
+  getExpiryDate(): string | null {
+    if (!this.tenant) return null;
+    if (this.tenant.status === 'trial' && this.tenant.trial_ends_at) {
+      return this.tenant.trial_ends_at;
+    }
+    if (this.tenant.subscription_ends_at) {
+      return this.tenant.subscription_ends_at;
+    }
+    return null;
   }
 
   goBack(): void {

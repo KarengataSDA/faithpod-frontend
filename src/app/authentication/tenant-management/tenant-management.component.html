@@ -149,6 +149,7 @@
                   <th>Name</th>
                   <th>Email</th>
                   <th>Domain</th>
+                  <th>Status</th>
                   <th>Created At</th>
                   <th class="text-center">Actions</th>
                 </tr>
@@ -167,8 +168,13 @@
                     </span>
                   </td>
                   <td>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(tenant.status)">
+                      {{getStatusLabel(tenant.status)}}
+                    </span>
+                  </td>
+                  <td>
                     <span *ngIf="tenant.created_at">
-                      {{tenant.created_at | date: 'medium'}}
+                      {{tenant.created_at | date: 'mediumDate'}}
                     </span>
                     <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
                   </td>
@@ -179,8 +185,8 @@
                     <button class="btn btn-sm btn-primary me-1" (click)="openEditModal(tenant)" title="Edit">
                       <i class="zmdi zmdi-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteTenant(tenant)" title="Delete" [disabled]="isDeleting">
-                      <i class="zmdi zmdi-delete"></i>
+                    <button class="btn btn-sm btn-secondary" (click)="archiveTenant(tenant)" title="Archive" [disabled]="isUpdating || tenant.status === 'archived'">
+                      <i class="zmdi zmdi-archive"></i>
                     </button>
                   </td>
                 </tr>
