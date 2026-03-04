@@ -46,8 +46,10 @@ export class MemberActivityLogComponent implements OnInit, OnDestroy {
       });
   }
 
-  prevPage(): void { if (this.currentPage > 1) this.load(this.currentPage - 1); }
-  nextPage(): void { if (this.currentPage < this.lastPage) this.load(this.currentPage + 1); }
+  onPageChange(page: number): void {
+    if (page < 1 || page > this.lastPage) return;
+    this.load(page);
+  }
 
   get from(): number { return (this.currentPage - 1) * this.perPage + 1; }
   get to(): number   { return Math.min(this.currentPage * this.perPage, this.total); }
