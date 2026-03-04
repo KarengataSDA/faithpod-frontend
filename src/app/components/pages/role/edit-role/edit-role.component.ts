@@ -52,27 +52,32 @@ export class EditRoleComponent implements OnInit, OnDestroy {
       role: this.roleService.get(this.id, true) // Force refresh
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ permissions, role }) => {
-        this.permissions = permissions;
+      .subscribe({
+        next: ({ permissions, role }) => {
+          this.permissions = permissions;
 
-        // Clear existing permissions array before rebuilding
-        this.permissionsArray.clear();
+          // Clear existing permissions array before rebuilding
+          this.permissionsArray.clear();
 
-        // Build the permissions form array with checked state based on role's permissions
-        this.permissions.forEach((p) => {
-          const hasPermission = role.permissions?.some((r) => r.id === p.id) || false;
-          this.permissionsArray.push(
-            this.formBuilder.group({
-              value: hasPermission,
-              id: p.id,
-            })
-          );
-        });
+          // Build the permissions form array with checked state based on role's permissions
+          this.permissions.forEach((p) => {
+            const hasPermission = role.permissions?.some((r) => r.id === p.id) || false;
+            this.permissionsArray.push(
+              this.formBuilder.group({
+                value: hasPermission,
+                id: p.id,
+              })
+            );
+          });
 
-        // Set the role name
-        this.form.patchValue({
-          name: role.name,
-        });
+          // Set the role name
+          this.form.patchValue({
+            name: role.name,
+          });
+        },
+        error: (err) => {
+          console.error('Failed to load role data:', err);
+        }
       });
   }
 

@@ -45,9 +45,14 @@ export class RolesComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.rolesService.getAll(forceRefresh)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: Role[]) => {
-        this.roles = data;
-        this.isLoading = false;
+      .subscribe({
+        next: (data: Role[]) => {
+          this.roles = data;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        }
       });
   }
 

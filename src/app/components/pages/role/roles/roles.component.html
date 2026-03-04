@@ -38,6 +38,7 @@
                   <tr>
                     <th>No.</th>
                     <th>Name</th>
+                    <th>Permissions</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -45,42 +46,31 @@
                   <tr *ngFor="let item of [1,2,3]">
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
                   </tr>
                 </tbody>
                 <tbody *ngIf="!isLoading">
                   <tr *ngFor="let role of roles; index as i">
-                    <th>{{ i + 1 }}</th>
-                    <th>{{ role.name }}</th>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ role.name }}</td>
                     <td>
-                      <div class="g-2">
-                        <td>
-                          <div class="g-2">
-                            <!-- <a
-                              routerLink="view/{{ role.id }}"
-                              class="btn text-primary btn-sm"
-                              data-bs-toggle="tooltip"
-                              ngbTooltip="Edit"
-                              ><span class="fe fe-eye fs-14"></span
-                            ></a> -->
-                            <a 
-                            *ngIf="authService.hasPermission('edit roles')"
-                              routerLink="edit/{{ role.id }}"
-                              class="btn text-primary btn-sm"
-                              ngbTooltip="Edit"
-                              ><span class="fe fe-edit fs-14"></span
-                            ></a>
-                            <a 
-                            *ngIf="authService.hasPermission('delete roles')"
-                              (click)="deleteRole(role.id)"
-                              class="btn text-danger btn-sm"
-                              data-bs-toggle="tooltip"
-                              ngbTooltip="Delete"
-                              ><span class="fe fe-trash-2 fs-14"></span
-                            ></a>
-                          </div>
-                        </td>
-                      </div>
+                      <span *ngFor="let perm of role.permissions" class="badge bg-light text-dark me-1 mb-1">{{ perm.name }}</span>
+                      <span *ngIf="!role.permissions?.length" class="text-muted">—</span>
+                    </td>
+                    <td>
+                      <a
+                        *ngIf="authService.hasPermission('edit roles')"
+                        routerLink="edit/{{ role.id }}"
+                        class="btn text-primary btn-sm"
+                        ngbTooltip="Edit"
+                      ><span class="fe fe-edit fs-14"></span></a>
+                      <a
+                        *ngIf="authService.hasPermission('delete roles')"
+                        (click)="deleteRole(role.id)"
+                        class="btn text-danger btn-sm"
+                        ngbTooltip="Delete"
+                      ><span class="fe fe-trash-2 fs-14"></span></a>
                     </td>
                   </tr>
                 </tbody>
