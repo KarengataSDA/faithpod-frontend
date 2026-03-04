@@ -257,7 +257,7 @@
                                 </span>
                               </td>
                               <td>{{ entry.reason || '—' }}</td>
-                              <td>{{ entry.changed_by ? '#' + entry.changed_by : 'System' }}</td>
+                              <td>{{ entry.changed_by ? (entry.changed_by.first_name + ' ' + entry.changed_by.last_name) : 'System' }}</td>
                             </tr>
                           </tbody>
                         </table>
