@@ -163,7 +163,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       } else if (error.status === 401) {
         this.loginError = 'Email or Password is incorrect. Please try again.';
       } else if (error.status === 403) {
-        this.loginError = 'Your email address is not verified';
+        this.loginError = error.error?.message || 'Access denied. Please contact your administrator.';
       } else if (error.status === 422) {
         // Validation errors
         if (error.error.errors) {
