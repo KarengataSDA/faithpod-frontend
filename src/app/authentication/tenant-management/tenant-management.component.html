@@ -23,6 +23,20 @@
   <div class="page-body">
     <div class="container-xl">
 
+      <!-- Admin Nav -->
+      <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="/tenants" routerLinkActive="active">
+            <i class="zmdi zmdi-accounts-alt me-2"></i>Tenants
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/plans" routerLinkActive="active">
+            <i class="zmdi zmdi-view-list-alt me-2"></i>Subscription Plans
+          </a>
+        </li>
+      </ul>
+
       <!-- Success Message -->
       <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">
         {{successMessage}}
