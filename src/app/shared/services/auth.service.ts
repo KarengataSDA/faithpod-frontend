@@ -186,6 +186,14 @@ export class AuthService {
     }
   }
 
+  hasRole(role: string): boolean {
+    const user = this.currentUserSubject.value ?? (() => {
+      const stored = sessionStorage.getItem('user') || localStorage.getItem('user');
+      try { return stored ? JSON.parse(stored) : null; } catch { return null; }
+    })();
+    return !!(user?.roles && Array.isArray(user.roles) && user.roles.includes(role));
+  }
+
   hasPermission(permission: string): boolean {
     let user = this.currentUserSubject.value;
 

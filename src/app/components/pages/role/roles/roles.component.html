@@ -38,13 +38,11 @@
                   <tr>
                     <th>No.</th>
                     <th>Name</th>
-                    <th>Permissions</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody *ngIf="isLoading">
                   <tr *ngFor="let item of [1,2,3]">
-                    <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
@@ -54,10 +52,6 @@
                   <tr *ngFor="let role of roles; index as i">
                     <td>{{ i + 1 }}</td>
                     <td>{{ role.name }}</td>
-                    <td>
-                      <span *ngFor="let perm of role.permissions" class="badge bg-light text-dark me-1 mb-1">{{ perm.name }}</span>
-                      <span *ngIf="!role.permissions?.length" class="text-muted">—</span>
-                    </td>
                     <td>
                       <a
                         *ngIf="authService.hasPermission('edit roles')"

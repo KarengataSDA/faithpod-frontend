@@ -14,8 +14,8 @@
   <div class="col-xl-12">
     <div class="card overflow-visible">
 
-      <!-- Status tabs -->
-      <div class="card-header pb-0">
+      <!-- Status tabs (super_admin only) -->
+      <div class="card-header pb-0" *ngIf="authService.hasRole('super_admin')">
         <ul class="nav nav-tabs nav-tabs-bottom mb-0">
           <li class="nav-item" *ngFor="let tab of tabs">
             <a class="nav-link d-flex align-items-center gap-1"
