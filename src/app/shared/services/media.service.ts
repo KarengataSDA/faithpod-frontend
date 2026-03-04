@@ -32,13 +32,13 @@ export class MediaService {
   }
 
   /**
-   * Upload a file to Laravel which streams it directly to R2.
-   * Returns an observable of HttpEvents so the caller can track upload progress.
-   * entityType 'member' uses tenant API (token via AuthInterceptor);
-   * entityType 'tenant' uses central admin API (token read from sessionStorage).
+   * Upload a file to Laravel.
+   * - 'member': tenant API, auth via AuthInterceptor
+   * - 'tenant': central admin API, auth via central_admin_token
+   * - 'tenant-self': tenant API (current tenant's own media), auth via AuthInterceptor
    */
   uploadMedia(
-    entityType: 'member' | 'tenant',
+    entityType: 'member' | 'tenant' | 'tenant-self',
     entityId: string | null,
     collection: string,
     file: File
@@ -47,13 +47,15 @@ export class MediaService {
     formData.append('file', file);
     formData.append('collection', collection);
 
-    const url = entityType === 'member'
-      ? `${this.tenantApiUrl}/members/me/media`
-      : `${this.adminApiUrl}/tenants/${entityId}/media/${collection}`;
-
-    // Admin requests need the central admin token; tenant requests are handled by AuthInterceptor
+    let url: string;
     const headers: Record<string, string> = {};
-    if (entityType === 'tenant') {
+
+    if (entityType === 'member') {
+      url = `${this.tenantApiUrl}/members/me/media`;
+    } else if (entityType === 'tenant-self') {
+      url = `${this.tenantApiUrl}/tenant/media/${collection}`;
+    } else {
+      url = `${this.adminApiUrl}/tenants/${entityId}/media/${collection}`;
       const token = sessionStorage.getItem('central_admin_token');
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -74,7 +76,7 @@ export class MediaService {
    * Delete all media in a collection.
    */
   deleteMedia(
-    entityType: 'member' | 'tenant',
+    entityType: 'member' | 'tenant' | 'tenant-self',
     entityId: string | null,
     collection: string
   ): Observable<{ message: string }> {
@@ -82,6 +84,12 @@ export class MediaService {
       return this.http.delete<{ message: string }>(
         `${this.tenantApiUrl}/members/me/media`,
         { body: { collection } }
+      );
+    }
+
+    if (entityType === 'tenant-self') {
+      return this.http.delete<{ message: string }>(
+        `${this.tenantApiUrl}/tenant/media/${collection}`
       );
     }
 

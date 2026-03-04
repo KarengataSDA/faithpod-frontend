@@ -45,7 +45,8 @@ export class SidebarComponent implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         if (user && user.permissions && Array.isArray(user.permissions)) {
-          this.navServices.filterMenuItems(user.permissions)
+          const roles = Array.isArray(user.roles) ? user.roles : [];
+          this.navServices.filterMenuItems(user.permissions, roles);
         } else {
           this.logger.warn("User or user permissions are undefined")
         }
