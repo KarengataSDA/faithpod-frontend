@@ -4,7 +4,12 @@
       <div class="row g-2 align-items-center">
         <div class="col">
           <div class="page-pretitle">Tenant Management</div>
-          <h2 class="page-title">{{tenant?.name || 'Tenant Details'}}</h2>
+          <h2 class="page-title">
+            {{tenant?.name || 'Tenant Details'}}
+            <span *ngIf="tenant?.status" class="badge ms-2 fs-6" [ngClass]="getStatusBadgeClass(tenant!.status)">
+              {{getStatusLabel(tenant!.status)}}
+            </span>
+          </h2>
         </div>
         <div class="col-auto">
           <button class="btn btn-secondary me-2" (click)="goBack()">
@@ -75,54 +80,271 @@
 
           <!-- Details Tab -->
           <div *ngIf="activeTab === 'details'">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">{{tenant.name}}</h3>
+
+            <!-- Lifecycle Status Card -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">Lifecycle Status</h3>
+                <div *ngIf="isUpdating" class="spinner-border spinner-border-sm text-secondary" role="status"></div>
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                    <label class="form-label fw-bold text-muted">Tenant ID</label>
-                    <p class="fs-4">{{tenant.id}}</p>
+                <div class="row align-items-center">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Current Status</label>
+                    <div>
+                      <span class="badge fs-6 px-3 py-2" [ngClass]="getStatusBadgeClass(tenant.status)">
+                        {{getStatusLabel(tenant.status)}}
+                      </span>
+                    </div>
                   </div>
 
-                  <div class="col-md-6 mb-4">
-                    <label class="form-label fw-bold text-muted">Organization Name</label>
-                    <p class="fs-4">{{tenant.name}}</p>
+                  <div class="col-md-4 mb-3" *ngIf="tenant.plan">
+                    <label class="form-label fw-bold text-muted small">Plan</label>
+                    <p class="mb-0 fw-semibold">{{tenant.plan.name}}</p>
+                    <small class="text-muted">{{tenant.plan.billing_cycle | titlecase}} · {{tenant.plan.price | currency:'KES ':'symbol':'1.0-0'}}</small>
                   </div>
 
-                  <div class="col-md-6 mb-4">
-                    <label class="form-label fw-bold text-muted">Email Address</label>
-                    <p class="fs-4">
-                      <a [href]="'mailto:' + tenant.email">{{tenant.email}}</a>
+                  <div class="col-md-4 mb-3" *ngIf="getExpiryDate()">
+                    <label class="form-label fw-bold text-muted small">
+                      {{tenant.status === 'trial' ? 'Trial Ends' : 'Subscription Ends'}}
+                    </label>
+                    <p class="mb-0 fw-semibold">{{getExpiryDate() | date: 'mediumDate'}}</p>
+                  </div>
+
+                  <div class="col-md-4 mb-3" *ngIf="tenant.grace_ends_at">
+                    <label class="form-label fw-bold text-muted small text-warning">Grace Period Ends</label>
+                    <p class="mb-0 fw-semibold text-warning">{{tenant.grace_ends_at | date: 'mediumDate'}}</p>
+                  </div>
+
+                  <div class="col-md-4 mb-3" *ngIf="tenant.suspended_at">
+                    <label class="form-label fw-bold text-muted small text-danger">Suspended At</label>
+                    <p class="mb-0 fw-semibold text-danger">{{tenant.suspended_at | date: 'mediumDate'}}</p>
+                  </div>
+                </div>
+
+                <!-- Status Actions -->
+                <hr>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                  <button
+                    class="btn btn-success btn-sm"
+                    (click)="updateStatus('active')"
+                    [disabled]="isUpdating || tenant.status === 'active'"
+                    title="Activate this tenant">
+                    <i class="zmdi zmdi-check me-1"></i> Activate
+                  </button>
+                  <button
+                    class="btn btn-info btn-sm"
+                    (click)="updateStatus('trial')"
+                    [disabled]="isUpdating || tenant.status === 'trial'"
+                    title="Reset to trial">
+                    <i class="zmdi zmdi-time me-1"></i> Set Trial
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="updateStatus('suspended')"
+                    [disabled]="isUpdating || tenant.status === 'suspended'"
+                    title="Suspend access immediately">
+                    <i class="zmdi zmdi-block me-1"></i> Suspend
+                  </button>
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    (click)="updateStatus('cancelled')"
+                    [disabled]="isUpdating || tenant.status === 'cancelled'"
+                    title="Cancel subscription">
+                    <i class="zmdi zmdi-close me-1"></i> Cancel
+                  </button>
+                  <button
+                    class="btn btn-dark btn-sm"
+                    (click)="updateStatus('archived')"
+                    [disabled]="isUpdating || tenant.status === 'archived'"
+                    title="Archive — preserves all data">
+                    <i class="zmdi zmdi-archive me-1"></i> Archive
+                  </button>
+
+                  <span class="ms-auto">
+                    <button
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="showSubscriptionForm = !showSubscriptionForm">
+                      <i class="zmdi zmdi-calendar me-1"></i>
+                      {{showSubscriptionForm ? 'Hide' : 'Set Dates & Plan'}}
+                    </button>
+                  </span>
+                </div>
+
+                <!-- Subscription Date & Plan Form -->
+                <div *ngIf="showSubscriptionForm" class="mt-3 pt-3 border-top">
+                  <h5 class="mb-3 text-muted small fw-bold text-uppercase">Subscription Settings</h5>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label">Plan</label>
+                      <select class="form-select form-select-sm" [(ngModel)]="subPlanId">
+                        <option [ngValue]="null">— No plan —</option>
+                        <option *ngFor="let p of plans" [ngValue]="p.id">
+                          {{p.name}} ({{p.billing_cycle}})
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Trial Ends At</label>
+                      <input
+                        type="date"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="subTrialEndsAt"
+                      >
+                      <small class="text-muted">Leave blank to keep current</small>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Subscription Ends At</label>
+                      <input
+                        type="date"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="subSubscriptionEndsAt"
+                      >
+                      <small class="text-muted">Leave blank to keep current</small>
+                    </div>
+                  </div>
+                  <div class="mt-3 d-flex gap-2">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      (click)="saveSubscription()"
+                      [disabled]="isSavingSubscription">
+                      <span *ngIf="isSavingSubscription" class="spinner-border spinner-border-sm me-1"></span>
+                      Save
+                    </button>
+                    <button class="btn btn-light btn-sm" (click)="showSubscriptionForm = false">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- General Details Card -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tenant Information</h3>
+              </div>
+              <div class="card-body">
+
+                <!-- Section: Identity -->
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Identity</h6>
+                <div class="row mb-4">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Tenant ID</label>
+                    <p class="mb-0">{{tenant.id}}</p>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Organization Name</label>
+                    <p class="mb-0">{{tenant.name || '—'}}</p>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Email Address</label>
+                    <p class="mb-0">
+                      <a *ngIf="tenant.email" [href]="'mailto:' + tenant.email">{{tenant.email}}</a>
+                      <span *ngIf="!tenant.email" class="text-muted">—</span>
                     </p>
                   </div>
-
-                  <div class="col-md-6 mb-4">
-                    <label class="form-label fw-bold text-muted">Domain</label>
-                    <p class="fs-4">
-                      <span *ngIf="tenant.domains && tenant.domains.length > 0">
-                        <a [href]="'http://' + tenant.domains[0].domain" target="_blank">
-                          {{tenant.domains[0].domain}}
-                          <i class="zmdi zmdi-open-in-new ms-1"></i>
-                        </a>
-                      </span>
-                      <span *ngIf="!tenant.domains || tenant.domains.length === 0" class="text-muted">
-                        Not configured
-                      </span>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Billing Email</label>
+                    <p class="mb-0">
+                      <a *ngIf="tenant.billing_email" [href]="'mailto:' + tenant.billing_email">{{tenant.billing_email}}</a>
+                      <span *ngIf="!tenant.billing_email" class="text-muted">—</span>
                     </p>
                   </div>
-
-                  <div class="col-md-6 mb-4">
-                    <label class="form-label fw-bold text-muted">Created At</label>
-                    <p class="fs-4">
-                      <span *ngIf="tenant.created_at">
-                        {{tenant.created_at | date: 'MMM d, y, h:mm:ss a'}}
-                      </span>
-                      <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Domain</label>
+                    <p class="mb-0">
+                      <a *ngIf="tenant.domains && tenant.domains.length > 0"
+                         [href]="'http://' + tenant.domains[0].domain" target="_blank">
+                        {{tenant.domains[0].domain}}
+                        <i class="zmdi zmdi-open-in-new ms-1"></i>
+                      </a>
+                      <span *ngIf="!tenant.domains || tenant.domains.length === 0" class="text-muted">Not configured</span>
+                    </p>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Database</label>
+                    <p class="mb-0">
+                      <code *ngIf="tenant.tenancy_db_name">{{tenant.tenancy_db_name}}</code>
+                      <span *ngIf="!tenant.tenancy_db_name" class="text-muted">—</span>
                     </p>
                   </div>
                 </div>
+
+                <hr>
+
+                <!-- Section: Subscription -->
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Subscription</h6>
+                <div class="row mb-4">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Status</label>
+                    <div>
+                      <span class="badge" [ngClass]="getStatusBadgeClass(tenant.status)">
+                        {{getStatusLabel(tenant.status)}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Plan</label>
+                    <p class="mb-0" *ngIf="tenant.plan">
+                      <strong>{{tenant.plan.name}}</strong>
+                      <br>
+                      <small class="text-muted">
+                        {{tenant.plan.billing_cycle | titlecase}}
+                        <span *ngIf="tenant.plan.max_members"> · {{tenant.plan.max_members | number}} max members</span>
+                      </small>
+                    </p>
+                    <span *ngIf="!tenant.plan" class="text-muted">No plan assigned</span>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Access</label>
+                    <div>
+                      <span class="badge" [ngClass]="tenant.is_active ? 'bg-success' : 'bg-danger'">
+                        {{tenant.is_active ? 'Active' : 'Blocked'}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Trial Ends At</label>
+                    <p class="mb-0" *ngIf="tenant.trial_ends_at">
+                      {{tenant.trial_ends_at | date: 'mediumDate'}}
+                    </p>
+                    <span *ngIf="!tenant.trial_ends_at" class="text-muted">—</span>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Subscription Ends At</label>
+                    <p class="mb-0" *ngIf="tenant.subscription_ends_at">
+                      {{tenant.subscription_ends_at | date: 'mediumDate'}}
+                    </p>
+                    <span *ngIf="!tenant.subscription_ends_at" class="text-muted">—</span>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Grace Period Ends</label>
+                    <p class="mb-0 text-warning fw-semibold" *ngIf="tenant.grace_ends_at">
+                      {{tenant.grace_ends_at | date: 'mediumDate'}}
+                    </p>
+                    <span *ngIf="!tenant.grace_ends_at" class="text-muted">—</span>
+                  </div>
+                  <div class="col-md-4 mb-3" *ngIf="tenant.suspended_at">
+                    <label class="form-label fw-bold text-muted small text-danger">Suspended At</label>
+                    <p class="mb-0 text-danger fw-semibold">{{tenant.suspended_at | date: 'mediumDate'}}</p>
+                  </div>
+                </div>
+
+                <hr>
+
+                <!-- Section: Timestamps -->
+                <h6 class="text-muted text-uppercase small fw-bold mb-3">Timestamps</h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-muted small">Created At</label>
+                    <p class="mb-0">
+                      <span *ngIf="tenant.created_at">{{tenant.created_at | date: 'MMM d, y, h:mm a'}}</span>
+                      <span *ngIf="!tenant.created_at" class="text-muted">—</span>
+                    </p>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>

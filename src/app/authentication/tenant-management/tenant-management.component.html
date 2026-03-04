@@ -142,36 +142,65 @@
           </div>
 
           <div class="table-responsive" *ngIf="!isLoading && tenants.length > 0">
-            <table class="table table-vcenter card-table table-striped">
+            <table class="table table-vcenter card-table">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Domain</th>
-                  <th>Created At</th>
+                  <th>Tenant</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th class="text-end">Members</th>
+                  <th>Subscription Ends</th>
                   <th class="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let tenant of tenants">
-                  <td>{{tenant.id}}</td>
-                  <td>{{tenant.name}}</td>
-                  <td>{{tenant.email}}</td>
+                  <!-- Tenant name + domain -->
                   <td>
-                    <span *ngIf="tenant.domains && tenant.domains.length > 0">
-                      {{tenant.domains[0].domain}}
-                    </span>
-                    <span *ngIf="!tenant.domains || tenant.domains.length === 0" class="text-muted">
-                      N/A
+                    <div class="fw-semibold">{{tenant.name || tenant.id}}</div>
+                    <small class="text-muted">
+                      <span *ngIf="tenant.domains && tenant.domains.length > 0">{{tenant.domains[0].domain}}</span>
+                      <span *ngIf="!tenant.domains || tenant.domains.length === 0">—</span>
+                    </small>
+                  </td>
+
+                  <!-- Plan -->
+                  <td>
+                    <span *ngIf="tenant.plan" class="fw-semibold">{{tenant.plan.name}}</span>
+                    <small *ngIf="tenant.plan" class="text-muted d-block">{{tenant.plan.billing_cycle | titlecase}}</small>
+                    <span *ngIf="!tenant.plan" class="text-muted">—</span>
+                  </td>
+
+                  <!-- Status -->
+                  <td>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(tenant.status)">
+                      {{getStatusLabel(tenant.status)}}
                     </span>
                   </td>
-                  <td>
-                    <span *ngIf="tenant.created_at">
-                      {{tenant.created_at | date: 'medium'}}
+
+                  <!-- Members -->
+                  <td class="text-end">
+                    <span *ngIf="tenant.member_count != null" class="fw-semibold">
+                      {{tenant.member_count | number}}
                     </span>
-                    <span *ngIf="!tenant.created_at" class="text-muted">N/A</span>
+                    <span *ngIf="tenant.member_count == null" class="text-muted">—</span>
+                    <small *ngIf="tenant.plan?.max_members" class="text-muted d-block">
+                      / {{tenant.plan!.max_members | number}}
+                    </small>
                   </td>
+
+                  <!-- Subscription Ends -->
+                  <td>
+                    <ng-container *ngIf="getSubscriptionEndDate(tenant) as endDate; else noEnd">
+                      <span class="fw-semibold">{{endDate | date: 'mediumDate'}}</span>
+                      <small class="text-muted d-block">{{getSubscriptionEndLabel(tenant)}}</small>
+                    </ng-container>
+                    <ng-template #noEnd>
+                      <span class="text-muted">—</span>
+                    </ng-template>
+                  </td>
+
+                  <!-- Actions -->
                   <td class="text-center">
                     <button class="btn btn-sm btn-info me-1" (click)="viewTenant(tenant)" title="View">
                       <i class="zmdi zmdi-eye"></i>
@@ -179,8 +208,9 @@
                     <button class="btn btn-sm btn-primary me-1" (click)="openEditModal(tenant)" title="Edit">
                       <i class="zmdi zmdi-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteTenant(tenant)" title="Delete" [disabled]="isDeleting">
-                      <i class="zmdi zmdi-delete"></i>
+                    <button class="btn btn-sm btn-secondary" (click)="archiveTenant(tenant)" title="Archive"
+                      [disabled]="isUpdating || tenant.status === 'archived'">
+                      <i class="zmdi zmdi-archive"></i>
                     </button>
                   </td>
                 </tr>

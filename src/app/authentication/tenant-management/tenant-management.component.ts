@@ -7,11 +7,24 @@ import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
-interface Tenant {
+export type TenantStatus = 'pending' | 'trial' | 'active' | 'past_due' | 'suspended' | 'cancelled' | 'archived';
+
+export interface Tenant {
   id: string;
   name: string;
   email: string;
-  domains?: Array<{ domain: string }>;
+  status: TenantStatus;
+  is_active: boolean;
+  billing_email?: string;
+  trial_ends_at?: string;
+  subscription_ends_at?: string;
+  grace_ends_at?: string;
+  suspended_at?: string;
+  plan_id?: number;
+  plan?: { id: number; name: string; price: number; billing_cycle: string; max_members?: number };
+  member_count?: number | null;
+  tenancy_db_name?: string;
+  domains?: Array<{ id: number; domain: string }>;
   created_at?: string;
 }
 
@@ -28,7 +41,7 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
   showCreateForm = false;
   isLoading = false;
   isCreating = false;
-  isDeleting = false;
+  isUpdating = false;
   showPassword = false;
   errorMessage = '';
   successMessage = '';
@@ -64,14 +77,9 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
 
     this.http
       .get<Tenant[]>(`${this.apiUrl}/tenants`, {
-        headers: {
-          'Authorization': `Bearer ${this.authToken}`
-        }
+        headers: { 'Authorization': `Bearer ${this.authToken}` }
       })
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(this.handleError.bind(this))
-      )
+      .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
@@ -109,18 +117,13 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
 
     this.http
       .post(`${this.apiUrl}/tenants`, this.createTenantForm.getRawValue(), {
-        headers: {
-          'Authorization': `Bearer ${this.authToken}`
-        }
+        headers: { 'Authorization': `Bearer ${this.authToken}` }
       })
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(this.handleError.bind(this))
-      )
+      .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
       .subscribe({
-        next: (response: any) => {
+        next: () => {
           this.isCreating = false;
-          this.successMessage = 'Tenant created successfully!';
+          this.successMessage = 'Tenant created successfully! They are now in trial status.';
           this.createTenantForm.reset();
           this.showCreateForm = false;
           this.loadTenants();
@@ -139,49 +142,80 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
     this.router.navigate(['/tenants/edit', tenant.id]);
   }
 
-  deleteTenant(tenant: Tenant): void {
+  archiveTenant(tenant: Tenant): void {
     Swal.fire({
-      title: 'Delete Tenant?',
-      html: `You are about to permanently delete <strong>${tenant.name}</strong>.<br>This will remove all tenant data and cannot be undone.`,
+      title: 'Archive Tenant?',
+      html: `You are about to archive <strong>${tenant.name}</strong>.<br>All data will be preserved. Access will be disabled.`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, delete it',
+      confirmButtonColor: '#6c757d',
+      cancelButtonColor: '#adb5bd',
+      confirmButtonText: 'Yes, archive it',
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (!result.isConfirmed) return;
 
-      this.isDeleting = true;
+      this.isUpdating = true;
       this.errorMessage = '';
 
       this.http
-        .delete(`${this.apiUrl}/tenants/${tenant.id}`, {
-          headers: {
-            'Authorization': `Bearer ${this.authToken}`
-          }
+        .patch(`${this.apiUrl}/tenants/${tenant.id}/status`, { status: 'archived' }, {
+          headers: { 'Authorization': `Bearer ${this.authToken}` }
         })
-        .pipe(
-          takeUntil(this.destroy$),
-          catchError(this.handleError.bind(this))
-        )
+        .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
         .subscribe({
           next: () => {
-            this.isDeleting = false;
+            this.isUpdating = false;
             this.loadTenants();
             Swal.fire({
-              title: 'Deleted!',
-              text: `${tenant.name} has been deleted.`,
+              title: 'Archived!',
+              text: `${tenant.name} has been archived. Data is preserved.`,
               icon: 'success',
               timer: 2500,
               showConfirmButton: false,
             });
           },
           error: () => {
-            this.isDeleting = false;
+            this.isUpdating = false;
           }
         });
     });
+  }
+
+  getStatusBadgeClass(status: TenantStatus): string {
+    const map: Record<TenantStatus, string> = {
+      trial:     'bg-info text-white',
+      active:    'bg-success text-white',
+      past_due:  'bg-warning text-dark',
+      suspended: 'bg-danger text-white',
+      cancelled: 'bg-secondary text-white',
+      archived:  'bg-dark text-white',
+      pending:   'bg-light text-dark border',
+    };
+    return map[status] ?? 'bg-secondary text-white';
+  }
+
+  getSubscriptionEndDate(tenant: Tenant): string | null {
+    if (tenant.status === 'trial') return tenant.trial_ends_at ?? null;
+    return tenant.subscription_ends_at ?? null;
+  }
+
+  getSubscriptionEndLabel(tenant: Tenant): string {
+    if (tenant.status === 'trial') return 'Trial ends';
+    return 'Sub. ends';
+  }
+
+  getStatusLabel(status: TenantStatus): string {
+    const map: Record<TenantStatus, string> = {
+      trial:     'Trial',
+      active:    'Active',
+      past_due:  'Past Due',
+      suspended: 'Suspended',
+      cancelled: 'Cancelled',
+      archived:  'Archived',
+      pending:   'Pending',
+    };
+    return map[status] ?? status;
   }
 
   logout(): void {
@@ -191,9 +225,8 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
   }
 
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Client-side error: ${error.error.message}`;
+      this.errorMessage = `Client-side error: ${error.error.message}`;
     } else {
       if (error.status === 0) {
         this.errorMessage = 'Unable to connect to the server. Please check your network connection.';
@@ -202,16 +235,14 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
       } else if (error.status === 422) {
         if (error.error.errors) {
           const errors = Object.values(error.error.errors).flat();
-          this.errorMessage = errors.join(' ');
+          this.errorMessage = (errors as string[]).join(' ');
         } else {
           this.errorMessage = error.error.message || 'Validation error occurred.';
         }
       } else {
-        errorMessage = `Server error: ${error.status} - ${error.message}`;
         this.errorMessage = 'An error occurred. Please try again.';
       }
     }
-    console.error(errorMessage);
     return throwError(() => error);
   }
 
