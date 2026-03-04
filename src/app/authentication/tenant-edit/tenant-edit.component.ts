@@ -11,6 +11,7 @@ interface Tenant {
   id: string;
   name: string;
   email: string;
+  billing_email?: string;
   domains?: Array<{ domain: string }>;
   created_at?: string;
 }
@@ -40,9 +41,10 @@ export class TenantEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.editTenantForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      domain: ['', Validators.required]
+      name:          ['', Validators.required],
+      email:         ['', [Validators.required, Validators.email]],
+      billing_email: ['', Validators.email],
+      domain:        ['', Validators.required]
     });
 
     this.tenantId = this.route.snapshot.paramMap.get('id');
@@ -81,9 +83,10 @@ export class TenantEditComponent implements OnInit, OnDestroy {
           // Populate form with tenant data
           if (this.tenant) {
             this.editTenantForm.patchValue({
-              name: this.tenant.name,
-              email: this.tenant.email,
-              domain: this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : ''
+              name:          this.tenant.name,
+              email:         this.tenant.email,
+              billing_email: this.tenant.billing_email ?? '',
+              domain:        this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : ''
             });
           }
         },
