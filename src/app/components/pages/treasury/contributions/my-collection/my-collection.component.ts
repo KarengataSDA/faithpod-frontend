@@ -179,8 +179,10 @@ export class MyCollectionComponent implements OnInit{
         console.log('Normalized status:', normalizedStatus);
 
         if (normalizedStatus === 'completed') {
-          console.log('✅ Transaction completed. Stopping polling.');
+          console.log('Transaction completed. Stopping polling.');
           clearInterval(interval);
+
+          this.collectionService.invalidateCache();
 
           Swal.fire('Success', 'Transaction successful!', 'success').then(() => {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -188,25 +190,25 @@ export class MyCollectionComponent implements OnInit{
             });
           });
         } else if (normalizedStatus === 'not completed') {
-          console.log('❌ Transaction failed. Stopping polling.');
+          console.log('Transaction failed. Stopping polling.');
           clearInterval(interval);
 
           Swal.fire('Failed', 'Transaction was not successful.', 'error').then(() => {
             location.reload();
           });
         } else if (attempts >= maxAttempts) {
-          console.log('⚠️ Max attempts reached. Stopping polling.');
+          console.log('Max attempts reached. Stopping polling.');
           clearInterval(interval);
 
           Swal.fire('Failed', 'Transaction not completed. Please try again.', 'error').then(() => {
             location.reload();
           });
         } else {
-          console.log(`ℹ️ Transaction still pending. Attempt #${attempts} of ${maxAttempts}.`);
+          console.log(`Transaction still pending. Attempt #${attempts} of ${maxAttempts}.`);
         }
       },
       error: (err) => {
-        console.error('🚨 Error fetching transaction status:', err);
+        console.error('Error fetching transaction status:', err);
         clearInterval(interval);
 
         Swal.fire('Error', 'Could not fetch transaction status', 'error').then(() => {

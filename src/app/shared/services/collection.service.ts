@@ -142,7 +142,7 @@ export class CollectionService {
   /**
    * Clear all collection-related cache after mutations
    */
-  private invalidateCache(): void {
+  invalidateCache(): void {
     const prefix = this.tenantPrefix;
     this.cacheService.clearPattern(new RegExp(`^${prefix}_collections`));
     this.cacheService.clearPattern(new RegExp(`^${prefix}_contributions`));
