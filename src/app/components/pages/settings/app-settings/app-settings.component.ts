@@ -41,9 +41,10 @@ interface AppConfig {
 
 @Component({
   selector: 'app-app-settings',
-  standalone: false,
   templateUrl: './app-settings.component.html',
-  styleUrls: ['./app-settings.component.scss']
+  styleUrls: ['./app-settings.component.scss'],
+  standalone: false,
+  
 })
 export class AppSettingsComponent implements OnInit, OnDestroy {
   configForm!: FormGroup;
