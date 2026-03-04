@@ -12,6 +12,7 @@ import { TenantManagementComponent } from './tenant-management/tenant-management
 import { TenantViewComponent } from './tenant-view/tenant-view.component';
 import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
 import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
+import { SubscriptionPlansComponent } from './subscription-plans/subscription-plans.component';
 
 const routes: Routes = [
   {
@@ -29,7 +30,8 @@ const routes: Routes = [
   // Central Admin routes (accessible only on root domain)
   { path: 'tenants', component: TenantManagementComponent },
   { path: 'tenants/view/:id', component: TenantViewComponent },
-  { path: 'tenants/edit/:id', component: TenantEditComponent }
+  { path: 'tenants/edit/:id', component: TenantEditComponent },
+  { path: 'plans', component: SubscriptionPlansComponent }
 ];
 
 @NgModule({

@@ -17,6 +17,7 @@ import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
 import { TenantThemingComponent } from './tenant-theming/tenant-theming.component';
 import { TenantConfigurationComponent } from './tenant-configuration/tenant-configuration.component';
 import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
+import { SubscriptionPlansComponent } from './subscription-plans/subscription-plans.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
     TenantViewComponent,
     TenantEditComponent,
     AcceptInviteComponent,
+    SubscriptionPlansComponent,
   ],
   imports: [
     CommonModule,
