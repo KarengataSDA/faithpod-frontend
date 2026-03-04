@@ -17,6 +17,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        // Silent requests — let the caller handle errors without a popup
+        if (request.url.includes('/tenant/info')) {
+          return throwError(() => error);
+        }
+
         let errorMessage = '';
 
         if (error.error instanceof ErrorEvent) {
