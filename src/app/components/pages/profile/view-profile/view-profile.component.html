@@ -157,14 +157,19 @@
                                 </tr>
                             </thead>
                             <tbody >
-                              <ng-container *ngIf="user?.contributions as contributions">
+                              <ng-container *ngIf="contributions.length > 0; else noGivings">
                                 <tr class="border-bottom" *ngFor="let collection of contributions; index as i">
                                     <td *ngIf="i === 0 || contributions[i].contribution_date !== contributions[i-1].contribution_date" [attr.rowspan]="getRowspan(contributions, collection.contribution_date)">{{collection.contribution_date}}</td>
                                     <th>{{i + 1}}</th>
                                     <td>{{collection?.contribution_type?.name}}</td>
                                     <td>{{collection?.contribution_amount}}</td>
                                 </tr>
-                                </ng-container>
+                              </ng-container>
+                              <ng-template #noGivings>
+                                <tr>
+                                  <td colspan="4" class="text-center text-muted py-3">No contributions recorded yet.</td>
+                                </tr>
+                              </ng-template>
                             </tbody>
                         </table>
                     </div>

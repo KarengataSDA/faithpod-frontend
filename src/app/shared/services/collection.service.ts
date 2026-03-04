@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {
   Collection,
   CollectionTotal,
@@ -128,6 +128,12 @@ export class CollectionService {
 
   sendMail(id: number): Observable<Collection> {
     return this.http.get<Collection>(this.apiSendMail + id);
+  }
+
+  getUserContributions(): Observable<Contribution[]> {
+    return this.http.get<{data: {contributions: Contribution[]}}>(this.baseUrl + '/user-contributions').pipe(
+      map(response => response.data?.contributions || [])
+    );
   }
 
   delete(id: number) {

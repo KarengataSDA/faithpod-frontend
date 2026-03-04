@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/user';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Contribution } from '../../../../shared/models/collection';
+import { CollectionService } from '../../../../shared/services/collection.service';
 
 @Component({
     selector: 'app-view-profile',
@@ -11,10 +12,11 @@ import { Contribution } from '../../../../shared/models/collection';
 })
 export class ViewProfileComponent implements OnInit{
   user: User
+  contributions: Contribution[] = [];
   completionPercentage: number;
   unfilledFields: string[] = []
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private collectionService: CollectionService) {}
   ngOnInit(): void {
       this.authService.user().subscribe(
         (user) => {
@@ -22,7 +24,10 @@ export class ViewProfileComponent implements OnInit{
           this.completionPercentage = this.getProfileCompletionPercentage()
           this.unfilledFields = this.getUnfilledFields();
         }
-      )
+      );
+      this.collectionService.getUserContributions().subscribe(
+        contributions => this.contributions = contributions
+      );
   }
 
   getProfileCompletionPercentage(): number {
