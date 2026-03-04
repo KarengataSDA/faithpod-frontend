@@ -12,22 +12,83 @@ import { CollectionService } from '../../../../shared/services/collection.servic
 })
 export class ViewProfileComponent implements OnInit{
   user: User
-  contributions: Contribution[] = [];
   completionPercentage: number;
   unfilledFields: string[] = []
 
+  // Pagination properties
+  paginatedContributions: Contribution[] = []
+  filteredContributions: Contribution[] = []
+  totalLength = 0
+  pageSize = 10
+  currentPage = 1
+  totalPages = 0
+
   constructor(private authService: AuthService, private collectionService: CollectionService) {}
   ngOnInit(): void {
-      this.authService.user().subscribe(
-        (user) => {
-          this.user = user;
-          this.completionPercentage = this.getProfileCompletionPercentage()
-          this.unfilledFields = this.getUnfilledFields();
-        }
-      );
-      this.collectionService.getUserContributions().subscribe(
-        contributions => this.contributions = contributions
-      );
+      this.authService.user().subscribe(user => {
+        this.user = user;
+        this.completionPercentage = this.getProfileCompletionPercentage();
+        this.unfilledFields = this.getUnfilledFields();
+      });
+      this.collectionService.getUserContributions().subscribe(contributions => {
+        this.applyFilter(contributions);
+      });
+  }
+
+  applyFilter(contributions: Contribution[]) {
+    this.filteredContributions = [...contributions].sort((a, b) =>
+      new Date(b.contribution_date).getTime() - new Date(a.contribution_date).getTime()
+    );
+    this.totalLength = this.filteredContributions.length;
+    this.currentPage = 1;
+    this.totalPages = Math.ceil(this.totalLength / this.pageSize);
+    this.updatePaginatedContributions();
+  }
+
+  updatePaginatedContributions() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedContributions = this.filteredContributions.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number | string) {
+    if (typeof page !== 'number' || page < 1 || page > this.totalPages || page === this.currentPage) {
+      return;
+    }
+    this.currentPage = page;
+    this.updatePaginatedContributions();
+  }
+
+  getDisplayedPages(): (number | '...')[] {
+    const pages: (number | '...')[] = [];
+
+    if (this.totalPages <= 7) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    pages.push(1);
+
+    if (this.currentPage > 4) {
+      pages.push('...');
+    }
+
+    const start = Math.max(2, this.currentPage - 2);
+    const end = Math.min(this.totalPages - 1, this.currentPage + 2);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (this.currentPage < this.totalPages - 3) {
+      pages.push('...');
+    }
+
+    pages.push(this.totalPages);
+
+    return pages;
   }
 
   getProfileCompletionPercentage(): number {
@@ -67,9 +128,5 @@ export class ViewProfileComponent implements OnInit{
     }
 
     return Object.keys(fields).filter(field => !this.user[field as keyof User]).map(field => fields[field as keyof typeof fields])
-  }
-
-  getRowspan(contributions: Contribution[], date: string): number {
-    return contributions.filter(contribution => contribution.contribution_date === date).length
   }
 }
