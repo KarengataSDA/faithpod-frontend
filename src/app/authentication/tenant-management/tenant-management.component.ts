@@ -22,6 +22,8 @@ export interface Tenant {
   suspended_at?: string;
   plan_id?: number;
   plan?: { id: number; name: string; price: number; billing_cycle: string; max_members?: number };
+  member_count?: number | null;
+  tenancy_db_name?: string;
   domains?: Array<{ id: number; domain: string }>;
   created_at?: string;
 }
@@ -191,6 +193,16 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
       pending:   'bg-light text-dark border',
     };
     return map[status] ?? 'bg-secondary text-white';
+  }
+
+  getSubscriptionEndDate(tenant: Tenant): string | null {
+    if (tenant.status === 'trial') return tenant.trial_ends_at ?? null;
+    return tenant.subscription_ends_at ?? null;
+  }
+
+  getSubscriptionEndLabel(tenant: Tenant): string {
+    if (tenant.status === 'trial') return 'Trial ends';
+    return 'Sub. ends';
   }
 
   getStatusLabel(status: TenantStatus): string {

@@ -7,6 +7,15 @@ import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Tenant, TenantStatus } from '../tenant-management/tenant-management.component';
 
+export interface SubscriptionPlan {
+  id: number;
+  name: string;
+  price: number;
+  billing_cycle: string;
+  max_members?: number;
+  trial_days: number;
+}
+
 @Component({
     selector: 'app-tenant-view',
     templateUrl: './tenant-view.component.html',
@@ -16,10 +25,18 @@ import { Tenant, TenantStatus } from '../tenant-management/tenant-management.com
 export class TenantViewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   tenant: Tenant | null = null;
+  plans: SubscriptionPlan[] = [];
   isLoading = false;
   isUpdating = false;
+  isSavingSubscription = false;
   errorMessage = '';
   activeTab: string = 'details';
+  showSubscriptionForm = false;
+
+  // Subscription form fields
+  subPlanId: number | null = null;
+  subTrialEndsAt: string = '';
+  subSubscriptionEndsAt: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +49,7 @@ export class TenantViewComponent implements OnInit, OnDestroy {
     if (tenantId) {
       this.loadTenant(tenantId);
     }
+    this.loadPlans();
   }
 
   get apiUrl(): string {
@@ -55,12 +73,76 @@ export class TenantViewComponent implements OnInit, OnDestroy {
         next: (response: any) => {
           this.isLoading = false;
           this.tenant = response;
+          this.syncFormFromTenant();
         },
         error: (err) => {
           this.isLoading = false;
           if (err.status === 401) {
             this.router.navigate(['/auth/login']);
           }
+        }
+      });
+  }
+
+  loadPlans(): void {
+    this.http
+      .get<SubscriptionPlan[]>(`${this.apiUrl}/plans`, {
+        headers: { 'Authorization': `Bearer ${this.authToken}` }
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (plans) => { this.plans = plans; },
+        error: () => {}
+      });
+  }
+
+  /** Pre-fill form from current tenant values */
+  syncFormFromTenant(): void {
+    if (!this.tenant) return;
+    this.subPlanId = this.tenant.plan_id ?? null;
+    this.subTrialEndsAt        = this.tenant.trial_ends_at
+      ? this.toDateInputValue(this.tenant.trial_ends_at) : '';
+    this.subSubscriptionEndsAt = this.tenant.subscription_ends_at
+      ? this.toDateInputValue(this.tenant.subscription_ends_at) : '';
+  }
+
+  /** Convert ISO string → YYYY-MM-DD for <input type="date"> */
+  private toDateInputValue(iso: string): string {
+    return iso ? iso.substring(0, 10) : '';
+  }
+
+  saveSubscription(): void {
+    if (!this.tenant) return;
+
+    const payload: any = {};
+    if (this.subPlanId)              payload.plan_id              = this.subPlanId;
+    if (this.subTrialEndsAt)         payload.trial_ends_at        = this.subTrialEndsAt;
+    if (this.subSubscriptionEndsAt)  payload.subscription_ends_at = this.subSubscriptionEndsAt;
+
+    if (Object.keys(payload).length === 0) return;
+
+    this.isSavingSubscription = true;
+
+    this.http
+      .patch(`${this.apiUrl}/tenants/${this.tenant.id}/subscription`, payload, {
+        headers: { 'Authorization': `Bearer ${this.authToken}` }
+      })
+      .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
+      .subscribe({
+        next: (response: any) => {
+          this.isSavingSubscription = false;
+          this.tenant = response.data;
+          this.showSubscriptionForm = false;
+          Swal.fire({
+            title: 'Saved!',
+            text: 'Subscription details updated.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        },
+        error: () => {
+          this.isSavingSubscription = false;
         }
       });
   }
