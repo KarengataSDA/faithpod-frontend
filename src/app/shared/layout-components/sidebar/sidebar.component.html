@@ -8,26 +8,27 @@
   >
     <div class="side-header">
       <a class="header-brand1" routerLink="/dashboard">
-        <img
+        <!-- <img
           src="./assets/images/brand/logo.png"
           class="header-brand-img desktop-logo"
           alt="logo"
-        />
-        <img
+          
+        /> -->
+        <!-- <img
           src="./assets/images/brand/main-logo.svg"
           class="header-brand-img toggle-logo"
           alt="logo"
-        />
+        /> -->
         <img
-          src="./assets/images/brand/main-logo.svg"
+          [src]="logoUrl || './assets/images/brand/main-logo.svg'"
           class="header-brand-img light-logo"
-          alt="logo"
+          alt="toggled-logo"
         />
         <img
-          src="./assets/images/brand/main-logo.svg"
+          [src]="bannerUrl || './assets/images/brand/main-logo.svg'"
           class="header-brand-img light-logo1"
           alt="logo"
-          style="width: 55%;"
+          style="width: 65%;"
         />
       </a>
     </div>

@@ -5,8 +5,10 @@ import { switcherArrowFn, checkHoriMenu } from './sidebar';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { LoggerService } from '../../services/logger.service';
+import { TenantService } from '../../services/tenant.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -31,12 +33,27 @@ export class SidebarComponent implements OnDestroy {
     private navServices: NavService,
     public elRef: ElementRef,
     private authService: AuthService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private http: HttpClient,
+    private tenantService: TenantService
   ) {
 
   }
   public user!: { id: number };
+  logoUrl: string | null = null;
+  bannerUrl: string | null = null;
+
   ngOnInit() {
+    const apiUrl = this.tenantService.getApiUrl();
+    this.http.get<{ logo_url: string | null; banner_url: string | null }>(
+      `${apiUrl}/tenant/theme-config`
+    ).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (config) => {
+        this.logoUrl = config.logo_url;
+        this.bannerUrl = config.banner_url;
+      }
+    });
+
     this.navServices.items
       .pipe(takeUntil(this.destroy$))
       .subscribe((items) => (this.menuItems = items));
