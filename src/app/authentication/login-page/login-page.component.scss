@@ -1,3 +1,46 @@
+.img-card {
+  position: relative;
+
+  &::before {
+    background-size: 50vw auto !important;
+    background-position: right center !important;
+
+    @media (max-width: 768px) {
+      background-size: 70vw auto !important;
+    }
+
+    @media (max-width: 480px) {
+      background-size: 90vw auto !important;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 18vw;
+    height: 18vw;
+    background-image: url('/assets/images/brand/faithpod-logo-white.png');
+    background-position: bottom left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+
+    @media (max-width: 768px) {
+      width: 30vw;
+      height: 30vw;
+    }
+
+    @media (max-width: 480px) {
+      width: 42vw;
+      height: 42vw;
+    }
+  }
+}
+
 .login-option ul{
     margin: 30px 0 0 0;
 }
