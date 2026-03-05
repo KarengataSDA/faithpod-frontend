@@ -18445,7 +18445,7 @@ img {
 .img-card:before {
     content: "";
     position: absolute;
-    background: url(../images/svgs/circle-6.svg);
+    background: url(../images/svgs/circle-3.svg);
     background-position: right;
     background-repeat: no-repeat;
     width: 100%;
