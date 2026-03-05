@@ -27,21 +27,30 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">New Password</label>
-                    <div class="wrap-input100 input-group" >
-                        <a  class="input-group-text bg-white text-muted">
-                            <i class="zmdi zmdi-eye" aria-hidden="true"></i>
+                    <label class="form-label">Current Password</label>
+                    <div class="wrap-input100 input-group">
+                        <a class="input-group-text bg-white text-muted" style="cursor:pointer" (click)="showCurrent = !showCurrent">
+                            <i class="zmdi" [ngClass]="showCurrent ? 'zmdi-eye-off' : 'zmdi-eye'" aria-hidden="true"></i>
                         </a>
-                        <input formControlName="password" class="input100 form-control" required>
+                        <input formControlName="current_password" [type]="showCurrent ? 'text' : 'password'" class="input100 form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <div class="wrap-input100 input-group">
+                        <a class="input-group-text bg-white text-muted" style="cursor:pointer" (click)="showNew = !showNew">
+                            <i class="zmdi" [ngClass]="showNew ? 'zmdi-eye-off' : 'zmdi-eye'" aria-hidden="true"></i>
+                        </a>
+                        <input formControlName="password" [type]="showNew ? 'text' : 'password'" class="input100 form-control" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Confirm Password</label>
-                    <div class="wrap-input100  input-group" id="Password-toggle2">
-                        <a class="input-group-text bg-white text-muted">
-                            <i class="zmdi zmdi-eye" aria-hidden="true"></i>
+                    <div class="wrap-input100 input-group">
+                        <a class="input-group-text bg-white text-muted" style="cursor:pointer" (click)="showConfirm = !showConfirm">
+                            <i class="zmdi" [ngClass]="showConfirm ? 'zmdi-eye-off' : 'zmdi-eye'" aria-hidden="true"></i>
                         </a>
-                        <input formControlName="password_confirm" class="input100 form-control" required>
+                        <input formControlName="password_confirmation" [type]="showConfirm ? 'text' : 'password'" class="input100 form-control" required>
                     </div>
                 </div>
             </div>

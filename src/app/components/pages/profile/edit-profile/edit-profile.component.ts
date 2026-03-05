@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Auth } from 'src/app/components/classes/auth';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MediaConfirmResponse } from 'src/app/shared/services/media.service';
@@ -16,6 +16,10 @@ export class EditProfileComponent implements OnInit {
   infoForm: FormGroup;
   passwordForm: FormGroup;
   //user: User
+
+  showCurrent = false;
+  showNew = false;
+  showConfirm = false;
 
   user: any = {
     first_name: '',
@@ -59,8 +63,9 @@ export class EditProfileComponent implements OnInit {
 
    
     this.passwordForm = this.formBuilder.group({
-      password: '',
-      password_confirm: ''
+      current_password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      password_confirmation: ['', Validators.required],
     })
 
     Auth.userEmitter.subscribe(
@@ -102,19 +107,35 @@ export class EditProfileComponent implements OnInit {
   }
 
   passwordSubmit():void {
-    this.authService.updatePassword(this.passwordForm.getRawValue()).subscribe(
-      res => {
-        console.log(res)
-         Swal.fire({
-        icon: 'success',
-        title: 'Password Updated Successfully',
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 5500,
-      });
+    if (this.passwordForm.invalid) return;
+
+    this.authService.updatePassword(this.passwordForm.getRawValue()).subscribe({
+      next: () => {
+        this.passwordForm.reset();
+        Swal.fire({
+          icon: 'success',
+          title: 'Password Updated Successfully',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 5500,
+        });
+      },
+      error: (err) => {
+        const message = err?.error?.errors?.current_password?.[0]
+          ?? err?.error?.message
+          ?? 'Failed to update password.';
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 5500,
+        });
       }
-    )
+    });
   }
 
   getInitials(): string {
