@@ -87,8 +87,10 @@ export class MediaService {
       );
     }
 
+    const token = sessionStorage.getItem('central_admin_token');
     return this.http.delete<{ message: string }>(
-      `${this.adminApiUrl}/tenants/${entityId}/media/${collection}`
+      `${this.adminApiUrl}/tenants/${entityId}/media/${collection}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
   }
 
@@ -104,11 +106,13 @@ export class MediaService {
     file: File
   ): Observable<HttpEvent<MediaConfirmResponse>> {
     const extension = (file.name.split('.').pop() ?? 'jpg').toLowerCase();
+    const token = sessionStorage.getItem('central_admin_token');
+    const authHeaders = { Authorization: `Bearer ${token}` };
 
     return this.http
       .get<{ upload_url: string; cdn_url: string; key: string }>(
         `${this.adminApiUrl}/tenants/${tenantId}/media/${collection}/presigned-url`,
-        { params: { extension } }
+        { params: { extension }, headers: authHeaders }
       )
       .pipe(
         switchMap(({ upload_url, cdn_url, key }) => {
@@ -130,7 +134,8 @@ export class MediaService {
                   this.http
                     .post<MediaConfirmResponse>(
                       `${this.adminApiUrl}/tenants/${tenantId}/media/${collection}/confirm`,
-                      { cdn_url, key }
+                      { cdn_url, key },
+                      { headers: authHeaders }
                     )
                     .subscribe({
                       next: (response) => {
