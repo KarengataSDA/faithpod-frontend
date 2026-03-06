@@ -8,6 +8,7 @@ import { landing_page_Routes } from './shared/routes/landingpage';
 import { content } from './shared/routes/routes';
 import { SwitcherOneRoute } from './shared/routes/switchers';
 import { UnauthorizedComponent } from './components/pages/unauthorized/unauthorized.component';
+import { TenantNotFoundComponent } from './components/pages/tenant-not-found/tenant-not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo:'auth/login', pathMatch: 'full'},
@@ -34,6 +35,7 @@ const routes: Routes = [
   // }
 
   { path: 'unauthorized', component: UnauthorizedComponent},
+  { path: 'not-found', component: TenantNotFoundComponent },
 
 ];
 @NgModule({

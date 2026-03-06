@@ -69,6 +69,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         error: (err) => {
           console.error('[AppComponent] Failed to fetch tenant info:', err);
 
+          if (err.status === 404 && err.error?.code === 'TENANT_NOT_FOUND') {
+            this.router.navigate(['/not-found']);
+            return;
+          }
+
           // If we don't have a stored theme, apply default
           if (!storedTheme) {
             this.themeService.applyDefaultTheme();
