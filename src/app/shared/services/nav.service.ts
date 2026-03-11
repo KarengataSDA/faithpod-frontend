@@ -89,6 +89,28 @@ export class NavService implements OnDestroy {
       type: 'link',
       permissions: []
     },
+     {
+      headTitle: 'Announcements',
+      permissions: ['can view announcements']
+    },
+     {
+      title: 'Announcements',
+      selected: false,
+      icon: 'briefcase',
+      type: 'sub',
+      Menusub: true,
+      active: false,
+      permissions: ['can view announcements'],
+      children: [
+        {
+          path: '/pages/announcements',
+          title: 'Announcements',
+          type: 'link',
+          selected: false,
+          permissions: ['can view announcements']
+        }
+      ]
+    },
     {
       headTitle: 'MEMBERSHIP',
       permissions: ['view members', 'view membership types']

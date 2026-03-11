@@ -38,10 +38,11 @@ export class MediaService {
    * Upload a file.
    * - 'member': tenant API, multipart through Laravel
    * - 'tenant-self': tenant API, multipart through Laravel
+   * - 'announcement': tenant API — POST /announcements/{id}/media
    * - 'tenant': central admin — browser uploads directly to R2 via presigned URL
    */
   uploadMedia(
-    entityType: 'member' | 'tenant' | 'tenant-self',
+    entityType: 'member' | 'tenant' | 'tenant-self' | 'announcement',
     entityId: string | null,
     collection: string,
     file: File
@@ -57,6 +58,8 @@ export class MediaService {
     let url: string;
     if (entityType === 'member') {
       url = `${this.tenantApiUrl}/members/me/media`;
+    } else if (entityType === 'announcement') {
+      url = `${this.tenantApiUrl}/announcements/${entityId}/media`;
     } else {
       url = `${this.tenantApiUrl}/tenant/media/${collection}`;
     }
@@ -70,7 +73,7 @@ export class MediaService {
    * Delete all media in a collection.
    */
   deleteMedia(
-    entityType: 'member' | 'tenant' | 'tenant-self',
+    entityType: 'member' | 'tenant' | 'tenant-self' | 'announcement',
     entityId: string | null,
     collection: string
   ): Observable<{ message: string }> {
@@ -84,6 +87,12 @@ export class MediaService {
     if (entityType === 'tenant-self') {
       return this.http.delete<{ message: string }>(
         `${this.tenantApiUrl}/tenant/media/${collection}`
+      );
+    }
+
+    if (entityType === 'announcement') {
+      return this.http.delete<{ message: string }>(
+        `${this.tenantApiUrl}/announcements/${entityId}/media`
       );
     }
 

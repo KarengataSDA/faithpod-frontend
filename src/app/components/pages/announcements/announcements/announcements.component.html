@@ -1,0 +1,115 @@
+<app-page-header [title]="'Announcements'" [items]="['Pages']" [active_item]="'Announcements'"></app-page-header>
+
+<div class="card-footer text-end">
+    <a class="btn ms-2 btn-primary my-1" routerLink="/pages/announcements/create">
+        <i class="fe fe-plus"></i> Add Announcement
+    </a>
+</div>
+
+<div class="row">
+    <!-- Announcements Column (Left - 8 cols) -->
+    <div class="col-xl-8 col-lg-8">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="card">
+            <div class="card-body text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements Grid (2 columns) -->
+        <div class="row" *ngIf="!isLoading">
+            <div class="col-sm-6" *ngFor="let announcement of paginatedAnnouncements">
+                <div class="card">
+                    <a routerLink="/pages/announcements/view/{{announcement.id}}">
+                        <img class="card-img-top announcement-img" [src]="announcement.image || './assets/images/media/13.jpg'" [alt]="announcement.title">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5><a routerLink="/pages/announcements/view/{{announcement.id}}">{{announcement.title}}</a></h5>
+                        <div class="text-muted small">{{announcement.body | slice:0:250}}{{(announcement.body?.length ?? 0) > 250 ? '...' : ''}}</div>
+                        <div class="d-flex align-items-center pt-3 mt-auto">
+                            <div>
+                                <small class="d-block text-muted">{{announcement.created_at | date:'mediumDate'}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && filteredAnnouncements.length === 0" class="card">
+            <div class="card-body text-center">
+                <p class="text-muted">No announcements available.</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+         <div class="card-body">
+        <div *ngIf="!isLoading && filteredAnnouncements.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <p class="text-muted mb-0">Showing {{(currentPage - 1) * pageSize + 1}} to {{(currentPage - 1) * pageSize + paginatedAnnouncements.length}} of {{totalLength}} announcements</p>
+            </div>
+            <div>
+                <ul class="pagination mb-0">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="currentPage > 1 && onPageChange(currentPage - 1)">Prev</a>
+                    </li>
+                    <li *ngFor="let page of [].constructor(totalPages); let index = index" class="page-item" [class.active]="currentPage === index + 1">
+                        <a class="page-link" (click)="onPageChange(index + 1)">{{index + 1}}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="currentPage < totalPages && onPageChange(currentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+        
+    </div>
+
+    <!-- Sidebar (Right - 4 cols) -->
+    <div class="col-xl-4 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="input-group">
+                    <input type="text" class="form-control border-end-0" placeholder="Search ..." (input)="onSearchChange($event)">
+                    <button class="btn input-group-text bg-transparent border-start-0 text-muted">
+                        <i class="fe fe-search" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Announcements</div>
+            </div>
+            <div class="card-body">
+                <div *ngIf="isLoading" class="text-center">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div *ngIf="!isLoading && recentAnnouncements.length === 0" class="text-center">
+                    <p class="text-muted mb-0">No recent announcements.</p>
+                </div>
+                <div *ngIf="!isLoading && recentAnnouncements.length > 0">
+                    <div *ngFor="let announcement of recentAnnouncements; let i = index"
+                         class="d-flex overflow-visible" [class.mt-4]="i > 0">
+                        <a routerLink="/pages/announcements/view/{{announcement.id}}"
+                           class="card-aside-column br-5 cover-image recent-announcement-img"
+                           [style.background-image]="'url(' + (announcement.image || './assets/images/media/13.jpg') + ')'">
+                        </a>
+                        <div class="ps-3 flex-column">
+                            <small class="text-muted">{{announcement.created_at | date:'mediumDate'}}</small>
+                            <h6 class="mb-1"><a routerLink="/pages/announcements/view/{{announcement.id}}">{{announcement.title | slice:0:30}}{{(announcement.title?.length ?? 0) > 30 ? '...' : ''}}</a></h6>
+                            <div class="text-muted small">{{announcement.body | slice:0:60}}{{(announcement.body?.length ?? 0) > 60 ? '...' : ''}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
