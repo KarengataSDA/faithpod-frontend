@@ -1,0 +1,88 @@
+<app-page-header [title]="'Create Announcement'" [items]="['Pages']" [active_item]="'Create Announcement'"></app-page-header>
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Add New Announcement</div>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="title" placeholder="Enter announcement title">
+                        <div *ngIf="form.get('title')?.touched && form.get('title')?.invalid" class="text-danger mt-1">
+                            <small *ngIf="form.get('title')?.errors?.['required']">Title is required</small>
+                            <small *ngIf="form.get('title')?.errors?.['minlength']">Title must be at least 3 characters</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Description <span class="text-danger">*</span></label>
+                        <textarea class="form-control" formControlName="body" rows="6" placeholder="Enter announcement description"></textarea>
+                        <div *ngIf="form.get('body')?.touched && form.get('body')?.invalid" class="text-danger mt-1">
+                            <small *ngIf="form.get('body')?.errors?.['required']">Description is required</small>
+                            <small *ngIf="form.get('body')?.errors?.['minlength']">Description must be at least 10 characters</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Image (Optional)</label>
+                        <div *ngIf="!imagePreview" class="dropzone p-4 border border-dashed  text-center">
+                            <input type="file" id="fileInput" class="d-none" accept="image/*" (change)="onFileSelected($event)">
+                            <label for="fileInput" class="mb-0 cursor-pointer">
+                                <i class="fe fe-upload-cloud fs-3 text-muted"></i>
+                                <p class="text-muted mb-0 mt-2">Click to upload an image</p>
+                            </label>
+                        </div>
+                        <div *ngIf="imagePreview" class="position-relative d-inline-block">
+                            <img [src]="imagePreview" class="img-thumbnail" style="max-height: 200px;">
+                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" (click)="removeFile()">
+                                <i class="fe fe-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                        {{ isSubmitting ? 'Posting...' : 'Post' }}
+                    </button>
+                    <button type="button" class="btn btn-default float-end" (click)="onDiscard()">Discard</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Announcements</div>
+            </div>
+            <div class="card-body">
+                <div *ngIf="isLoading" class="text-center">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div *ngIf="!isLoading && recentAnnouncements.length === 0" class="text-center">
+                    <p class="text-muted mb-0">No recent announcements.</p>
+                </div>
+                <div *ngIf="!isLoading && recentAnnouncements.length > 0">
+                    <div *ngFor="let announcement of recentAnnouncements; let i = index"
+                         class="d-flex overflow-visible" [class.mt-4]="i > 0">
+                        <a routerLink="/pages/announcements/view/{{announcement.id}}"
+                           class="card-aside-column br-5 cover-image"
+                           [style.background-image]="'url(' + (announcement.image || './assets/images/media/13.jpg') + ')'"
+                           style="min-width: 80px; min-height: 80px; background-size: cover; background-position: center;">
+                        </a>
+                        <div class="ps-3 flex-column">
+                            <small class="text-muted">{{announcement.created_at | date:'mediumDate'}}</small>
+                            <h6 class="mb-1"><a routerLink="/pages/announcements/view/{{announcement.id}}">{{announcement.title | slice:0:30}}{{(announcement.title?.length ?? 0) > 30 ? '...' : ''}}</a></h6>
+                            <div class="text-muted small">{{announcement.body | slice:0:60}}{{(announcement.body?.length ?? 0) > 60 ? '...' : ''}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

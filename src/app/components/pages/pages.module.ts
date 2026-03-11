@@ -47,6 +47,10 @@ import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboar
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
+import { AnnouncementsComponent } from './announcements/announcements/announcements.component';
+import { CreateAnnouncementComponent } from './announcements/create-announcement/create-announcement.component';
+import { ViewAnnouncementComponent } from './announcements/view-announcement/view-announcement.component';
+import { EditAnnouncementComponent } from './announcements/edit-announcement/edit-announcement.component';
 
 
 
@@ -92,7 +96,12 @@ import { AppSettingsComponent } from './settings/app-settings/app-settings.compo
     DashboardMonitorComponent,
     MemberActivityLogComponent,
     BrandingComponent,
-    AppSettingsComponent
+    AppSettingsComponent,
+
+    AnnouncementsComponent,
+    CreateAnnouncementComponent,
+    ViewAnnouncementComponent,
+    EditAnnouncementComponent,
 
 
 

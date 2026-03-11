@@ -1,0 +1,88 @@
+<app-page-header [title]="'View Announcement'" [items]="['Pages', 'Announcements']" [active_item]="'View'"></app-page-header>
+
+<div class="row">
+    <div class="col-xl-8">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="card">
+            <div class="card-body text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcement Content -->
+        <div *ngIf="!isLoading && announcement" class="card">
+            <img *ngIf="announcement.image" [src]="announcement.image" class="card-img-top" [alt]="announcement.title" style="max-height: 400px; object-fit: cover;">
+            <img *ngIf="!announcement.image" src="./assets/images/media/13.jpg" class="card-img-top" alt="Default image" style="max-height: 400px; object-fit: cover;">
+            <div class="card-body">
+                <h2 class="card-title mb-3">{{announcement.title}}</h2>
+                <div class="d-flex align-items-center text-muted mb-4">
+                    <i class="fe fe-calendar me-2"></i>
+                    <span>{{announcement.created_at | date:'fullDate'}}</span>
+                </div>
+                <div class="announcement-body" style="white-space: pre-wrap;">{{announcement.body}}</div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <button class="btn btn-outline-secondary" (click)="onBack()">
+                    <i class="fe fe-arrow-left me-1"></i> Back
+                </button>
+                <div>
+                    <button class="btn btn-primary me-2" (click)="onEdit()">
+                        <i class="fe fe-edit me-1"></i> Edit
+                    </button>
+                    <button class="btn btn-danger" (click)="onDelete()" [disabled]="isDeleting">
+                        <span *ngIf="isDeleting" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                        <i *ngIf="!isDeleting" class="fe fe-trash-2 me-1"></i>
+                        {{ isDeleting ? 'Deleting...' : 'Delete' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Not Found State -->
+        <div *ngIf="!isLoading && !announcement" class="card">
+            <div class="card-body text-center py-5">
+                <i class="fe fe-alert-circle fs-1 text-muted mb-3"></i>
+                <h5 class="text-muted">Announcement not found</h5>
+                <button class="btn btn-primary mt-3" (click)="onBack()">Back to Announcements</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Other Announcements</div>
+            </div>
+            <div class="card-body">
+                <div *ngIf="recentAnnouncements.length === 0" class="text-center">
+                    <p class="text-muted mb-0">No other announcements.</p>
+                </div>
+                <div *ngIf="recentAnnouncements.length > 0">
+                    <div *ngFor="let item of recentAnnouncements; let i = index"
+                         class="d-flex overflow-visible" [class.mt-4]="i > 0">
+                        <a routerLink="/pages/announcements/view/{{item.id}}"
+                           class="card-aside-column br-5 cover-image"
+                           [style.background-image]="'url(' + (item.image || './assets/images/media/13.jpg') + ')'"
+                           style="min-width: 80px; min-height: 80px; background-size: cover; background-position: center;">
+                        </a>
+                        <div class="ps-3 flex-column">
+                            <small class="text-muted">{{item.created_at | date:'mediumDate'}}</small>
+                            <h6 class="mb-1"><a routerLink="/pages/announcements/view/{{item.id}}">{{item.title | slice:0:30}}{{(item.title?.length ?? 0) > 30 ? '...' : ''}}</a></h6>
+                            <div class="text-muted small">{{item.body | slice:0:60}}{{(item.body?.length ?? 0) > 60 ? '...' : ''}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <a routerLink="/pages/announcements/create" class="btn btn-primary w-100">
+                    <i class="fe fe-plus me-1"></i> Create New Announcement
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

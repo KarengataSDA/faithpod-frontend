@@ -20,10 +20,10 @@ import { MediaConfirmResponse, MediaService } from '../../services/media.service
   styleUrl: './image-upload.component.scss',
 })
 export class ImageUploadComponent implements OnChanges {
-  /** 'member' → /members/me/media; 'tenant' → /tenants/{entityId}/media; 'tenant-self' → /tenant/media/{collection} */
-  @Input() entityType: 'member' | 'tenant' | 'tenant-self' = 'member';
+  /** 'member' → /members/me/media; 'tenant' → /tenants/{entityId}/media; 'tenant-self' → /tenant/media/{collection}; 'announcement' → /announcements/{entityId}/media */
+  @Input() entityType: 'member' | 'tenant' | 'tenant-self' | 'announcement' = 'member';
 
-  /** Required when entityType === 'tenant' */
+  /** Required when entityType === 'tenant' or 'announcement' */
   @Input() entityId: string | null = null;
 
   /** MediaLibrary collection name, e.g. 'avatar', 'logo', 'banner' */

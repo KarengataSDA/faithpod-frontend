@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreatePrayercellComponent } from './prayercell/create-prayercell/create-prayercell.component';
 import { ViewPrayercellComponent } from './prayercell/view-prayercell/view-prayercell.component';
 import { EditPrayercellComponent } from './prayercell/edit-prayercell/edit-prayercell.component';
+import { AnnouncementsComponent } from './announcements/announcements/announcements.component';
+import { CreateAnnouncementComponent } from './announcements/create-announcement/create-announcement.component';
+import { ViewAnnouncementComponent } from './announcements/view-announcement/view-announcement.component';
+import { EditAnnouncementComponent } from './announcements/edit-announcement/edit-announcement.component';
 import { MembersComponent } from './members/members/members.component';
 import { PrayercellsComponent } from './prayercell/prayercells/prayercells.component';
 import { EditMemberComponent } from './members/edit-member/edit-member.component';
@@ -90,6 +94,11 @@ const routes: Routes = [
       {path: 'settings/activity-log', title: "Member Activity Log", component: MemberActivityLogComponent, canActivate: [AuthGuard], data: { permission: 'edit members'}},
       {path: 'settings/branding', title: "Branding", component: BrandingComponent, canActivate: [AuthGuard], data: { permission: 'view roles'}},
       {path: 'settings/app-settings', title: "App Settings", component: AppSettingsComponent, canActivate: [AuthGuard], data: { permission: 'view roles'}},
+
+      {path: 'announcements', title: "Announcements", component: AnnouncementsComponent},
+      {path: 'announcements/create', title: "Create Announcement", component: CreateAnnouncementComponent},
+      {path: 'announcements/view/:announcementId', title: "View Announcement", component: ViewAnnouncementComponent},
+      {path: 'announcements/edit/:id', title: "Edit Announcement", component: EditAnnouncementComponent},
     ]
   }
 ];
