@@ -18,7 +18,7 @@
                     <span class="badge bg-secondary">{{hymn.language?.name}}</span>
                 </div>
                 <div>
-                    <button *ngIf="currentUser$ | async" class="btn btn-sm me-1" [class.btn-danger]="hymn.is_favorite" [class.btn-outline-danger]="!hymn.is_favorite" (click)="toggleFavorite()">
+                    <button class="btn btn-sm me-1" [class.btn-danger]="hymn.is_favorite" [class.btn-outline-danger]="!hymn.is_favorite" (click)="toggleFavorite()">
                         <i class="fe fe-heart"></i> {{hymn.is_favorite ? 'Favorited' : 'Add to Favorites'}}
                     </button>
                 </div>
@@ -47,7 +47,7 @@
                 <a *ngIf="hymn.language" routerLink="/pages/hymns/language/{{hymn.language.id}}" class="btn btn-outline-secondary w-100 mb-2">
                     <i class="fe fe-globe me-2"></i> {{hymn.language.name}} Hymns
                 </a>
-                <a *ngIf="currentUser$ | async" routerLink="/pages/hymns/favorites" class="btn btn-outline-danger w-100">
+                <a routerLink="/pages/hymns/favorites" class="btn btn-outline-danger w-100">
                     <i class="fe fe-heart me-2"></i> My Favorites
                 </a>
             </div>

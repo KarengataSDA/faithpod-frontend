@@ -103,7 +103,7 @@
                   <td class="fw-semibold">{{ lang.name }}</td>
                   <td class="text-muted">{{ lang.description || '—' }}</td>
                   <td>
-                    <span class="badge bg-secondary-lt rounded-pill">{{ lang.hymns_count ?? 0 }}</span>
+                    <span class="badge bg-primary">{{ lang.hymns_count ?? 0 }}</span>
                   </td>
                   <td>
                     <span class="badge" [class.bg-success]="lang.is_active" [class.bg-secondary]="!lang.is_active">
@@ -113,7 +113,7 @@
                   <td>
                     <div class="d-flex gap-1">
                       <button class="btn btn-sm btn-outline-primary" (click)="viewHymns(lang)" title="View Hymns">
-                        <i class="zmdi zmdi-music"></i>
+                        <i class="zmdi zmdi-format-queue-music"></i>
                       </button>
                       <button class="btn btn-sm btn-outline-warning" (click)="openEdit(lang)" title="Edit">
                         <i class="zmdi zmdi-edit"></i>
