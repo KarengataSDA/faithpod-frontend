@@ -18,6 +18,8 @@ import { TenantThemingComponent } from './tenant-theming/tenant-theming.componen
 import { TenantConfigurationComponent } from './tenant-configuration/tenant-configuration.component';
 import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
 import { SubscriptionPlansComponent } from './subscription-plans/subscription-plans.component';
+import { HymnalLanguagesComponent } from './hymnal-languages/hymnal-languages.component';
+import { HymnalHymnsComponent } from './hymnal-hymns/hymnal-hymns.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { SubscriptionPlansComponent } from './subscription-plans/subscription-pl
     TenantEditComponent,
     AcceptInviteComponent,
     SubscriptionPlansComponent,
+    HymnalLanguagesComponent,
+    HymnalHymnsComponent,
   ],
   imports: [
     CommonModule,

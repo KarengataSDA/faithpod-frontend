@@ -42,6 +42,10 @@ import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboar
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
+import { HymnLanguagesComponent } from './hymns/hymn-languages/hymn-languages.component';
+import { HymnsListComponent } from './hymns/hymns-list/hymns-list.component';
+import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.component';
+import { ViewHymnComponent } from './hymns/view-hymn/view-hymn.component';
 
 
 
@@ -99,6 +103,13 @@ const routes: Routes = [
       {path: 'announcements/create', title: "Create Announcement", component: CreateAnnouncementComponent},
       {path: 'announcements/view/:announcementId', title: "View Announcement", component: ViewAnnouncementComponent},
       {path: 'announcements/edit/:id', title: "Edit Announcement", component: EditAnnouncementComponent},
+
+        // Hymns Routes (read-only on tenant; create/edit/delete is central admin only)
+      {path: 'hymns/languages', title: "Hymn Languages", component: HymnLanguagesComponent},
+      {path: 'hymns/language/:languageId', title: "Hymns by Language", component: HymnsListComponent},
+      {path: 'hymns/favorites', title: "Favorite Hymns", component: HymnFavoritesComponent, canActivate: [AuthGuard]},
+      {path: 'hymns/view/:id', title: "View Hymn", component: ViewHymnComponent},
+      {path: 'hymns', title: "Hymns", component: HymnsListComponent},
     ]
   }
 ];

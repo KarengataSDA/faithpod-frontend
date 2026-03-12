@@ -1,0 +1,80 @@
+<app-page-header [title]="'My Favorite Hymns'" [items]="['Hymns']" [active_item]="'Favorites'"></app-page-header>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a class="btn btn-outline-primary me-2" routerLink="/pages/hymns">
+            <i class="fe fe-list"></i> All Hymns
+        </a>
+        <a class="btn btn-outline-secondary" routerLink="/pages/hymns/languages">
+            <i class="fe fe-globe"></i> Languages
+        </a>
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex gap-2 justify-content-end">
+            <select class="form-select w-auto" (change)="onLanguageChange($any($event.target).value ? +$any($event.target).value : null)">
+                <option value="">All Languages</option>
+                <option *ngFor="let lang of languages" [value]="lang.id">{{lang.name}}</option>
+            </select>
+            <div class="input-group w-auto">
+                <input type="text" class="form-control" placeholder="Search favorites..." (input)="onSearchChange($event)" [value]="searchTerm">
+                <button class="btn btn-outline-secondary">
+                    <i class="fe fe-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            <i class="fe fe-heart text-danger me-2"></i> My Favorites ({{filteredFavorites.length}})
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Favorites Grid -->
+        <div *ngIf="!isLoading" class="row">
+            <div class="col-lg-6 col-md-12 mb-3" *ngFor="let hymn of filteredFavorites">
+                <div class="card border mb-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-primary me-2">{{hymn.hymn_number}}</span>
+                                <span class="badge bg-secondary-transparent">{{hymn.language?.name}}</span>
+                                <h5 class="mt-2 mb-1">
+                                    <a routerLink="/pages/hymns/view/{{hymn.id}}">{{hymn.title}}</a>
+                                </h5>
+                                <p *ngIf="hymn.author" class="text-muted small mb-1"><i class="fe fe-user me-1"></i>{{hymn.author}}</p>
+                                <p class="text-muted small mb-0">{{hymn.lyrics | slice:0:100}}{{hymn.lyrics.length > 100 ? '...' : ''}}</p>
+                            </div>
+                            <div>
+                                <a routerLink="/pages/hymns/view/{{hymn.id}}" class="btn btn-sm btn-outline-primary me-1" title="View">
+                                    <i class="fe fe-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-danger" (click)="removeFromFavorites(hymn)" title="Remove from favorites">
+                                    <i class="fe fe-heart-off"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && filteredFavorites.length === 0" class="text-center py-5">
+            <i class="fe fe-heart fs-1 text-muted"></i>
+            <p class="text-muted mt-3">You haven't added any hymns to your favorites yet.</p>
+            <a routerLink="/pages/hymns" class="btn btn-primary">
+                <i class="fe fe-music me-2"></i> Browse Hymns
+            </a>
+        </div>
+    </div>
+</div>

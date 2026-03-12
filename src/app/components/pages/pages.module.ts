@@ -51,6 +51,10 @@ import { AnnouncementsComponent } from './announcements/announcements/announceme
 import { CreateAnnouncementComponent } from './announcements/create-announcement/create-announcement.component';
 import { ViewAnnouncementComponent } from './announcements/view-announcement/view-announcement.component';
 import { EditAnnouncementComponent } from './announcements/edit-announcement/edit-announcement.component';
+import { HymnLanguagesComponent } from './hymns/hymn-languages/hymn-languages.component';
+import { HymnsListComponent } from './hymns/hymns-list/hymns-list.component';
+import { ViewHymnComponent } from './hymns/view-hymn/view-hymn.component';
+import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.component';
 
 
 
@@ -102,6 +106,11 @@ import { EditAnnouncementComponent } from './announcements/edit-announcement/edi
     CreateAnnouncementComponent,
     ViewAnnouncementComponent,
     EditAnnouncementComponent,
+
+    HymnLanguagesComponent,
+    HymnsListComponent,
+    ViewHymnComponent,
+    HymnFavoritesComponent
 
 
 

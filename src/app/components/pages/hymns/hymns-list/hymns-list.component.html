@@ -1,0 +1,103 @@
+<app-page-header [title]="selectedLanguage ? selectedLanguage.name + ' Hymns' : 'All Hymns'" [items]="['Hymns']" [active_item]="selectedLanguage?.name || 'All'"></app-page-header>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a class="btn btn-outline-primary me-2" routerLink="/pages/hymns/languages">
+            <i class="fe fe-globe"></i> Languages
+        </a>
+        <a class="btn btn-outline-danger" routerLink="/pages/hymns/favorites" *ngIf="currentUser$ | async">
+            <i class="fe fe-heart"></i> My Favorites
+        </a>
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex gap-2 justify-content-end">
+            <select class="form-select w-auto" (change)="onLanguageChange($any($event.target).value ? +$any($event.target).value : null)">
+                <option value="">All Languages</option>
+                <option *ngFor="let lang of languages" [value]="lang.id" [selected]="lang.id === languageId">{{lang.name}}</option>
+            </select>
+            <div class="input-group w-auto">
+                <input type="text" class="form-control" placeholder="Search hymns..." (input)="onSearchChange($event)" [value]="searchTerm">
+                <button class="btn btn-outline-secondary">
+                    <i class="fe fe-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Hymns Table -->
+        <div *ngIf="!isLoading" class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">#</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th *ngIf="!languageId">Language</th>
+                        <th style="width: 150px;" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let hymn of paginatedHymns">
+                        <td class="fw-bold text-primary">{{hymn.hymn_number}}</td>
+                        <td>
+                            <a routerLink="/pages/hymns/view/{{hymn.id}}">{{hymn.title}}</a>
+                        </td>
+                        <td class="text-muted">{{hymn.author || '-'}}</td>
+                        <td *ngIf="!languageId">
+                            <span class="badge bg-secondary">{{hymn.language?.name}}</span>
+                        </td>
+                        <td class="text-center">
+                            <button *ngIf="currentUser$ | async" class="btn btn-sm me-1" [class.btn-danger]="hymn.is_favorite" [class.btn-outline-danger]="!hymn.is_favorite" (click)="toggleFavorite(hymn)" title="Toggle Favorite">
+                                <i class="fe fe-heart"></i>
+                            </button>
+                            <a routerLink="/pages/hymns/view/{{hymn.id}}" class="btn btn-sm btn-outline-primary me-1" title="View">
+                                <i class="fe fe-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && filteredHymns.length === 0" class="text-center py-4">
+            <i class="fe fe-music fs-1 text-muted"></i>
+            <p class="text-muted mt-2">No hymns found.</p>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="!isLoading && filteredHymns.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <p class="text-muted mb-0">Showing {{(currentPage - 1) * pageSize + 1}} to {{(currentPage - 1) * pageSize + paginatedHymns.length}} of {{totalLength}} hymns</p>
+            </div>
+            <div>
+                <ul class="pagination mb-0">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="currentPage > 1 && onPageChange(currentPage - 1)">Prev</a>
+                    </li>
+                    <li *ngFor="let page of [].constructor(totalPages > 5 ? 5 : totalPages); let index = index"
+                        class="page-item"
+                        [class.active]="currentPage === index + 1">
+                        <a class="page-link" (click)="onPageChange(index + 1)">{{index + 1}}</a>
+                    </li>
+                    <li *ngIf="totalPages > 5" class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="currentPage < totalPages && onPageChange(currentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

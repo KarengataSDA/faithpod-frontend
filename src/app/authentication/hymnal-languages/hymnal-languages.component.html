@@ -1,0 +1,135 @@
+<div class="page-wrapper">
+  <div class="page-header d-print-none">
+    <div class="container-xl">
+      <div class="row g-2 align-items-center">
+        <div class="col">
+          <div class="page-pretitle">Hymnal</div>
+          <h2 class="page-title">Hymn Languages</h2>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary" (click)="openCreate()">
+            <i class="zmdi zmdi-plus me-1"></i> Add Language
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container-xl">
+
+      <!-- Admin Nav -->
+      <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/tenants" routerLinkActive="active">
+            <i class="zmdi zmdi-accounts-alt me-2"></i>Tenants
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/plans" routerLinkActive="active">
+            <i class="zmdi zmdi-view-list-alt me-2"></i>Subscription Plans
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="/hymnal/languages" routerLinkActive="active">
+            <i class="zmdi zmdi-music me-2"></i>Hymnal
+          </a>
+        </li>
+      </ul>
+
+      <!-- Create / Edit Form -->
+      <div class="card mb-4" *ngIf="showForm">
+        <div class="card-header">
+          <h3 class="card-title">{{ editingId ? 'Edit Language' : 'New Language' }}</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="name" placeholder="e.g. English" />
+                <div class="text-danger small mt-1" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                  Name is required.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" formControlName="description" placeholder="Optional description" />
+              </div>
+              <div class="col-12">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" formControlName="is_active" id="isActive" />
+                  <label class="form-check-label" for="isActive">Active</label>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+              <button type="submit" class="btn btn-success" [disabled]="form.invalid || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
+                {{ editingId ? 'Update' : 'Create' }}
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="cancelForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Languages Table -->
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="text-center py-5" *ngIf="isLoading">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+
+          <div class="text-center py-5 text-muted" *ngIf="!isLoading && languages.length === 0">
+            No hymn languages found. Add one to get started.
+          </div>
+
+          <div class="table-responsive" *ngIf="!isLoading && languages.length > 0">
+            <table class="table table-vcenter card-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Hymns</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let lang of languages; let i = index">
+                  <td class="text-muted">{{ i + 1 }}</td>
+                  <td class="fw-semibold">{{ lang.name }}</td>
+                  <td class="text-muted">{{ lang.description || '—' }}</td>
+                  <td>
+                    <span class="badge bg-primary">{{ lang.hymns_count ?? 0 }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" [class.bg-success]="lang.is_active" [class.bg-secondary]="!lang.is_active">
+                      {{ lang.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <button class="btn btn-sm btn-outline-primary" (click)="viewHymns(lang)" title="View Hymns">
+                        <i class="zmdi zmdi-format-queue-music"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-warning" (click)="openEdit(lang)" title="Edit">
+                        <i class="zmdi zmdi-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" (click)="delete(lang)" title="Delete">
+                        <i class="zmdi zmdi-delete"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
