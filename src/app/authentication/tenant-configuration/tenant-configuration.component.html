@@ -56,15 +56,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Password</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('mail_password') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="password"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('mail_password')">
+                <input *ngIf="!isFieldVisible('mail_password')" type="password" class="form-control" formControlName="password" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('mail_password')" type="text" class="form-control" formControlName="password" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('mail_password')">
                   <i class="zmdi" [ngClass]="isFieldVisible('mail_password') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
@@ -98,15 +92,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Consumer Key</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('mpesa_consumer_key') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="consumer_key"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('mpesa_consumer_key')">
+                <input *ngIf="!isFieldVisible('mpesa_consumer_key')" type="password" class="form-control" formControlName="consumer_key" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('mpesa_consumer_key')" type="text" class="form-control" formControlName="consumer_key" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('mpesa_consumer_key')">
                   <i class="zmdi" [ngClass]="isFieldVisible('mpesa_consumer_key') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
@@ -115,15 +103,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Consumer Secret</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('mpesa_consumer_secret') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="consumer_secret"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('mpesa_consumer_secret')">
+                <input *ngIf="!isFieldVisible('mpesa_consumer_secret')" type="password" class="form-control" formControlName="consumer_secret" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('mpesa_consumer_secret')" type="text" class="form-control" formControlName="consumer_secret" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('mpesa_consumer_secret')">
                   <i class="zmdi" [ngClass]="isFieldVisible('mpesa_consumer_secret') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
@@ -136,15 +118,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Passkey</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('mpesa_passkey') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="passkey"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('mpesa_passkey')">
+                <input *ngIf="!isFieldVisible('mpesa_passkey')" type="password" class="form-control" formControlName="passkey" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('mpesa_passkey')" type="text" class="form-control" formControlName="passkey" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('mpesa_passkey')">
                   <i class="zmdi" [ngClass]="isFieldVisible('mpesa_passkey') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
@@ -182,15 +158,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Partner ID</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('sms_partner_id') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="partner_id"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('sms_partner_id')">
+                <input *ngIf="!isFieldVisible('sms_partner_id')" type="password" class="form-control" formControlName="partner_id" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('sms_partner_id')" type="text" class="form-control" formControlName="partner_id" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('sms_partner_id')">
                   <i class="zmdi" [ngClass]="isFieldVisible('sms_partner_id') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
@@ -199,15 +169,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">API Key</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('sms_api_key') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="api_key"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('sms_api_key')">
+                <input *ngIf="!isFieldVisible('sms_api_key')" type="password" class="form-control" formControlName="api_key" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('sms_api_key')" type="text" class="form-control" formControlName="api_key" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('sms_api_key')">
                   <i class="zmdi" [ngClass]="isFieldVisible('sms_api_key') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
@@ -241,15 +205,9 @@
             <div class="col-md-12 mb-3">
               <label class="form-label">API Key</label>
               <div class="input-group">
-                <input
-                  [type]="isFieldVisible('hashlix_api_key') ? 'text' : 'password'"
-                  class="form-control"
-                  formControlName="api_key"
-                  placeholder="••••••••">
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  (click)="toggleFieldVisibility('hashlix_api_key')">
+                <input *ngIf="!isFieldVisible('hashlix_api_key')" type="password" class="form-control" formControlName="api_key" placeholder="••••••••">
+                <input *ngIf="isFieldVisible('hashlix_api_key')" type="text" class="form-control" formControlName="api_key" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" (click)="toggleFieldVisibility('hashlix_api_key')">
                   <i class="zmdi" [ngClass]="isFieldVisible('hashlix_api_key') ? 'zmdi-eye-off' : 'zmdi-eye'"></i>
                 </button>
               </div>
