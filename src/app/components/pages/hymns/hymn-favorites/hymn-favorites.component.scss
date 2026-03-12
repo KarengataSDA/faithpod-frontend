@@ -1,0 +1,11 @@
+.card.border {
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+}
+
+.fe-heart-off::before {
+    content: "\e9da"; // fallback if icon doesn't exist
+}

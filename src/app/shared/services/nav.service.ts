@@ -272,6 +272,42 @@ export class NavService implements OnDestroy {
       ]
     },
     {
+      headTitle: 'Hymns',
+      permissions: []
+    },
+    {
+      title: 'Hymns',
+      selected: false,
+      icon: 'music',
+      type: 'sub',
+      Menusub: true,
+      active: false,
+      permissions: [],
+      children: [
+        {
+          path: '/pages/hymns',
+          title: 'All Hymns',
+          type: 'link',
+          selected: false,
+          permissions: []
+        },
+        {
+          path: '/pages/hymns/languages',
+          title: 'Languages',
+          type: 'link',
+          selected: false,
+          permissions: []
+        },
+        {
+          path: '/pages/hymns/favorites',
+          title: 'My Favorites',
+          type: 'link',
+          selected: false,
+          permissions: []
+        }
+      ]
+    },
+    {
       headTitle: 'Settings',
       permissions: ['view roles', 'edit members']
     },

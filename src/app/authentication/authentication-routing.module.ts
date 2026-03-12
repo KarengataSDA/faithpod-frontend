@@ -13,6 +13,8 @@ import { TenantViewComponent } from './tenant-view/tenant-view.component';
 import { TenantEditComponent } from './tenant-edit/tenant-edit.component';
 import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
 import { SubscriptionPlansComponent } from './subscription-plans/subscription-plans.component';
+import { HymnalLanguagesComponent } from './hymnal-languages/hymnal-languages.component';
+import { HymnalHymnsComponent } from './hymnal-hymns/hymnal-hymns.component';
 
 const routes: Routes = [
   {
@@ -31,7 +33,11 @@ const routes: Routes = [
   { path: 'tenants', component: TenantManagementComponent },
   { path: 'tenants/view/:id', component: TenantViewComponent },
   { path: 'tenants/edit/:id', component: TenantEditComponent },
-  { path: 'plans', component: SubscriptionPlansComponent }
+  { path: 'plans', component: SubscriptionPlansComponent },
+
+  // Global Hymnal management (central admin — shared across all tenants)
+  { path: 'hymnal/languages', component: HymnalLanguagesComponent },
+  { path: 'hymnal/hymns', component: HymnalHymnsComponent },
 ];
 
 @NgModule({

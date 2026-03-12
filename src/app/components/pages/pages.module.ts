@@ -51,6 +51,14 @@ import { AnnouncementsComponent } from './announcements/announcements/announceme
 import { CreateAnnouncementComponent } from './announcements/create-announcement/create-announcement.component';
 import { ViewAnnouncementComponent } from './announcements/view-announcement/view-announcement.component';
 import { EditAnnouncementComponent } from './announcements/edit-announcement/edit-announcement.component';
+import { HymnLanguagesComponent } from './hymns/hymn-languages/hymn-languages.component';
+import { CreateHymnLanguageComponent } from './hymns/create-hymn-language/create-hymn-language.component';
+import { EditHymnLanguageComponent } from './hymns/edit-hymn-language/edit-hymn-language.component';
+import { HymnsListComponent } from './hymns/hymns-list/hymns-list.component';
+import { ViewHymnComponent } from './hymns/view-hymn/view-hymn.component';
+import { CreateHymnComponent } from './hymns/create-hymn/create-hymn.component';
+import { EditHymnComponent } from './hymns/edit-hymn/edit-hymn.component';
+import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.component';
 
 
 
@@ -102,6 +110,15 @@ import { EditAnnouncementComponent } from './announcements/edit-announcement/edi
     CreateAnnouncementComponent,
     ViewAnnouncementComponent,
     EditAnnouncementComponent,
+
+    HymnLanguagesComponent,
+    CreateHymnLanguageComponent,
+    EditHymnLanguageComponent,
+    HymnsListComponent,
+    ViewHymnComponent,
+    CreateHymnComponent,
+    EditHymnComponent,
+    HymnFavoritesComponent
 
 
 
