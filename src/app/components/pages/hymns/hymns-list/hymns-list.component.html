@@ -2,9 +2,6 @@
 
 <div class="row mb-3">
     <div class="col-md-6">
-        <a class="btn btn-primary me-2" routerLink="/pages/hymns/create" *appHasPermission="'create hymns'">
-            <i class="fe fe-plus"></i> Add Hymn
-        </a>
         <a class="btn btn-outline-primary me-2" routerLink="/pages/hymns/languages">
             <i class="fe fe-globe"></i> Languages
         </a>
@@ -66,12 +63,6 @@
                             <a routerLink="/pages/hymns/view/{{hymn.id}}" class="btn btn-sm btn-outline-primary me-1" title="View">
                                 <i class="fe fe-eye"></i>
                             </a>
-                            <a routerLink="/pages/hymns/edit/{{hymn.id}}" class="btn btn-sm btn-outline-warning me-1" title="Edit" *appHasPermission="'edit hymns'">
-                                <i class="fe fe-edit"></i>
-                            </a>
-                            <button class="btn btn-sm btn-outline-danger" (click)="deleteHymn(hymn.id)" title="Delete" *appHasPermission="'delete hymns'">
-                                <i class="fe fe-trash-2"></i>
-                            </button>
                         </td>
                     </tr>
                 </tbody>

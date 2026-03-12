@@ -21,12 +21,6 @@
                     <button *ngIf="currentUser$ | async" class="btn btn-sm me-1" [class.btn-danger]="hymn.is_favorite" [class.btn-outline-danger]="!hymn.is_favorite" (click)="toggleFavorite()">
                         <i class="fe fe-heart"></i> {{hymn.is_favorite ? 'Favorited' : 'Add to Favorites'}}
                     </button>
-                    <a routerLink="/pages/hymns/edit/{{hymn.id}}" class="btn btn-sm btn-outline-warning" *appHasPermission="'edit hymns'">
-                        <i class="fe fe-edit"></i> Edit
-                    </a>
-                    <button class="btn btn-sm btn-outline-danger ms-1" (click)="deleteHymn()" *appHasPermission="'delete hymns'">
-                        <i class="fe fe-trash-2"></i> Delete
-                    </button>
                 </div>
             </div>
             <div class="card-body">

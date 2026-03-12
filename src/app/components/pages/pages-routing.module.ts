@@ -108,14 +108,10 @@ const routes: Routes = [
       {path: 'announcements/view/:announcementId', title: "View Announcement", component: ViewAnnouncementComponent},
       {path: 'announcements/edit/:id', title: "Edit Announcement", component: EditAnnouncementComponent},
 
-        // Hymns Routes - specific routes first, then generic
-      {path: 'hymns/languages/create', title: "Create Language", component: CreateHymnLanguageComponent, canActivate: [AuthGuard], data: { permission: 'create hymn languages'}},
-      {path: 'hymns/languages/edit/:id', title: "Edit Language", component: EditHymnLanguageComponent, canActivate: [AuthGuard], data: { permission: 'edit hymn language'}},
+        // Hymns Routes (read-only on tenant; create/edit/delete is central admin only)
       {path: 'hymns/languages', title: "Hymn Languages", component: HymnLanguagesComponent},
       {path: 'hymns/language/:languageId', title: "Hymns by Language", component: HymnsListComponent},
       {path: 'hymns/favorites', title: "Favorite Hymns", component: HymnFavoritesComponent, canActivate: [AuthGuard]},
-      {path: 'hymns/create', title: "Create Hymn", component: CreateHymnComponent, canActivate: [AuthGuard], data: { permission: 'create hymns'}},
-      {path: 'hymns/edit/:id', title: "Edit Hymn", component: EditHymnComponent, canActivate: [AuthGuard], data: { permission: 'edit hymns'}},
       {path: 'hymns/view/:id', title: "View Hymn", component: ViewHymnComponent},
       {path: 'hymns', title: "Hymns", component: HymnsListComponent},
     ]
