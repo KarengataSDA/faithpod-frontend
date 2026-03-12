@@ -57,24 +57,6 @@ export class HymnService {
     );
   }
 
-  createLanguage(data: any): Observable<HymnLanguage> {
-    return this.http.post<HymnLanguage>(this.baseUrl + '/hymn-languages', data).pipe(
-      tap(() => this.invalidateLanguagesCache())
-    );
-  }
-
-  updateLanguage(id: number, data: any): Observable<HymnLanguage> {
-    return this.http.put<HymnLanguage>(this.baseUrl + '/hymn-languages/' + id, data).pipe(
-      tap(() => this.invalidateLanguagesCache())
-    );
-  }
-
-  deleteLanguage(id: number): Observable<void> {
-    return this.http.delete<void>(this.baseUrl + '/hymn-languages/' + id).pipe(
-      tap(() => this.invalidateLanguagesCache())
-    );
-  }
-
   private invalidateLanguagesCache(): void {
     this.cacheService.clearPattern(new RegExp(`^${this.LANGUAGES_CACHE_KEY}`));
     this.localStorageService.remove(this.LANGUAGES_CACHE_KEY);
@@ -120,25 +102,7 @@ export class HymnService {
     return this.http.get<Hymn>(this.baseUrl + '/hymns/' + id);
   }
 
-  createHymn(data: any): Observable<Hymn> {
-    return this.http.post<Hymn>(this.baseUrl + '/hymns', data).pipe(
-      tap(() => this.invalidateHymnsCache())
-    );
-  }
-
-  updateHymn(id: number, data: any): Observable<Hymn> {
-    return this.http.put<Hymn>(this.baseUrl + '/hymns/' + id, data).pipe(
-      tap(() => this.invalidateHymnsCache())
-    );
-  }
-
-  deleteHymn(id: number): Observable<void> {
-    return this.http.delete<void>(this.baseUrl + '/hymns/' + id).pipe(
-      tap(() => this.invalidateHymnsCache())
-    );
-  }
-
-  private invalidateHymnsCache(): void {
+  invalidateHymnsCache(): void {
     this.cacheService.clearPattern(new RegExp(`^${this.HYMNS_CACHE_KEY}`));
   }
 

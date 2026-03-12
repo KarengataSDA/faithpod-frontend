@@ -5,7 +5,7 @@
         <a class="btn btn-outline-primary me-2" routerLink="/pages/hymns/languages">
             <i class="fe fe-globe"></i> Languages
         </a>
-        <a class="btn btn-outline-danger" routerLink="/pages/hymns/favorites" *ngIf="authService.isLoggedIn()">
+        <a class="btn btn-outline-danger" routerLink="/pages/hymns/favorites" *ngIf="currentUser$ | async">
             <i class="fe fe-heart"></i> My Favorites
         </a>
     </div>
@@ -57,7 +57,7 @@
                             <span class="badge bg-secondary">{{hymn.language?.name}}</span>
                         </td>
                         <td class="text-center">
-                            <button *ngIf="authService.isLoggedIn()" class="btn btn-sm me-1" [class.btn-danger]="hymn.is_favorite" [class.btn-outline-danger]="!hymn.is_favorite" (click)="toggleFavorite(hymn)" title="Toggle Favorite">
+                            <button *ngIf="currentUser$ | async" class="btn btn-sm me-1" [class.btn-danger]="hymn.is_favorite" [class.btn-outline-danger]="!hymn.is_favorite" (click)="toggleFavorite(hymn)" title="Toggle Favorite">
                                 <i class="fe fe-heart"></i>
                             </button>
                             <a routerLink="/pages/hymns/view/{{hymn.id}}" class="btn btn-sm btn-outline-primary me-1" title="View">

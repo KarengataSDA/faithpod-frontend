@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Hymn, HymnLanguage } from 'src/app/shared/models/hymn';
+import { User } from 'src/app/shared/models/user';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { HymnService } from 'src/app/shared/services/hymn.service';
 import Swal from 'sweetalert2';
@@ -21,6 +22,7 @@ export class HymnsListComponent implements OnInit, OnDestroy {
   languages: HymnLanguage[] = [];
   selectedLanguage: HymnLanguage | null = null;
   languageId: number | null = null;
+  currentUser$: Observable<User | null>;
 
   // Pagination
   pageSize = 10;
@@ -34,9 +36,13 @@ export class HymnsListComponent implements OnInit, OnDestroy {
     public hymnService: HymnService,
     public authService: AuthService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.currentUser$ = this.authService.currentUser$;
+  }
 
   ngOnInit(): void {
+    // Clear hymns cache so logged-in members always get correct is_favorite values
+    this.hymnService.invalidateHymnsCache();
     this.loadLanguages();
 
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
@@ -163,33 +169,6 @@ export class HymnsListComponent implements OnInit, OnDestroy {
           });
         }
       });
-  }
-
-  deleteHymn(id: number): void {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'This hymn will be deleted!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.hymnService.deleteHymn(id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-            next: () => {
-              Swal.fire('Deleted!', 'Hymn has been deleted.', 'success');
-              this.hymns = this.hymns.filter(h => h.id !== id);
-              this.applyFilter();
-            },
-            error: () => {
-              Swal.fire('Error!', 'Failed to delete hymn.', 'error');
-            }
-          });
-      }
-    });
   }
 
   ngOnDestroy(): void {

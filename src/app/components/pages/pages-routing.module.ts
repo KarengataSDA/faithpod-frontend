@@ -42,13 +42,9 @@ import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboar
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
-import { CreateHymnLanguageComponent } from './hymns/create-hymn-language/create-hymn-language.component';
-import { EditHymnLanguageComponent } from './hymns/edit-hymn-language/edit-hymn-language.component';
 import { HymnLanguagesComponent } from './hymns/hymn-languages/hymn-languages.component';
 import { HymnsListComponent } from './hymns/hymns-list/hymns-list.component';
 import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.component';
-import { CreateHymnComponent } from './hymns/create-hymn/create-hymn.component';
-import { EditHymnComponent } from './hymns/edit-hymn/edit-hymn.component';
 import { ViewHymnComponent } from './hymns/view-hymn/view-hymn.component';
 
 

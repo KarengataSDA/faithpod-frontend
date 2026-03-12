@@ -86,34 +86,6 @@ export class ViewHymnComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteHymn(): void {
-    if (!this.hymn) return;
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'This hymn will be deleted!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed && this.hymn) {
-        this.hymnService.deleteHymn(this.hymn.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-            next: () => {
-              Swal.fire('Deleted!', 'Hymn has been deleted.', 'success');
-              this.router.navigate(['/pages/hymns']);
-            },
-            error: () => {
-              Swal.fire('Error!', 'Failed to delete hymn.', 'error');
-            }
-          });
-      }
-    });
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
