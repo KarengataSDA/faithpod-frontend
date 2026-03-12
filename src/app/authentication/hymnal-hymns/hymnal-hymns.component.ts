@@ -123,8 +123,19 @@ export class HymnalHymnsComponent implements OnInit, OnDestroy {
     this.updatePage();
   }
 
-  get pageRange(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  get visiblePages(): (number | null)[] {
+    if (this.totalPages <= 7) {
+      return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | null)[] = [];
+    const left = Math.max(2, this.currentPage - 1);
+    const right = Math.min(this.totalPages - 1, this.currentPage + 1);
+    pages.push(1);
+    if (left > 2) pages.push(null);
+    for (let i = left; i <= right; i++) pages.push(i);
+    if (right < this.totalPages - 1) pages.push(null);
+    pages.push(this.totalPages);
+    return pages;
   }
 
   openCreate(): void {
