@@ -133,6 +133,7 @@ export class SubscriptionPlansComponent implements OnInit, OnDestroy {
           headers: { 'Authorization': `Bearer ${this.authToken}` }
         });
 
+    const isEditing = !!this.editingPlan;
     req$
       .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
       .subscribe({
@@ -140,11 +141,37 @@ export class SubscriptionPlansComponent implements OnInit, OnDestroy {
           this.isSaving = false;
           this.showForm = false;
           this.editingPlan = null;
-          this.successMessage = this.editingPlan ? 'Plan updated.' : 'Plan created.';
+          this.successMessage = isEditing ? 'Plan updated.' : 'Plan created.';
           this.loadPlans();
         },
         error: () => { this.isSaving = false; }
       });
+  }
+
+  deletePlan(plan: SubscriptionPlan): void {
+    Swal.fire({
+      title: 'Delete Plan?',
+      text: `"${plan.name}" will be permanently deleted.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete',
+      confirmButtonColor: '#d33',
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      this.http
+        .delete(`${this.apiUrl}/plans/${plan.id}`, {
+          headers: { 'Authorization': `Bearer ${this.authToken}` }
+        })
+        .pipe(takeUntil(this.destroy$), catchError(this.handleError.bind(this)))
+        .subscribe({
+          next: () => {
+            this.plans = this.plans.filter(p => p.id !== plan.id);
+            this.successMessage = `Plan "${plan.name}" deleted.`;
+          },
+          error: () => {}
+        });
+    });
   }
 
   toggleActive(plan: SubscriptionPlan): void {
