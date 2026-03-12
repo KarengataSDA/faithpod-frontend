@@ -43,8 +43,33 @@
 
       <!-- Tenant Details with Sidebar Navigation -->
       <div *ngIf="!isLoading && tenant" class="row">
-        <!-- Sidebar Navigation -->
+
+        <!-- Sidebar -->
         <div class="col-md-3 mb-4">
+
+          <!-- Tenant Summary Card -->
+          <div class="card mb-3">
+            <div class="card-body text-center pb-3">
+              <!-- Avatar / Initials -->
+              <span class="avatar avatar-lg mb-3 rounded bg-primary text-white">
+                {{tenant.name ? tenant.name.charAt(0).toUpperCase() : '?'}}
+              </span>
+              <div class="fw-semibold">{{tenant.name}}</div>
+              <div class="mt-1">
+                <span class="badge" [ngClass]="getStatusBadgeClass(tenant.status)">
+                  {{getStatusLabel(tenant.status)}}
+                </span>
+              </div>
+              <div class="mt-2 small" *ngIf="tenant.domains && tenant.domains.length > 0">
+                <a [href]="'https://' + tenant.domains[0].domain" target="_blank">
+                  <i class="zmdi zmdi-globe me-1"></i>{{tenant.domains[0].domain}}
+                  <i class="zmdi zmdi-open-in-new ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Navigation -->
           <div class="card">
             <div class="list-group list-group-flush">
               <a
@@ -71,7 +96,6 @@
                 <i class="zmdi zmdi-settings me-2"></i>
                 Configuration
               </a>
-
             </div>
           </div>
         </div>
@@ -99,22 +123,38 @@
                     </div>
                   </div>
 
-                  <div class="col-md-4 mb-3" *ngIf="tenant.plan">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Access</label>
+                    <div>
+                      <span class="badge" [ngClass]="tenant.is_active ? 'bg-success' : 'bg-danger'">
+                        {{tenant.is_active ? 'Active' : 'Blocked'}}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold text-muted small">Plan</label>
-                    <p class="mb-0 fw-semibold">{{tenant.plan.name}}</p>
-                    <small class="text-muted">{{tenant.plan.billing_cycle | titlecase}} · {{tenant.plan.price | currency:'KES ':'symbol':'1.0-0'}}</small>
+                    <p class="mb-0 fw-semibold" *ngIf="tenant.plan">{{tenant.plan.name}}</p>
+                    <small class="text-muted" *ngIf="tenant.plan">{{tenant.plan.billing_cycle | titlecase}} · {{tenant.plan.price | currency:'KES ':'symbol':'1.0-0'}}</small>
+                    <p class="mb-0 text-muted" *ngIf="!tenant.plan">No plan assigned</p>
                   </div>
 
-                  <div class="col-md-4 mb-3" *ngIf="getExpiryDate()">
-                    <label class="form-label fw-bold text-muted small">
-                      {{tenant.status === 'trial' ? 'Trial Ends' : 'Subscription Ends'}}
-                    </label>
-                    <p class="mb-0 fw-semibold">{{getExpiryDate() | date: 'mediumDate'}}</p>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Trial Ends At</label>
+                    <p class="mb-0 fw-semibold" *ngIf="tenant.trial_ends_at">{{tenant.trial_ends_at | date: 'mediumDate'}}</p>
+                    <span *ngIf="!tenant.trial_ends_at" class="text-muted">—</span>
                   </div>
 
-                  <div class="col-md-4 mb-3" *ngIf="tenant.grace_ends_at">
-                    <label class="form-label fw-bold text-muted small text-warning">Grace Period Ends</label>
-                    <p class="mb-0 fw-semibold text-warning">{{tenant.grace_ends_at | date: 'mediumDate'}}</p>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Subscription Ends At</label>
+                    <p class="mb-0 fw-semibold" *ngIf="tenant.subscription_ends_at">{{tenant.subscription_ends_at | date: 'mediumDate'}}</p>
+                    <span *ngIf="!tenant.subscription_ends_at" class="text-muted">—</span>
+                  </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold text-muted small">Grace Period Ends</label>
+                    <p class="mb-0 fw-semibold text-warning" *ngIf="tenant.grace_ends_at">{{tenant.grace_ends_at | date: 'mediumDate'}}</p>
+                    <span *ngIf="!tenant.grace_ends_at" class="text-muted">—</span>
                   </div>
 
                   <div class="col-md-4 mb-3" *ngIf="tenant.suspended_at">
@@ -220,7 +260,7 @@
               </div>
             </div>
 
-            <!-- General Details Card -->
+            <!-- Tenant Information Card -->
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Tenant Information</h3>
@@ -232,7 +272,7 @@
                 <div class="row mb-4">
                   <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold text-muted small">Tenant ID</label>
-                    <p class="mb-0">{{tenant.id}}</p>
+                    <p class="mb-0"><code>{{tenant.id}}</code></p>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold text-muted small">Organization Name</label>
@@ -256,7 +296,7 @@
                     <label class="form-label fw-bold text-muted small">Domain</label>
                     <p class="mb-0">
                       <a *ngIf="tenant.domains && tenant.domains.length > 0"
-                         [href]="'http://' + tenant.domains[0].domain" target="_blank">
+                         [href]="'https://' + tenant.domains[0].domain" target="_blank">
                         {{tenant.domains[0].domain}}
                         <i class="zmdi zmdi-open-in-new ms-1"></i>
                       </a>
@@ -269,66 +309,6 @@
                       <code *ngIf="tenant.tenancy_db_name">{{tenant.tenancy_db_name}}</code>
                       <span *ngIf="!tenant.tenancy_db_name" class="text-muted">—</span>
                     </p>
-                  </div>
-                </div>
-
-                <hr>
-
-                <!-- Section: Subscription -->
-                <h6 class="text-muted text-uppercase small fw-bold mb-3">Subscription</h6>
-                <div class="row mb-4">
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold text-muted small">Status</label>
-                    <div>
-                      <span class="badge" [ngClass]="getStatusBadgeClass(tenant.status)">
-                        {{getStatusLabel(tenant.status)}}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold text-muted small">Plan</label>
-                    <p class="mb-0" *ngIf="tenant.plan">
-                      <strong>{{tenant.plan.name}}</strong>
-                      <br>
-                      <small class="text-muted">
-                        {{tenant.plan.billing_cycle | titlecase}}
-                        <span *ngIf="tenant.plan.max_members"> · {{tenant.plan.max_members | number}} max members</span>
-                      </small>
-                    </p>
-                    <span *ngIf="!tenant.plan" class="text-muted">No plan assigned</span>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold text-muted small">Access</label>
-                    <div>
-                      <span class="badge" [ngClass]="tenant.is_active ? 'bg-success' : 'bg-danger'">
-                        {{tenant.is_active ? 'Active' : 'Blocked'}}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold text-muted small">Trial Ends At</label>
-                    <p class="mb-0" *ngIf="tenant.trial_ends_at">
-                      {{tenant.trial_ends_at | date: 'mediumDate'}}
-                    </p>
-                    <span *ngIf="!tenant.trial_ends_at" class="text-muted">—</span>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold text-muted small">Subscription Ends At</label>
-                    <p class="mb-0" *ngIf="tenant.subscription_ends_at">
-                      {{tenant.subscription_ends_at | date: 'mediumDate'}}
-                    </p>
-                    <span *ngIf="!tenant.subscription_ends_at" class="text-muted">—</span>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold text-muted small">Grace Period Ends</label>
-                    <p class="mb-0 text-warning fw-semibold" *ngIf="tenant.grace_ends_at">
-                      {{tenant.grace_ends_at | date: 'mediumDate'}}
-                    </p>
-                    <span *ngIf="!tenant.grace_ends_at" class="text-muted">—</span>
-                  </div>
-                  <div class="col-md-4 mb-3" *ngIf="tenant.suspended_at">
-                    <label class="form-label fw-bold text-muted small text-danger">Suspended At</label>
-                    <p class="mb-0 text-danger fw-semibold">{{tenant.suspended_at | date: 'mediumDate'}}</p>
                   </div>
                 </div>
 

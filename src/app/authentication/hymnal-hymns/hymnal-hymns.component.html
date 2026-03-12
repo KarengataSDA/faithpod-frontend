@@ -3,10 +3,9 @@
     <div class="container-xl">
       <div class="row g-2 align-items-center">
         <div class="col">
-          <div class="page-pretitle">Hymnal</div>
-          <h2 class="page-title">
-            Hymns
-            <span class="text-muted fw-normal fs-4" *ngIf="selectedLanguageName">— {{ selectedLanguageName }}</span>
+          <div class="page-pretitle mb-4">Hymnal</div>
+          <h2 class="page-title" *ngIf="selectedLanguageName">
+            {{ selectedLanguageName }} - Hymns
           </h2>
         </div>
         <div class="col-auto d-flex gap-2">
@@ -70,19 +69,19 @@
 
       <!-- Filters -->
       <div class="card mb-3">
-        <div class="card-body py-2">
+        <div class="card-body py-5">
           <div class="row g-2 align-items-center">
             <div class="col-md-4">
-              <select class="form-select form-select-sm" [(ngModel)]="selectedLanguageId" (change)="onLanguageChange()">
+              <select class="form-select form-select-md" [(ngModel)]="selectedLanguageId" (change)="onLanguageChange()">
                 <option [ngValue]="null">All Languages</option>
                 <option *ngFor="let lang of languages" [ngValue]="lang.id">{{ lang.name }}</option>
               </select>
             </div>
             <div class="col-md-5">
-              <input type="text" class="form-control form-control-sm" placeholder="Search by title, number or author..."
+              <input type="text" class="form-control form-control-md" placeholder="Search by title, number or author..."
                 (input)="onSearchChange($event)" />
             </div>
-            <div class="col-md-3 text-end text-muted small">
+            <div class="col-md-3 text-end text-muted">
               {{ filteredHymns.length }} hymn{{ filteredHymns.length !== 1 ? 's' : '' }}
             </div>
           </div>
@@ -91,7 +90,7 @@
 
       <!-- Hymns Table -->
       <div class="card">
-        <div class="card-body p-0">
+        <div class="card-body p-5">
           <div class="text-center py-5" *ngIf="isLoading">
             <div class="spinner-border text-primary" role="status"></div>
           </div>
@@ -106,7 +105,6 @@
                 <tr>
                   <th style="width:80px">#</th>
                   <th>Title</th>
-                  <th>Language</th>
                   <th>Author</th>
                   <th class="text-end">Actions</th>
                 </tr>
@@ -115,11 +113,7 @@
                 <tr *ngFor="let hymn of paginatedHymns">
                   <td class="fw-bold text-muted">{{ hymn.hymn_number }}</td>
                   <td class="fw-semibold">{{ hymn.title }}</td>
-                  <td>
-                    <span class="badge bg-secondary-lt">
-                      {{ hymn.language?.name ?? '—' }}
-                    </span>
-                  </td>
+                
                   <td class="text-muted">{{ hymn.author || '—' }}</td>
                   <td class="text-end">
                     <div class="d-flex gap-1 justify-content-end">
