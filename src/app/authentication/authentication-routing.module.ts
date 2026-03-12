@@ -15,6 +15,7 @@ import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
 import { SubscriptionPlansComponent } from './subscription-plans/subscription-plans.component';
 import { HymnalLanguagesComponent } from './hymnal-languages/hymnal-languages.component';
 import { HymnalHymnsComponent } from './hymnal-hymns/hymnal-hymns.component';
+import { CentralAdminLayoutComponent } from './central-admin-layout/central-admin-layout.component';
 
 const routes: Routes = [
   {
@@ -29,15 +30,19 @@ const routes: Routes = [
       { path: 'verification-notice', component: VerificationNoticeComponent }
     ]
   },
-  // Central Admin routes (accessible only on root domain)
-  { path: 'tenants', component: TenantManagementComponent },
-  { path: 'tenants/view/:id', component: TenantViewComponent },
-  { path: 'tenants/edit/:id', component: TenantEditComponent },
-  { path: 'plans', component: SubscriptionPlansComponent },
-
-  // Global Hymnal management (central admin — shared across all tenants)
-  { path: 'hymnal/languages', component: HymnalLanguagesComponent },
-  { path: 'hymnal/hymns', component: HymnalHymnsComponent },
+  // Central Admin routes (accessible only on root domain) — wrapped in sidebar layout
+  {
+    path: '',
+    component: CentralAdminLayoutComponent,
+    children: [
+      { path: 'tenants', component: TenantManagementComponent },
+      { path: 'tenants/view/:id', component: TenantViewComponent },
+      { path: 'tenants/edit/:id', component: TenantEditComponent },
+      { path: 'plans', component: SubscriptionPlansComponent },
+      { path: 'hymnal/languages', component: HymnalLanguagesComponent },
+      { path: 'hymnal/hymns', component: HymnalHymnsComponent },
+    ]
+  },
 ];
 
 @NgModule({

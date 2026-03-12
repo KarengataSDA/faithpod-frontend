@@ -11,10 +11,6 @@
             <span *ngIf="!showCreateForm">Create Tenant</span>
             <span *ngIf="showCreateForm">Cancel</span>
           </button>
-          <button class="btn btn-secondary ms-2" (click)="logout()">
-            <i class="zmdi zmdi-power me-2"></i>
-            Logout
-          </button>
         </div>
       </div>
     </div>
@@ -22,25 +18,6 @@
 
   <div class="page-body">
     <div class="container-xl">
-
-      <!-- Admin Nav -->
-      <ul class="nav nav-tabs mb-4">
-        <li class="nav-item">
-          <a class="nav-link active" routerLink="/tenants" routerLinkActive="active">
-            <i class="zmdi zmdi-accounts-alt me-2"></i>Tenants
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/plans" routerLinkActive="active">
-            <i class="zmdi zmdi-view-list-alt me-2"></i>Subscription Plans
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/hymnal/languages" routerLinkActive="active">
-            <i class="zmdi zmdi-music me-2"></i>Hymnal
-          </a>
-        </li>
-      </ul>
 
       <!-- Success Message -->
       <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">

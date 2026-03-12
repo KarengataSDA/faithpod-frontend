@@ -1,0 +1,55 @@
+<div class="admin-layout">
+
+  <!-- Left Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/images/brand/faithpod-logo.png" alt="FaithPod" class="sidebar-logo" />
+      <span>FaithPod</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/tenants" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+        <i class="zmdi zmdi-accounts-alt"></i>
+        <span>Tenants</span>
+      </a>
+      <a routerLink="/plans" routerLinkActive="active">
+        <i class="zmdi zmdi-view-list-alt"></i>
+        <span>Subscription Plans</span>
+      </a>
+      <a routerLink="/hymnal/languages" [class.active]="isHymnalActive()">
+        <i class="zmdi zmdi-collection-music"></i>
+        <span>Hymnal</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-outline-primary btn-sm w-100" (click)="logout()">
+        <i class="zmdi zmdi-power me-2"></i>Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Right: header + content -->
+  <div class="admin-main">
+
+    <!-- Top Header Bar -->
+    <header class="admin-header">
+      <div class="admin-header-title">Central Admin</div>
+      <div class="admin-header-actions">
+        <div class="admin-user" *ngIf="adminInitials">
+          <div class="admin-avatar" [title]="adminName">{{ adminInitials }}</div>
+        </div>
+        <button class="btn btn-sm btn-outline-primary ms-3" (click)="logout()">
+          <i class="zmdi zmdi-power me-1"></i>Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="admin-content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+
+</div>

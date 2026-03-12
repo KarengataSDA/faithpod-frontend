@@ -20,6 +20,7 @@ import { AcceptInviteComponent } from './accept-invite/accept-invite.component';
 import { SubscriptionPlansComponent } from './subscription-plans/subscription-plans.component';
 import { HymnalLanguagesComponent } from './hymnal-languages/hymnal-languages.component';
 import { HymnalHymnsComponent } from './hymnal-hymns/hymnal-hymns.component';
+import { CentralAdminLayoutComponent } from './central-admin-layout/central-admin-layout.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { HymnalHymnsComponent } from './hymnal-hymns/hymnal-hymns.component';
     SubscriptionPlansComponent,
     HymnalLanguagesComponent,
     HymnalHymnsComponent,
+    CentralAdminLayoutComponent,
   ],
   imports: [
     CommonModule,

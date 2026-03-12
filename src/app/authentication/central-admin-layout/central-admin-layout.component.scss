@@ -1,0 +1,142 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6fb;
+}
+
+.admin-sidebar {
+  width: 240px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid #e5e7eb;
+
+    .sidebar-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    span {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: 0.2px;
+    }
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 0.75rem;
+    overflow-y: auto;
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.6rem 1rem;
+      color: #6b7280;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      font-size: 0.875rem;
+      transition: background 0.15s, color 0.15s;
+
+      i {
+        font-size: 1.05rem;
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        background: #f3f4f6;
+        color: #111827;
+      }
+
+      &.active {
+        background: #eff6ff;
+        color: #175351;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+}
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-header {
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  .admin-header-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .admin-header-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .admin-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .admin-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #175351;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .admin-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+}
+
+.admin-content {
+  flex: 1;
+  overflow-y: auto;
+}
