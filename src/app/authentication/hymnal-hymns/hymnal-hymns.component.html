@@ -156,20 +156,28 @@
           </div>
 
           <!-- Pagination -->
-          <div class="d-flex justify-content-center py-3" *ngIf="totalPages > 1">
-            <nav>
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item" [class.disabled]="currentPage === 1">
-                  <button class="page-link" (click)="onPageChange(currentPage - 1)">‹</button>
+          <div class="d-flex justify-content-between align-items-center pt-3 px-3 pb-2" *ngIf="totalPages > 1">
+            <p class="mb-0">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} –
+              {{ (currentPage - 1) * pageSize + paginatedHymns.length }}
+              of {{ filteredHymns.length }} hymn{{ filteredHymns.length !== 1 ? 's' : '' }}
+            </p>
+            <ul class="pagination mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+              </li>
+              <ng-container *ngFor="let p of visiblePages">
+                <li class="page-item disabled" *ngIf="p === null">
+                  <span class="page-link">…</span>
                 </li>
-                <li class="page-item" *ngFor="let p of pageRange" [class.active]="p === currentPage">
-                  <button class="page-link" (click)="onPageChange(p)">{{ p }}</button>
+                <li class="page-item" *ngIf="p !== null" [class.active]="p === currentPage">
+                  <a class="page-link" (click)="onPageChange(p!)">{{ p }}</a>
                 </li>
-                <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <button class="page-link" (click)="onPageChange(currentPage + 1)">›</button>
-                </li>
-              </ul>
-            </nav>
+              </ng-container>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
