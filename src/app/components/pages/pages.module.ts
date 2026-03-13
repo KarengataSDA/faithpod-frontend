@@ -55,6 +55,10 @@ import { HymnLanguagesComponent } from './hymns/hymn-languages/hymn-languages.co
 import { HymnsListComponent } from './hymns/hymns-list/hymns-list.component';
 import { ViewHymnComponent } from './hymns/view-hymn/view-hymn.component';
 import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.component';
+import { BirthdayWishesComponent } from './messages/birthday-wishes/birthday-wishes.component';
+import { ViewMessageComponent } from './messages/view-message/view-message.component';
+import { SendMessageComponent } from './messages/send-message/send-message.component';
+import { MessagesComponent } from './messages/messages/messages.component';
 
 
 
@@ -101,6 +105,11 @@ import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.co
     MemberActivityLogComponent,
     BrandingComponent,
     AppSettingsComponent,
+
+    MessagesComponent,
+    SendMessageComponent,
+    ViewMessageComponent,
+    BirthdayWishesComponent,
 
     AnnouncementsComponent,
     CreateAnnouncementComponent,

@@ -1,0 +1,37 @@
+.avatar {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.avatar-lg {
+    width: 56px;
+    height: 56px;
+}
+
+.bg-primary-transparent {
+    background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.bg-success-transparent {
+    background-color: rgba(var(--success-rgb), 0.1);
+}
+
+.bg-info-transparent {
+    background-color: rgba(var(--info-rgb), 0.1);
+}
+
+.bg-warning-transparent {
+    background-color: rgba(var(--warning-rgb), 0.1);
+}
+
+.page-link {
+    cursor: pointer;
+}
+
+.table-sm td, .table-sm th {
+    padding: 0.5rem;
+}

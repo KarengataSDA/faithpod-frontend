@@ -272,6 +272,35 @@ export class NavService implements OnDestroy {
       ]
     },
     {
+      headTitle: 'Messages',
+      permissions: ['can_view_messages']
+    },
+    {
+      title: 'Messages',
+      selected: false,
+      icon: 'mail',
+      type: 'sub',
+      Menusub: true,
+      active: false,
+      permissions: ['can_view_messages'],
+      children: [
+        {
+          path: '/pages/messages',
+          title: 'Messages',
+          type: 'link',
+          selected: false,
+          permissions: ['can_view_messages']
+        },
+        {
+          path: '/pages/messages/birthday-wishes',
+          title: 'Birthday Wishes',
+          type: 'link',
+          selected: false,
+          permissions: ['can_view_messages']
+        }
+      ]
+    },
+    {
       headTitle: 'Hymns',
       permissions: []
     },

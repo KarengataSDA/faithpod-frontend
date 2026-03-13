@@ -1,0 +1,126 @@
+<app-page-header [title]="'Messages'" [items]="['Pages']" [active_item]="'Messages'"></app-page-header>
+
+<div class="card-footer text-end">
+    <a class="btn ms-2 btn-primary my-1" routerLink="/pages/messages/send">
+        <i class="fe fe-send"></i> Send Message
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-title">Sent Messages</div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search messages..." (input)="onSearchChange($event)">
+                        <button class="btn input-group-text bg-transparent text-muted">
+                            <i class="fe fe-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Loading State -->
+                <div *ngIf="isLoading" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="!isLoading && filteredMessages.length === 0" class="text-center py-5">
+                    <i class="fe fe-mail fs-1 text-muted"></i>
+                    <p class="text-muted mt-3">No messages found.</p>
+                    <a routerLink="/pages/messages/send" class="btn btn-primary">
+                        <i class="fe fe-send"></i> Send Your First Message
+                    </a>
+                </div>
+
+                <!-- Messages Table -->
+                <div *ngIf="!isLoading && filteredMessages.length > 0" class="table-responsive">
+                    <table class="table table-nowrap table-hover">
+                        <thead>
+                            <tr>
+                                <th>Subject / Message</th>
+                                <th>Channel</th>
+                                <th>Recipients</th>
+                                <th>Delivery</th>
+                                <th>Sent</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let message of paginatedMessages">
+                                <td>
+                                    <div class="fw-semibold">{{ message.subject || '(No Subject)' }}</div>
+                                    <small class="text-muted">{{ message.message | slice:0:50 }}{{ message.message.length > 50 ? '...' : '' }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge" [ngClass]="getChannelBadgeClass(message.channel)">
+                                        {{ message.channel | uppercase }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div>{{ getRecipientTypeLabel(message.recipient_type) }}</div>
+                                    <small class="text-muted">{{ message.total_recipients }} recipients</small>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <div class="progress mb-1" style="height: 6px;">
+                                            <div class="progress-bar bg-success"
+                                                 [style.width.%]="getDeliveryRate(message)">
+                                            </div>
+                                        </div>
+                                        <small>
+                                            <span class="text-success">{{ message.successful_sms + message.successful_emails }}</span>
+                                            /
+                                            <span class="text-danger">{{ message.failed_sms + message.failed_emails }}</span>
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>{{ message.sent_at | date:'mediumDate' }}</div>
+                                    <small class="text-muted">{{ message.sent_at | date:'shortTime' }}</small>
+                                    <div *ngIf="message.sender" class="small text-muted">
+                                        by {{ message.sender.first_name }} {{ message.sender.last_name }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a [routerLink]="['/pages/messages/view', message.id]" class="btn btn-sm btn-outline-primary">
+                                        <i class="fe fe-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div *ngIf="!isLoading && filteredMessages.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <p class="text-muted mb-0">
+                            Showing {{ (currentPage - 1) * pageSize + 1 }} to
+                            {{ (currentPage - 1) * pageSize + paginatedMessages.length }} of
+                            {{ totalLength }} messages
+                        </p>
+                    </div>
+                    <div>
+                        <ul class="pagination mb-0">
+                            <li class="page-item" [class.disabled]="currentPage === 1">
+                                <a class="page-link" (click)="currentPage > 1 && onPageChange(currentPage - 1)">Prev</a>
+                            </li>
+                            <li *ngFor="let page of [].constructor(totalPages); let index = index"
+                                class="page-item" [class.active]="currentPage === index + 1">
+                                <a class="page-link" (click)="onPageChange(index + 1)">{{ index + 1 }}</a>
+                            </li>
+                            <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                <a class="page-link" (click)="currentPage < totalPages && onPageChange(currentPage + 1)">Next</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

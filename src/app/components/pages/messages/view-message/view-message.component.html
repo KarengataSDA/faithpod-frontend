@@ -1,0 +1,156 @@
+<app-page-header [title]="'View Message'" [items]="['Pages', 'Messages']" [active_item]="'View Message'"></app-page-header>
+
+<div class="row">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && error" class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fe fe-alert-circle fs-1 text-danger"></i>
+                <p class="text-muted mt-3">{{ error }}</p>
+                <button class="btn btn-primary" (click)="goBack()">
+                    <i class="fe fe-arrow-left me-1"></i> Back to Messages
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Content -->
+    <ng-container *ngIf="!isLoading && !error && message">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-title mb-0">Message Details</div>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="goBack()">
+                        <i class="fe fe-arrow-left me-1"></i> Back
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- Subject (if email) -->
+                    <div *ngIf="message.subject" class="mb-4">
+                        <label class="form-label text-muted small">Subject</label>
+                        <h5 class="mb-0">{{ message.subject }}</h5>
+                    </div>
+
+                    <!-- Message Body -->
+                    <div class="mb-4">
+                        <label class="form-label text-muted small">Message Content</label>
+                        <div class="p-3 bg-light">
+                            <p class="mb-0" style="white-space: pre-wrap;">{{ message.message }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Metadata -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">Channel</label>
+                            <div>
+                                <span class="badge"
+                                      [ngClass]="{'bg-info': message.channel === 'sms', 'bg-primary': message.channel === 'email', 'bg-success': message.channel === 'both'}">
+                                    {{ channelLabel }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">Recipients</label>
+                            <div>{{ recipientTypeLabel }}</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">Sent At</label>
+                            <div>{{ message.sent_at | date:'medium' }}</div>
+                        </div>
+                        <div class="col-md-6 mb-3" *ngIf="message.sender">
+                            <label class="form-label text-muted small">Sent By</label>
+                            <div>{{ message.sender.first_name }} {{ message.sender.last_name }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delivery Statistics -->
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Delivery Statistics</div>
+                </div>
+                <div class="card-body">
+                    <!-- Overall Success Rate -->
+                    <div class="text-center mb-4">
+                        <div class="display-5 fw-bold text-{{ deliveryRate >= 80 ? 'success' : deliveryRate >= 50 ? 'warning' : 'danger' }}">
+                            {{ deliveryRate }}%
+                        </div>
+                        <div class="text-muted">Delivery Rate</div>
+                    </div>
+
+                    <div class="progress mb-4" style="height: 10px;">
+                        <div class="progress-bar bg-success" [style.width.%]="deliveryRate"></div>
+                    </div>
+
+                    <!-- Total Recipients -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <span class="text-muted">Total Recipients</span>
+                        <span class="fw-bold fs-5">{{ message.total_recipients }}</span>
+                    </div>
+
+                    <!-- SMS Statistics -->
+                    <div *ngIf="message.channel === 'sms' || message.channel === 'both'" class="mb-3">
+                        <h6 class="text-muted mb-2">
+                            <i class="fe fe-smartphone me-1"></i> SMS
+                        </h6>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-success">
+                                <i class="fe fe-check-circle me-1"></i> Successful
+                            </span>
+                            <span class="fw-semibold">{{ message.successful_sms }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-danger">
+                                <i class="fe fe-x-circle me-1"></i> Failed
+                            </span>
+                            <span class="fw-semibold">{{ message.failed_sms }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Email Statistics -->
+                    <div *ngIf="message.channel === 'email' || message.channel === 'both'">
+                        <h6 class="text-muted mb-2">
+                            <i class="fe fe-mail me-1"></i> Email
+                        </h6>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-success">
+                                <i class="fe fe-check-circle me-1"></i> Successful
+                            </span>
+                            <span class="fw-semibold">{{ message.successful_emails }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-danger">
+                                <i class="fe fe-x-circle me-1"></i> Failed
+                            </span>
+                            <span class="fw-semibold">{{ message.failed_emails }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Send Another Message -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <a routerLink="/pages/messages/send" class="btn btn-primary w-100">
+                        <i class="fe fe-send me-1"></i> Send Another Message
+                    </a>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
