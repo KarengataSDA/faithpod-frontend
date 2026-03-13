@@ -1,0 +1,6 @@
+.btn-group {
+    .btn-check:checked + .btn-outline-primary {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+}

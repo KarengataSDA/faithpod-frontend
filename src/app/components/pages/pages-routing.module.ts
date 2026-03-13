@@ -46,6 +46,10 @@ import { HymnLanguagesComponent } from './hymns/hymn-languages/hymn-languages.co
 import { HymnsListComponent } from './hymns/hymns-list/hymns-list.component';
 import { HymnFavoritesComponent } from './hymns/hymn-favorites/hymn-favorites.component';
 import { ViewHymnComponent } from './hymns/view-hymn/view-hymn.component';
+import { MessagesComponent } from './messages/messages/messages.component';
+import { ViewMessageComponent } from './messages/view-message/view-message.component';
+import { BirthdayWishesComponent } from './messages/birthday-wishes/birthday-wishes.component';
+import { SendMessageComponent } from './messages/send-message/send-message.component';
 
 
 
@@ -103,6 +107,12 @@ const routes: Routes = [
       {path: 'announcements/create', title: "Create Announcement", component: CreateAnnouncementComponent},
       {path: 'announcements/view/:announcementId', title: "View Announcement", component: ViewAnnouncementComponent},
       {path: 'announcements/edit/:id', title: "Edit Announcement", component: EditAnnouncementComponent},
+
+      {path: 'messages', title: " Messages", component: MessagesComponent, canActivate: [AuthGuard], data: { permission: 'view messages'}},
+      {path: 'messages/send', title: "Send Message", component: SendMessageComponent, canActivate: [AuthGuard], data: { permission: 'send messages'}},
+      {path: 'messages/birthday-wishes', title: "Birthday Wishes", component: BirthdayWishesComponent, canActivate: [AuthGuard], data: { permission: 'view messages'}},
+      {path: 'messages/view/:id', title: "View Message", component: ViewMessageComponent, canActivate: [AuthGuard], data: { permission: 'view messages'}},
+
 
         // Hymns Routes (read-only on tenant; create/edit/delete is central admin only)
       {path: 'hymns/languages', title: "Hymn Languages", component: HymnLanguagesComponent},
