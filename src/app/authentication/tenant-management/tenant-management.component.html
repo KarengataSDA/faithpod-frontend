@@ -204,7 +204,7 @@
                     <button class="btn btn-sm btn-primary me-1" (click)="openEditModal(tenant)" title="Edit">
                       <i class="zmdi zmdi-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-secondary" (click)="archiveTenant(tenant)" title="Archive"
+                    <button class="btn btn-sm btn-dark" (click)="archiveTenant(tenant)" title="Archive"
                       [disabled]="isUpdating || tenant.status === 'archived'">
                       <i class="zmdi zmdi-archive"></i>
                     </button>

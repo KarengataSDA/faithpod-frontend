@@ -11,6 +11,8 @@ import { SwitcherService } from '../../services/switcher.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from 'src/app/shared/models/user';
 import { Auth } from 'src/app/components/classes/auth';
+import { HttpClient } from '@angular/common/http';
+import { TenantService } from '../../services/tenant.service';
 
 @Component({
     selector: 'app-header',
@@ -23,17 +25,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public isCollapsed = true;
   user: User;
+  bannerUrl: string | null = null;
 
   constructor(
     private authService: AuthService,
     public navServices: NavService,
     private router: Router,
+    private http: HttpClient,
+    private tenantService: TenantService,
   ){ }
 
   ngOnInit(): void {
     Auth.userEmitter
       .pipe(takeUntil(this.destroy$))
-      .subscribe(user=> this.user = user)
+      .subscribe(user=> this.user = user);
+
+    const apiUrl = this.tenantService.getApiUrl();
+    this.http.get<{ logo_url: string | null; banner_url: string | null }>(
+      `${apiUrl}/tenant/theme-config`
+    ).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (config) => {
+        this.bannerUrl = config.banner_url;
+      }
+    });
   }
 
   toggleSidebar(){
