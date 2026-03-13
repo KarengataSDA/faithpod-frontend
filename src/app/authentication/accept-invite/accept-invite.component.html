@@ -1,77 +1,100 @@
-<div class="page">
-  <div class="page-single">
-    <div class="container">
-      <div class="row">
-        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto my-auto">
+<div class="page-style1 light-mode default-sidebar error-page1">
+  <div class="img-card bg-primary">
+    <div class="page">
+      <div class="container">
+        <div class="row">
+          <div class="col mx-auto">
+            <div class="row justify-content-center">
+              <div class="col-md-7 col-lg-5">
 
-          <div class="card-group mb-0">
-            <div class="card p-4">
-              <div class="card-body">
-
-                <!-- Logo / Church name -->
-                <div class="text-center mb-4">
-                  <h4 class="fw-bold mb-1">{{ tenantName || 'FaithPod' }}</h4>
-                  <p class="text-muted">You've been invited to join. Set your password to activate your account.</p>
-                </div>
-
-                <!-- Error banner -->
-                <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-3">
-                  {{ errorMessage }}
-                </div>
-
-                <!-- Form — only show when token is valid -->
-                <form *ngIf="token" (ngSubmit)="submit()" autocomplete="off">
-
-                  <!-- Password -->
-                  <div class="input-group mb-3">
-                    <input
-                      [type]="showPassword ? 'text' : 'password'"
-                      class="form-control"
-                      placeholder="New password"
-                      [(ngModel)]="password"
-                      name="password"
-                      required
-                      minlength="8"
-                    />
-                    <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
-                      <i [class]="showPassword ? 'fe fe-eye-off' : 'fe fe-eye'"></i>
-                    </button>
+                <div class="login-option">
+                  <div class="text-center title-style mb-6">
+                    <h1 class="mb-2">{{ tenantName || 'FaithPod' }}</h1>
+                    <hr />
+                    <p class="text-muted">
+                      You've been invited to join. Set your password to activate your account.
+                    </p>
                   </div>
 
-                  <!-- Confirm password -->
-                  <div class="input-group mb-4">
-                    <input
-                      [type]="showConfirmPassword ? 'text' : 'password'"
-                      class="form-control"
-                      placeholder="Confirm password"
-                      [(ngModel)]="passwordConfirm"
-                      name="passwordConfirm"
-                      required
-                    />
-                    <button type="button" class="btn btn-outline-secondary" (click)="toggleConfirmPassword()">
-                      <i [class]="showConfirmPassword ? 'fe fe-eye-off' : 'fe fe-eye'"></i>
-                    </button>
+                  <div class="alert alert-danger" *ngIf="errorMessage">
+                    {{ errorMessage }}
                   </div>
+                </div>
 
-                  <div class="row">
-                    <div class="col-12">
-                      <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
-                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
-                        {{ isLoading ? 'Activating...' : 'Activate Account' }}
-                      </button>
+                <div class="card card-group mb-0">
+                  <div class="card p-4">
+                    <div class="card-body">
+
+                      <form *ngIf="token" (ngSubmit)="submit()" autocomplete="off">
+
+                        <!-- Password -->
+                        <div class="input-group mb-4">
+                          <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                            <i class="zmdi zmdi-lock text-muted" aria-hidden="true"></i>
+                          </a>
+                          <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            class="input100 border-start-0 form-control ms-0"
+                            placeholder="New password"
+                            [(ngModel)]="password"
+                            name="password"
+                            required
+                            minlength="8"
+                          />
+                          <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+                            <i [class]="showPassword ? 'fe fe-eye-off' : 'fe fe-eye'"></i>
+                          </button>
+                        </div>
+
+                        <!-- Confirm password -->
+                        <div class="input-group mb-4">
+                          <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                            <i class="zmdi zmdi-lock-outline text-muted" aria-hidden="true"></i>
+                          </a>
+                          <input
+                            [type]="showConfirmPassword ? 'text' : 'password'"
+                            class="input100 border-start-0 form-control ms-0"
+                            placeholder="Confirm password"
+                            [(ngModel)]="passwordConfirm"
+                            name="passwordConfirm"
+                            required
+                          />
+                          <button type="button" class="btn btn-outline-secondary" (click)="toggleConfirmPassword()">
+                            <i [class]="showConfirmPassword ? 'fe fe-eye-off' : 'fe fe-eye'"></i>
+                          </button>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-12">
+                            <button
+                              type="submit"
+                              class="btn btn-lg btn-primary btn-block"
+                              [disabled]="isLoading"
+                            >
+                              <span *ngIf="isLoading">
+                                <i class="fa fa-spinner fa-spin me-2"></i>Activating...
+                              </span>
+                              <span *ngIf="!isLoading">Activate Account</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="text-center pt-3">
+                          <p class="text-dark mb-0">
+                            Already have an account?
+                            <a routerLink="/auth/login" class="ms-1">Back to Login</a>
+                          </p>
+                        </div>
+
+                      </form>
+
                     </div>
                   </div>
-
-                </form>
-
-                <div class="mt-4 text-center">
-                  <a routerLink="/auth/login" class="text-muted small">Back to Login</a>
                 </div>
 
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
