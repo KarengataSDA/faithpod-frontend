@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
+import { TenantService } from './tenant.service';
 import { Message, RecipientOptions, SendMessageRequest, SendMessageResponse, BirthdayWishesResponse } from '../models/message';
 
 @Injectable({
@@ -14,8 +14,11 @@ export class MessageService {
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
   private localStorageService = inject(LocalStorageService);
+  private tenantService = inject(TenantService);
 
-  baseUrl = environment.apiUrl;
+  get baseUrl(): string {
+    return this.tenantService.getApiUrl();
+  }
   private readonly CACHE_KEY = 'messages';
   private readonly STORAGE_KEY = 'messages';
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes

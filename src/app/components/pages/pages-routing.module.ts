@@ -108,10 +108,10 @@ const routes: Routes = [
       {path: 'announcements/view/:announcementId', title: "View Announcement", component: ViewAnnouncementComponent},
       {path: 'announcements/edit/:id', title: "Edit Announcement", component: EditAnnouncementComponent},
 
-       {path: 'messages', title: " Messages", component: MessagesComponent, canActivate: [AuthGuard], data: { permission: 'can_view_messages'}},
-      {path: 'messages/send', title: "Send Message", component: SendMessageComponent, canActivate: [AuthGuard], data: { permission: 'can_create_message'}},
-      {path: 'messages/birthday-wishes', title: "Birthday Wishes", component: BirthdayWishesComponent, canActivate: [AuthGuard], data: { permission: 'can_view_messages'}},
-      {path: 'messages/view/:id', title: "View Message", component: ViewMessageComponent, canActivate: [AuthGuard], data: { permission: 'can_view_messages'}},
+      {path: 'messages', title: " Messages", component: MessagesComponent, canActivate: [AuthGuard], data: { permission: 'view messages'}},
+      {path: 'messages/send', title: "Send Message", component: SendMessageComponent, canActivate: [AuthGuard], data: { permission: 'send messages'}},
+      {path: 'messages/birthday-wishes', title: "Birthday Wishes", component: BirthdayWishesComponent, canActivate: [AuthGuard], data: { permission: 'view messages'}},
+      {path: 'messages/view/:id', title: "View Message", component: ViewMessageComponent, canActivate: [AuthGuard], data: { permission: 'view messages'}},
 
 
         // Hymns Routes (read-only on tenant; create/edit/delete is central admin only)

@@ -273,7 +273,7 @@ export class NavService implements OnDestroy {
     },
     {
       headTitle: 'Messages',
-      permissions: ['can_view_messages']
+      permissions: ['view messages']
     },
     {
       title: 'Messages',
@@ -282,21 +282,21 @@ export class NavService implements OnDestroy {
       type: 'sub',
       Menusub: true,
       active: false,
-      permissions: ['can_view_messages'],
+      permissions: ['view messages'],
       children: [
         {
           path: '/pages/messages',
           title: 'Messages',
           type: 'link',
           selected: false,
-          permissions: ['can_view_messages']
+          permissions: ['view messages']
         },
         {
           path: '/pages/messages/birthday-wishes',
           title: 'Birthday Wishes',
           type: 'link',
           selected: false,
-          permissions: ['can_view_messages']
+          permissions: ['view messages']
         }
       ]
     },
