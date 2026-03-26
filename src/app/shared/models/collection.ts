@@ -30,7 +30,7 @@ export interface Contribution {
         contributiontype_id: number
         contribution_amount: string
         contribution_date: string
-        status: string
+        status: number | string
         email_sent: number
         sms_sent: number
         notification_error: string | null
