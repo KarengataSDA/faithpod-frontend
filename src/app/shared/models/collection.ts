@@ -26,9 +26,14 @@ export interface CollectionTotal {
 
 export interface Contribution {
         id: number
+        member_id: number
+        contributiontype_id: number
         contribution_amount: string
         contribution_date: string
-        status: number
+        status: string
+        email_sent: number
+        sms_sent: number
+        notification_error: string | null
         user?: User
         contribution_type?: ContributionCategory
 }
