@@ -32,11 +32,7 @@ export class ViewCollectionComponent implements OnInit {
       Auth.userEmitter.subscribe(user=> this.user = user)
   }
 
-  getRowspan(contributions: Contribution[], name: string): number {
-    return contributions.filter(contribution => contribution.user?.first_name == name).length
-  }
-
-  sendMail(id) {
+sendMail(id) {
     this.collectionService.sendMail(id).subscribe((res) => {
       id = this.collections.find((item) => item.id == id)?.id;
       window.location.reload();

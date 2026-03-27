@@ -46,21 +46,20 @@
                 >
                   <thead class="border-top">
                     <tr>
-                      <th>Name</th>
                       <th>No.</th>
+                      <th>Name</th>
                       <th>Contribution Category</th>
                       <th>Amount</th>
-                    
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let category of collection.contributions; index as i">
-                      <td *ngIf="i === 0 || collection.contributions[i]?.user?.first_name !== collection.contributions[i-1]?.user?.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user?.first_name || '')">{{category.user?.first_name || '-'}} {{category.user?.last_name || ''}}</td>
-
                       <th>{{ i + 1 }}</th>
+                      <td>
+                        {{ category.user ? (category.user.first_name + ' ' + category.user.last_name) : (category.contributor_name || '-') }}
+                      </td>
                       <td>{{ category.contribution_type?.name || '-' }}</td>
                       <td>{{ category.contribution_amount }}</td>
-            
                     </tr>
                   </tbody>
                 </table>

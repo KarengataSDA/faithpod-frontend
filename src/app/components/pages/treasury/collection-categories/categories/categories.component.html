@@ -38,7 +38,8 @@
                   <tr>
                     <th>No.</th>
                     <th>Name</th>
-                    <th>Status</th>
+                    <th>Total Amount</th>
+                    <th *ngIf="authService.hasPermission('view contribution types')">Status</th>
                     <th *ngIf="authService.hasPermission('view contribution types')">Action</th>
                   </tr>
                 </thead>
@@ -48,6 +49,7 @@
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
                   </tr>
                 </tbody>
                 
@@ -55,6 +57,7 @@
                   <tr *ngFor="let category of paginatedCategories; let i = index">
                     <td>{{(currentPage - 1) * pageSize + i + 1}}</td>
                     <th class="lowercase">{{ category.name }}</th>
+                    <td>{{ category.total_contributions | currency:'KES ':'symbol':'1.2-2' }}</td>
                     <th>
                       <span
                       class="badge  rounded-pill p-2 px-3"

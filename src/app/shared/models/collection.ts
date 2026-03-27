@@ -7,6 +7,7 @@ export interface ContributionCategory {
     description: string,
     archived: boolean,
     total_contributions: number
+    total_amount: number,
     contributions: Contribution[]
 }
 
