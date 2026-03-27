@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
 import { Member } from 'src/app/shared/models/member';
 import { ContributionCategory } from 'src/app/shared/models/collection';
 import { MemberService } from 'src/app/shared/services/member.service';
@@ -114,7 +115,7 @@ export class ManualContributionComponent implements OnInit {
     return {
       member_id:         this.isSystemMember ? v.member_id : null,
       contributor_name:  this.isSystemMember ? null : v.contributor_name || null,
-      contributor_phone: this.isSystemMember ? null : v.contributor_phone || null,
+      contributor_phone: this.isSystemMember ? undefined : (v.contributor_phone ? normalizePhoneNumber(v.contributor_phone) : undefined),
       contributor_email: this.isSystemMember ? null : v.contributor_email || null,
       contribution_date: v.contribution_date,
       notes:             v.notes || null,
