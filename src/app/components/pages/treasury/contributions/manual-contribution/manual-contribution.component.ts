@@ -76,6 +76,20 @@ export class ManualContributionComponent implements OnInit {
     this.contributions.removeAt(index);
   }
 
+  getAvailableCategories(index: number): ContributionCategory[] {
+    const usedIds = this.contributions.controls
+      .map((ctrl, i) => i !== index ? ctrl.get('contributiontype_id')?.value : null)
+      .filter(id => id !== null && id !== '');
+    return this.categories.filter(cat => !usedIds.includes(cat.id));
+  }
+
+  get allCategoriesSelected(): boolean {
+    const usedIds = this.contributions.controls
+      .map(ctrl => ctrl.get('contributiontype_id')?.value)
+      .filter(id => id !== null && id !== '');
+    return usedIds.length >= this.categories.length;
+  }
+
   toggleContributorType(isMember: boolean): void {
     this.isSystemMember = isMember;
     // Reset both sides when switching
