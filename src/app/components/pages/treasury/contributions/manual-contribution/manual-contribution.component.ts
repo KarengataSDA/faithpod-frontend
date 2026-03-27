@@ -102,7 +102,7 @@ export class ManualContributionComponent implements OnInit {
   }
 
   /** Validate that either member_id or contributor_name is filled */
-  private isContributorValid(): boolean {
+  isContributorValid(): boolean {
     if (this.isSystemMember) {
       return !!this.form.value.member_id;
     }

@@ -162,7 +162,7 @@
                 placeholder="e.g. Through PDQ, Cash in envelope #42, Cheque #1234, etc."></textarea>
     </div>
     <div class="card-footer text-end">
-      <button type="submit" class="btn btn-primary me-2" [disabled]="isSubmitting">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="isSubmitting || !isContributorValid() || !form.valid">
         <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
         Record Contribution
       </button>
