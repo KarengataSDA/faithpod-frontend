@@ -94,39 +94,46 @@ export class ViewProfileComponent implements OnInit{
   getProfileCompletionPercentage(): number {
     const totalFields = 11;
     const filledFields = [
-      'first_name', 
-      'middle_name', 
+      'first_name',
+      'middle_name',
       'last_name',
-      'email', 
+      'email',
       'phone_number',
       'date_of_birth',
       'gender',
-      'role',
+      'roles',
       'prayercell',
-      'membershiptype',
+      'membership_type',
       'population_group'
-    ] 
+    ]
       .map(field => this.user[field as keyof User])
-      .filter(value=> value && value !== '').length
-    
-      return Math.round((filledFields / totalFields) * 100);
+      .filter(value => {
+        if (Array.isArray(value)) return value.length > 0;
+        return value && value !== '';
+      }).length;
+
+    return Math.round((filledFields / totalFields) * 100);
   }
 
   getUnfilledFields(): string[] {
-    const fields = {
-     first_name: "First Name", 
-      middle_name: "Middle Name",  
+    const fields: Record<string, string> = {
+      first_name: "First Name",
+      middle_name: "Middle Name",
       last_name: "Last Name",
       email: "Email Address",
       phone_number: "Phone Number",
       date_of_birth: "Date of Birth",
       gender: "Gender",
-      role: "Role",
+      roles: "Role",
       prayercell: "Prayercell",
-      membershiptype: "Membership",
+      membership_type: "Membership",
       population_group: "Population Group"
-    }
+    };
 
-    return Object.keys(fields).filter(field => !this.user[field as keyof User]).map(field => fields[field as keyof typeof fields])
+    return Object.keys(fields).filter(field => {
+      const value = this.user[field as keyof User];
+      if (Array.isArray(value)) return value.length === 0;
+      return !value;
+    }).map(field => fields[field]);
   }
 }
