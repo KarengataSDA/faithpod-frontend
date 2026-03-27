@@ -150,7 +150,12 @@ export class ManualContributionComponent implements OnInit {
     );
     const lines = v.contributions
       .map((c: any) =>
-        `<li><strong>${this.categories.find(x => x.id == c.contributiontype_id)?.name ?? c.contributiontype_id}</strong>: KES ${parseFloat(c.contribution_amount).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</li>`
+        `<ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; border-bottom: 1px solid #ebebeb;">
+            <span>${this.categories.find(x => x.id == c.contributiontype_id)?.name ?? c.contributiontype_id}</span>
+            <span><strong>KES</strong> ${parseFloat(c.contribution_amount).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</span>
+          </li>
+        </ul>`
       )
       .join('');
 
@@ -159,8 +164,11 @@ export class ManualContributionComponent implements OnInit {
       html: `
         <p><strong>Contributor:</strong> ${this.getDisplayName()}</p>
         <p><strong>Date:</strong> ${v.contribution_date}</p>
-        <ul style="text-align:left">${lines}</ul>
-        <p><strong>Total: KES ${total.toLocaleString('en-KE', { minimumFractionDigits: 2 })}</strong></p>
+        ${lines}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 16px;">
+          <span><strong>Total</strong></span>
+          <span><strong>KES ${total.toLocaleString('en-KE', { minimumFractionDigits: 2 })}</strong></span>
+        </div>
         ${v.notes ? `<p><em>Notes: ${v.notes}</em></p>` : ''}
       `,
       showCancelButton: true,
