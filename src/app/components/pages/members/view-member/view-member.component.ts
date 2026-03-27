@@ -21,12 +21,16 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   collection: Collection;
 
   // Givings pagination
-  contributionPage = 1;
+  currentPage = 1;
   readonly contributionPageSize = 10;
+  isLoading: boolean = true
 
   get paginatedContributions() {
-    const start = (this.contributionPage - 1) * this.contributionPageSize;
-    return (this.member?.contributions ?? []).slice(start, start + this.contributionPageSize);
+    const sorted = [...(this.member?.contributions ?? [])].sort((a, b) =>
+      b.contribution_date.localeCompare(a.contribution_date)
+    );
+    const start = (this.currentPage - 1) * this.contributionPageSize;
+    return sorted.slice(start, start + this.contributionPageSize);
   }
 
   get contributionTotalPages() {
@@ -35,7 +39,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
 
   onContributionPageChange(page: number) {
     if (page < 1 || page > this.contributionTotalPages) return;
-    this.contributionPage = page;
+    this.currentPage = page;
   }
 
   private destroy$ = new Subject<void>();
@@ -52,6 +56,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.params['memberId'];
     this.memberService.getUser(this.id).subscribe((data: Member) => {
       this.member = data;
+      this.isLoading = false;
     });
   }
 
@@ -60,8 +65,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ── Status helpers ────────────────────────────────────────────────────────
-
+ 
   badgeClass(status: MemberStatus | undefined): string {
     return statusBadgeClass(status);
   }
@@ -69,8 +73,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   getStatusLabel(status: MemberStatus | undefined): string {
     return statusLabel(status);
   }
-
-  // ── Status actions ────────────────────────────────────────────────────────
 
   verifyMember(): void {
     Swal.fire({
@@ -171,4 +173,31 @@ sendMail(id: number): void {
       showConfirmButton: false, timer: 2500, timerProgressBar: true,
     }).fire({ icon, title });
   }
+
+  getRowspanForDate(index: number): number {
+  const date = this.paginatedContributions[index]?.contribution_date
+  return this.paginatedContributions.filter(c => c.contribution_date === date).length
+}
+
+
+  isFirstRowForDate(index: number): boolean {
+  if (index === 0) return true
+  const currentDate = this.paginatedContributions[index]?.contribution_date
+  const prevDate = this.paginatedContributions[index - 1]?.contribution_date
+  return currentDate !== prevDate
+}
+
+getDateNumber(index: number): number {
+  let dateCount = 0
+  let lastDate: string | null = null
+  for (let i = 0; i <= index; i++) {
+    const currentDate = this.paginatedContributions[i]?.contribution_date
+    if (currentDate !== lastDate) {
+      dateCount++
+      lastDate = currentDate
+    }
+  }
+  return (this.currentPage - 1) * this.contributionPageSize + dateCount
+}
+
 }
