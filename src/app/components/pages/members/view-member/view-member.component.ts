@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CollectionService } from '../../../../shared/services/collection.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Member, MemberStatus, statusBadgeClass, statusLabel } from 'src/app/shared/models/member';
-import { Collection, Contribution } from 'src/app/shared/models/collection';
+import { Collection } from 'src/app/shared/models/collection';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -19,6 +19,24 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   id!: number;
   member: Member | null = null;
   collection: Collection;
+
+  // Givings pagination
+  contributionPage = 1;
+  readonly contributionPageSize = 10;
+
+  get paginatedContributions() {
+    const start = (this.contributionPage - 1) * this.contributionPageSize;
+    return (this.member?.contributions ?? []).slice(start, start + this.contributionPageSize);
+  }
+
+  get contributionTotalPages() {
+    return Math.ceil((this.member?.contributions?.length ?? 0) / this.contributionPageSize);
+  }
+
+  onContributionPageChange(page: number) {
+    if (page < 1 || page > this.contributionTotalPages) return;
+    this.contributionPage = page;
+  }
 
   private destroy$ = new Subject<void>();
 
@@ -141,13 +159,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
       .subscribe(() => this.toast('success', 'Invite resent successfully'));
   }
 
-  // ── Contributions ─────────────────────────────────────────────────────────
-
-  getRowspan(contributions: Contribution[], date: string): number {
-    return contributions.filter(c => c.contribution_date === date).length;
-  }
-
-  sendMail(id: number): void {
+sendMail(id: number): void {
     this.collectionService.sendMail(id).subscribe(() => {
       window.location.reload();
     });

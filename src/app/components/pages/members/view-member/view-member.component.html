@@ -198,24 +198,43 @@
                         <table class="table table-bordered text-nowrap mb-0">
                           <thead class="border-top">
                             <tr>
-                              <th>Contribution Date</th>
                               <th>No.</th>
+                              <th>Contribution Date</th>
                               <th>Category</th>
                               <th>Total</th>
                             </tr>
                           </thead>
-                          <tbody *ngIf="member?.contributions as contributions">
-                            <tr class="border-bottom" *ngFor="let c of contributions; index as i">
-                              <td *ngIf="i === 0 || contributions[i].contribution_date !== contributions[i-1].contribution_date"
-                                  [attr.rowspan]="getRowspan(contributions, c.contribution_date)">
-                                {{ c.contribution_date }}
-                              </td>
-                              <th>{{ i + 1 }}</th>
-                              <td>{{ c.contribution_type?.name }}</td>
+                          <tbody>
+                            <tr class="border-bottom" *ngFor="let c of paginatedContributions; index as i">
+                              <th>{{ (contributionPage - 1) * contributionPageSize + i + 1 }}</th>
+                              <td>{{ c.contribution_date }}</td>
+                              <td>{{ c.contribution_type?.name || '—' }}</td>
                               <td>{{ c.contribution_amount }}</td>
+                            </tr>
+                            <tr *ngIf="!member?.contributions?.length">
+                              <td colspan="4" class="text-center text-muted py-4">No contributions found.</td>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center pt-3" *ngIf="contributionTotalPages > 1">
+                        <p class="mb-0">
+                          Showing {{ (contributionPage - 1) * contributionPageSize + 1 }} –
+                          {{ (contributionPage - 1) * contributionPageSize + paginatedContributions.length }}
+                          of {{ member?.contributions?.length }} contributions
+                        </p>
+                        <ul class="pagination mb-0">
+                          <li class="page-item" [class.disabled]="contributionPage === 1">
+                            <a class="page-link" (click)="onContributionPageChange(contributionPage - 1)">Prev</a>
+                          </li>
+                          <li *ngFor="let _ of [].constructor(contributionTotalPages); let idx = index"
+                              class="page-item" [class.active]="contributionPage === idx + 1">
+                            <a class="page-link" (click)="onContributionPageChange(idx + 1)">{{ idx + 1 }}</a>
+                          </li>
+                          <li class="page-item" [class.disabled]="contributionPage === contributionTotalPages">
+                            <a class="page-link" (click)="onContributionPageChange(contributionPage + 1)">Next</a>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </ng-template>
