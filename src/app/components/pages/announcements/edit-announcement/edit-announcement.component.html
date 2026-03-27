@@ -90,7 +90,7 @@
                         </a>
                         <div class="ps-3 flex-column">
                             <small class="text-muted">{{item.created_at | date:'mediumDate'}}</small>
-                            <h6 class="mb-1"><a routerLink="/pages/announcements/view/{{item.id}}">{{item.title | slice:0:30}}{{(item.title?.length ?? 0) > 30 ? '...' : ''}}</a></h6>
+                            <h6 class="mb-1"><a routerLink="/pages/announcements/view/{{item.id}}">{{item.title | slice:0:30}}{{item.title.length > 30 ? '...' : ''}}</a></h6>
                             <div class="text-muted small">{{item.body | slice:0:60}}{{(item.body?.length ?? 0) > 60 ? '...' : ''}}</div>
                         </div>
                     </div>

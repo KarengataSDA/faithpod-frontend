@@ -8,10 +8,10 @@
     <div class="col-xl-12">
       <div class="card overflow-visible">
         <div class="card-header pb-0">
-            <h6 class="main-content-label mb-1">Date: {{collection?.contribution_date}}</h6>
+            <h6 class="main-content-label mb-1">Date: {{collection.contribution_date}}</h6>
           <div class="card-options ">
-            
-            <p class="text-muted card-sub-title">Total Amount {{collection?.total_amount}}</p>
+
+            <p class="text-muted card-sub-title">Total Amount {{collection.total_amount}}</p>
         </div>
         </div>
         <div class="card-body">
@@ -28,7 +28,7 @@
         <div class="card-header pb-0">
           <div>
             <h6 class="">
-              List of all Contribution on Date: {{collection?.contribution_date}}.
+              List of all Contribution on Date: {{collection.contribution_date}}.
             </h6>
           </div>
         </div>
@@ -54,7 +54,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let category of collection?.contributions; index as i">
+                    <tr *ngFor="let category of collection.contributions; index as i">
                       <td *ngIf="i === 0 || collection.contributions[i]?.user?.first_name !== collection.contributions[i-1]?.user?.first_name" [attr.rowspan]="getRowspan(collection.contributions, category.user?.first_name || '')">{{category.user?.first_name || '-'}} {{category.user?.last_name || ''}}</td>
 
                       <th>{{ i + 1 }}</th>

@@ -21,7 +21,7 @@
                                       />
                                   </div> -->
                                   <div class="media overflow-visible mt-sm-5" >
-                                    <ng-container *ngIf="user?.avatar_url; else initialsAvatar">
+                                    <ng-container *ngIf="user.avatar_url; else initialsAvatar">
                                       <img
                                         [src]="user.avatar_url"
                                         alt="Profile"
@@ -31,7 +31,7 @@
                                     </ng-container>
                                     <ng-template #initialsAvatar>
                                       <span style="height: 60px; width: 60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
-                                        <h3 style="margin-top: 15px; margin-left: 0px; font-weight: bold;">{{ (user?.first_name?.charAt(0) || '') + (user?.last_name?.charAt(0) || '') }}</h3>
+                                        <h3 style="margin-top: 15px; margin-left: 0px; font-weight: bold;">{{ (user.first_name.charAt(0) || '') + (user.last_name.charAt(0) || '') }}</h3>
                                       </span>
                                     </ng-template>
                                     <div class="text-dark">
@@ -40,11 +40,11 @@
                                       <button
                                       class="btn btn-sm d-block"
                                       [ngClass]="{
-                                        ' btn-yellow ': user?.membershiptype?.name === 'visitor',
-                                        ' btn-primdary': user?.membershiptype?.name === 'member',
-                                        ' btn-success': user?.membershiptype?.name === 'sabbath'
+                                        ' btn-yellow ': user.membershiptype?.name === 'visitor',
+                                        ' btn-primdary': user.membershiptype?.name === 'member',
+                                        ' btn-success': user.membershiptype?.name === 'sabbath'
                                       }"
-                                      >{{user?.membershiptype?.name}}</button
+                                      >{{user.membershiptype?.name}}</button
                                     >
                                     </div>
                                   </div>
@@ -87,7 +87,7 @@
                 <span><i class="fe fe-calendar fs-20"></i></span>
               </div>
               <div>
-                <strong>{{user?.date_of_birth | date:'d MMM yyyy'}} </strong>
+                <strong>{{user.date_of_birth | date:'d MMM yyyy'}} </strong>
               </div>
             </div>
             <div class="d-flex align-items-center mb-3 mt-3">
@@ -95,7 +95,7 @@
                 <span><i class="fe fe-phone fs-20"></i></span>
               </div>
               <div>
-                <strong *ngIf="user">{{user?.phone_number}} </strong>
+                <strong *ngIf="user">{{user.phone_number}} </strong>
               </div>
             </div>
             <div class="d-flex align-items-center mb-3 mt-3">
@@ -103,7 +103,7 @@
                 <span><i class="fe fe-mail fs-20"></i></span>
               </div>
               <div>
-                <strong *ngIf="user" >{{user?.email}} </strong>
+                <strong *ngIf="user" >{{user.email}} </strong>
               </div>
             </div>
             <div class="d-flex align-items-center mb-3 mt-3">
@@ -168,8 +168,8 @@
                               <tr class="border-bottom" *ngFor="let collection of paginatedContributions; index as i">
                                   <td>{{(currentPage - 1) * pageSize + i + 1}}</td>
                                   <td>{{collection.contribution_date}}</td>
-                                  <td>{{collection?.contribution_type?.name}}</td>
-                                  <td>{{collection?.contribution_amount}}</td>
+                                  <td>{{collection.contribution_type?.name}}</td>
+                                  <td>{{collection.contribution_amount}}</td>
                               </tr>
                             </tbody>
                         </table>
