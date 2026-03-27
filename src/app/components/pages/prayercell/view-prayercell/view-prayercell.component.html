@@ -4,7 +4,7 @@
   [active_item]="'Prayercell Members'"
 ></app-page-header>
 
-<div class="row row-sm">
+<div class="row row-sm" *ngIf="prayercell">
     <div class="col-xl-12">
       <div class="card overflow-visible">
         <div class="card-header pb-0">
@@ -23,7 +23,7 @@
   </div>
 
 <!-- row opened -->
-<div class="row row-sm">
+<div class="row row-sm" *ngIf="prayercell">
   <div class="col-xl-12">
     <div class="card overflow-visible">
       <div class="card-header pb-0">
