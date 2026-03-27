@@ -1,0 +1,174 @@
+<app-page-header
+  [title]="'Record Manual Contribution'"
+  [items]="['Treasury', 'Collections']"
+  [active_item]="'Manual Entry'"
+></app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <!-- Contributor Type Toggle -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Contributor</h3>
+    </div>
+    <div class="card-body">
+
+      <!-- Toggle buttons -->
+      <div class="btn-group mb-4" role="group">
+        <button type="button"
+          class="btn"
+          [class.btn-primary]="isSystemMember"
+          [class.btn-outline-primary]="!isSystemMember"
+          (click)="toggleContributorType(true)">
+          System Member
+        </button>
+        <button type="button"
+          class="btn"
+          [class.btn-primary]="!isSystemMember"
+          [class.btn-outline-primary]="isSystemMember"
+          (click)="toggleContributorType(false)">
+          Walk-in / Non-Member
+        </button>
+      </div>
+
+      <div class="row">
+
+        <!-- System Member: dropdown search -->
+        <ng-container *ngIf="isSystemMember">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label class="form-label">Select Member <span class="text-danger">*</span></label>
+              <ng-select
+                [items]="members"
+                bindValue="id"
+                placeholder="Search by name..."
+                formControlName="member_id"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  <span>{{ item.first_name }} {{ item.last_name }}</span>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  <span>{{ item.first_name }} {{ item.last_name }}
+                    <small class="text-muted ms-2">{{ item.phone_number }}</small>
+                  </span>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Walk-in: free-text fields -->
+        <ng-container *ngIf="!isSystemMember">
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input class="form-control" type="text" formControlName="contributor_name"
+                     placeholder="e.g. John Kamau" />
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-label">Phone Number <small class="text-muted">(for SMS acknowledgment)</small></label>
+              <input class="form-control" type="tel" formControlName="contributor_phone"
+                     placeholder="e.g. 0712345678" />
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-label">Email <small class="text-muted">(for email acknowledgment)</small></label>
+              <input class="form-control" type="email" formControlName="contributor_email"
+                     placeholder="e.g. john@example.com" />
+              <small *ngIf="form.get('contributor_email')?.invalid && form.get('contributor_email')?.touched"
+                     class="text-danger">Enter a valid email address</small>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Date (always shown) -->
+        <div class="col-lg-4 mt-2">
+          <div class="form-group">
+            <label class="form-label">Contribution Date <span class="text-danger">*</span></label>
+            <input class="form-control" type="date" formControlName="contribution_date" />
+            <small *ngIf="form.get('contribution_date')?.invalid && form.get('contribution_date')?.touched"
+                   class="text-danger">Date is required</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Contribution Lines -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Tithes & Offering</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+
+        <ng-container formArrayName="contributions">
+          <ng-container
+            *ngFor="let row of contributions.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="col-lg-5">
+              <div class="form-group">
+                <label>Contribution Category <span class="text-danger">*</span></label>
+                <ng-select formControlName="contributiontype_id" placeholder="Select category">
+                  <ng-option *ngFor="let cat of categories" [value]="cat.id">
+                    {{ cat.name }}
+                  </ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="form-group">
+                <label>Amount (KES) <span class="text-danger">*</span></label>
+                <input type="number" min="0.01" step="0.01" class="form-control"
+                       formControlName="contribution_amount" placeholder="0.00" />
+              </div>
+            </div>
+            <div class="col-lg-2 d-flex align-items-end mb-4">
+              <button type="button" class="btn btn-danger btn-sm"
+                      (click)="removeContributionRow(i)"
+                      [disabled]="contributions.length === 1">
+                Remove
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <div class="col-lg-12"><hr /></div>
+
+        <div class="col-lg-3">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="addContributionRow()">
+            + Add Line
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Notes <small class="text-muted">(optional)</small></h3>
+    </div>
+    <div class="card-body">
+      <textarea class="form-control" rows="2" formControlName="notes"
+                placeholder="e.g. Cash in envelope #42, Cheque #1234, etc."></textarea>
+    </div>
+    <div class="card-footer text-end">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="isSubmitting">
+        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
+        Record Contribution
+      </button>
+      <button type="button" class="btn btn-danger"
+              (click)="router.navigateByUrl('/pages/treasury/all-collections')">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+</form>

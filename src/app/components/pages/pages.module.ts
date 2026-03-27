@@ -43,6 +43,7 @@ import { SkeletonLoaderComponent } from "../../shared/skeleton-loader/skeleton-l
 import { ImageUploadComponent } from "../../shared/components/image-upload/image-upload.component";
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
+import { ManualContributionComponent } from './treasury/contributions/manual-contribution/manual-contribution.component';
 import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
@@ -85,7 +86,8 @@ import { MessagesComponent } from './messages/messages/messages.component';
     EditProfileComponent,
     CategoriesComponent,
     AllContributionsComponent,
-    
+    ManualContributionComponent,
+
     GroupsComponent,
     CreateGroupComponent,
     EditGroupComponent,

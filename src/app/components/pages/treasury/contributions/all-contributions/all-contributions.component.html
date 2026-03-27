@@ -24,9 +24,10 @@
   <div class="col-xl-12">
     <div class="card overflow-visible">
      <div class="card-header pb-0">
-        <h6 class="main-content-label mb-1">All Collections Made Via App</h6>
-        <div class="card-options">
-          <h6 class="main-content-label">Total: KES {{ totalAmount | number:'1.2-2'}} </h6>
+        <h6 class="main-content-label mb-1">All Collections</h6>
+        <div class="card-options d-flex align-items-center gap-3">
+          <a routerLink="/pages/treasury/contributions/manual" class="btn btn-primary btn-sm">+ Manual Entry</a>
+          <h6 class="main-content-label mb-0">Total: KES {{ totalAmount | number:'1.2-2'}}</h6>
         </div>
       </div>
       <div class="card-body">
@@ -44,11 +45,11 @@
                 <thead class="border-top">
                   <tr>
                     <th>NO.</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Name</th>
                     <th>Phone Number</th>
                     <th>Contribution Category</th>
                     <th>Amount</th>
+                    <th>Source</th>
                     <th>Contribution Date</th>
                   </tr>
                 </thead>
@@ -77,18 +78,19 @@
                       </div>
                     </td>
                     <td>
-                      <span class="mt-sm-2 d-block">{{
-                        collection.user?.first_name || '-'
-                      }}</span>
+                      <span class="mt-sm-2 d-block">
+                        <ng-container *ngIf="collection.member_id; else walkInName">
+                          {{ (collection.user?.first_name || '') + ' ' + (collection.user?.last_name || '') | titlecase }}
+                        </ng-container>
+                        <ng-template #walkInName>
+                          {{ collection.contributor_name || '-' }}
+                          <span class="badge bg-secondary ms-1" title="Walk-in contributor">Guest</span>
+                        </ng-template>
+                      </span>
                     </td>
-                     <td>
+                    <td>
                       <span class="mt-sm-2 d-block">{{
-                        collection.user?.last_name || '-'
-                      }}</span>
-                    </td>
-                     <td>
-                      <span class="mt-sm-2 d-block">{{
-                        collection.user?.phone_number || '-'
+                        collection.user?.phone_number || collection.contributor_phone || '-'
                       }}</span>
                     </td>
                     <td>
@@ -96,10 +98,18 @@
                         collection.contribution_type?.name || '-'
                       }}</span>
                     </td>
-                     <td>
-                      <span class="mt-sm-2 d-block"> {{ collection.contribution_amount | number:'1.2-2' }}</span>
+                    <td>
+                      <span class="mt-sm-2 d-block">{{ collection.contribution_amount | number:'1.2-2' }}</span>
                     </td>
-                     <td>
+                    <td>
+                      <span class="badge"
+                        [class.bg-success]="collection.source === 'mpesa'"
+                        [class.bg-warning]="collection.source === 'manual'"
+                        [class.text-dark]="collection.source === 'manual'">
+                        {{ collection.source === 'mpesa' ? 'M-Pesa' : 'Manual' }}
+                      </span>
+                    </td>
+                    <td>
                       <span class="mt-sm-2 d-block">{{ collection.contribution_date | date:'mediumDate' }}</span>
                     </td>
                   </tr>

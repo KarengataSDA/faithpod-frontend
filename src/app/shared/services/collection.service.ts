@@ -145,6 +145,24 @@ export class CollectionService {
     );
   }
 
+  storeManual(payload: {
+    member_id?: number | null;
+    contributor_name?: string;
+    contributor_phone?: string;
+    contributor_email?: string;
+    contribution_date: string;
+    notes?: string;
+    contributions: { contributiontype_id: number; contribution_amount: number }[];
+  }) {
+    return this.http.post(
+      `${this.baseUrl}/contributions/manual`,
+      payload,
+      this.httpOptions
+    ).pipe(
+      tap(() => this.invalidateCache())
+    );
+  }
+
   /**
    * Clear all collection-related cache after mutations
    */
