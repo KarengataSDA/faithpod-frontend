@@ -43,7 +43,7 @@
               <!-- Left side: Search, Prayercell, Population Group -->
               <div class="d-flex align-items-center flex-wrap gap-3">
                 <div class="form-group d-flex align-items-center">
-                  <input class="form-control" type="text" placeholder="Search..." [(ngModel)]="searchTerm" name="searchTerm" (input)="applyFilters()" />
+                  <input class="form-control" type="text" placeholder="Search..." [(ngModel)]="searchTerm" name="searchTerm" (ngModelChange)="applyFilters()" />
                 </div>
 
                 <div class="form-group d-flex align-items-center">
