@@ -30,6 +30,7 @@ export interface Contribution {
         contributiontype_id: number
         contribution_amount: string
         contribution_date: string
+        created_at: string
         status: number | string
         source: 'mpesa' | 'manual'
         contributor_name: string | null

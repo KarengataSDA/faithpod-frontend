@@ -38,9 +38,39 @@
       <div class="card-body">
         <div class="">
           <form action="" class="ngb-table">
-            <div class="form-group form-inline">
-              Search
-              <input class="form-control ms-2" type="text" [(ngModel)]="searchTerm" name="searchTerm" (input)="filterSearchContributions()" />
+            <!-- All filters in one row -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+              <!-- Left side: Search, Prayercell, Population Group -->
+              <div class="d-flex align-items-center flex-wrap gap-3">
+                <div class="form-group d-flex align-items-center">
+                  <input class="form-control" type="text" placeholder="Search..." [(ngModel)]="searchTerm" name="searchTerm" (input)="applyFilters()" />
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                  <select class="form-control" [(ngModel)]="selectedPrayercell" name="selectedPrayercell" (change)="applyFilters()">
+                    <option value="">All Prayercells</option>
+                    <option *ngFor="let pc of prayercells" [value]="pc.id">{{ pc.name }}</option>
+                  </select>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                  <select class="form-control" [(ngModel)]="selectedPopulationGroup" name="selectedPopulationGroup" (change)="applyFilters()">
+                    <option value="">All Groups</option>
+                    <option *ngFor="let pg of populationGroups" [value]="pg.id">{{ pg.name }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Right side: Date Range -->
+              <div class="d-flex align-items-center gap-3">
+                <div class="form-group d-flex align-items-center">
+                  <input class="form-control" type="date" [(ngModel)]="startDate" name="startDate" (change)="applyFilters()" />
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                  <input class="form-control" type="date" [(ngModel)]="endDate" name="endDate" (change)="applyFilters()" />
+                </div>
+              </div>
             </div>
             <div class="table-responsive">
               <table
