@@ -43,7 +43,6 @@ import { ImageUploadComponent } from "../../shared/components/image-upload/image
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { ManualContributionComponent } from './treasury/contributions/manual-contribution/manual-contribution.component';
-import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
@@ -101,7 +100,6 @@ import { MessagesComponent } from './messages/messages/messages.component';
     MembershipComponent,
     ViewMembershipComponent,
     PaybillTransactionsComponent,
-    DashboardMonitorComponent,
     MemberActivityLogComponent,
     BrandingComponent,
     AppSettingsComponent,

@@ -218,13 +218,6 @@ export class NavService implements OnDestroy {
           // permissions: ['view contribution types']
 
         },
-         {
-          path: '/pages/treasury/dashboard-monitor',
-          title: 'Dashboard Monitor',
-          type: 'link',
-          selected: false,
-
-        },
       ],
     },
     {

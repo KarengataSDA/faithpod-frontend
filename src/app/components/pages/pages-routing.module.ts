@@ -38,7 +38,6 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
 import { ManualContributionComponent } from './treasury/contributions/manual-contribution/manual-contribution.component';
-import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
@@ -86,7 +85,6 @@ const routes: Routes = [
       {path: 'treasury/collection-categories/edit/:id', title: "Collections", component: EditCategoryComponent, canActivate: [AuthGuard], data: { permission: 'edit contribution types'}},
 
       {path: 'treasury/paybill-transactions', title: "Paybill Transactions", component: PaybillTransactionsComponent},
-      {path: 'treasury/dashboard-monitor', title: "Dashboard Monitor", component: DashboardMonitorComponent},
 
       {path: 'profile', title: "Profile", component: ViewProfileComponent},
       {path: 'edit-profile', title: "Edit Profile", component: EditProfileComponent},
