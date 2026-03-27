@@ -54,9 +54,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   prayercells: Prayercell[] = [] 
   groups: PopulationGroup[] = []
   user: User;
-  totalCollection: CollectionTotal
-  gender: Gender
-  membershipCount: MembershipCount
+  totalCollection: CollectionTotal | undefined
+  gender: Gender | undefined
+  membershipCount: MembershipCount | undefined
 
  constructor (
   private authService: AuthService,
