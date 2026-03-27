@@ -4,6 +4,12 @@
   [active_item]="'All Collections'"
 ></app-page-header>
 
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create contribution types')">
+  <a class="btn ms-2 btn-primary my-1"
+    routerLink="/pages/treasury/contributions/manual">
+    <i class="fe fe-plus"></i> Manual Entry
+  </a>
+</div>
 <div class="row">
   <div class="col-xl-12">
     <div class="card overflow-visible">
@@ -26,7 +32,6 @@
      <div class="card-header pb-0">
         <h6 class="main-content-label mb-1">All Collections</h6>
         <div class="card-options d-flex align-items-center gap-3">
-          <a routerLink="/pages/treasury/contributions/manual" class="btn btn-primary btn-sm">+ Manual Entry</a>
           <h6 class="main-content-label mb-0">Total: KES {{ totalAmount | number:'1.2-2'}}</h6>
         </div>
       </div>
@@ -51,12 +56,14 @@
                     <th>Amount</th>
                     <th>Source</th>
                     <th>Contribution Date</th>
+                    <th>Notes</th>
                   </tr>
                 </thead>
                  <tbody *ngIf="isLoading">
                   <tr *ngFor="let item of [1,2,3,4,5]">
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
@@ -111,6 +118,27 @@
                     </td>
                     <td>
                       <span class="mt-sm-2 d-block">{{ collection.contribution_date | date:'mediumDate' }}</span>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="collection.source === 'mpesa'; else manualNotes">
+                        <span
+                          class="fe fe-file-text fs-16 text-success"
+                          style="cursor: default;"
+                          [ngbTooltip]="collection.mpesa_reference || 'M-Pesa transaction'"
+                          tooltipClass="notes-tooltip">
+                        </span>
+                      </ng-container>
+                      <ng-template #manualNotes>
+                        <span *ngIf="collection.notes; else noNotes"
+                          class="fe fe-file-text fs-16 text-muted"
+                          style="cursor: default;"
+                          [ngbTooltip]="collection.notes"
+                          tooltipClass="notes-tooltip">
+                        </span>
+                        <ng-template #noNotes>
+                          <span class="text-muted">—</span>
+                        </ng-template>
+                      </ng-template>
                     </td>
                   </tr>
                 </tbody>

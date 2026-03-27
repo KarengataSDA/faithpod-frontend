@@ -13,7 +13,6 @@ import { EditMemberComponent } from './members/edit-member/edit-member.component
 import { ViewMemberComponent } from './members/view-member/view-member.component';
 import { CreateMemberComponent } from './members/create-member/create-member.component';
 import { CollectionComponent } from './treasury/contributions/collection/collection.component';
-import { CreateCollectionComponent } from './treasury/contributions/create-collection/create-collection.component';
 import { ViewCollectionComponent } from './treasury/view-collection/view-collection.component';
 import { EditCollectionComponent } from './treasury/contributions/edit-collection/edit-collection.component';
 import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
@@ -75,7 +74,6 @@ const routes: Routes = [
 
       {path: 'treasury/collections', title: "Treasury", component: CollectionComponent, canActivate: [AuthGuard], data: { permission: 'view contribution types'}},
       {path: 'treasury/all-collections', title: "All Collections", component: AllContributionsComponent, canActivate: [AuthGuard], data: { permission: 'view contribution types'}},
-      {path: 'treasury/collections/create', title: "Create Collection", component: CreateCollectionComponent, canActivate: [AuthGuard], data: { permission: 'create contribution types'}},
       {path: 'treasury/contributions/manual', title: "Manual Contribution", component: ManualContributionComponent, canActivate: [AuthGuard], data: { permission: 'create contribution types'}},
       {path: 'treasury/my-collections/create', title: "Create Collection", component: MyCollectionComponent},
       {path: 'treasury/collections/view/:date', title: "View Collection", component: ViewCollectionComponent, canActivate: [AuthGuard], data: { permission: 'view contribution types'}},

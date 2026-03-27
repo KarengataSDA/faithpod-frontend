@@ -12,7 +12,6 @@ import { CreateMemberComponent } from './members/create-member/create-member.com
 import { MembersComponent } from './members/members/members.component';
 import { PrayercellsComponent } from './prayercell/prayercells/prayercells.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CreateCollectionComponent } from './treasury/contributions/create-collection/create-collection.component';
 import { ViewCollectionComponent } from './treasury/view-collection/view-collection.component';
 import { EditCollectionComponent } from './treasury/contributions/edit-collection/edit-collection.component';
 import { CollectionComponent } from './treasury/contributions/collection/collection.component';
@@ -75,7 +74,6 @@ import { MessagesComponent } from './messages/messages/messages.component';
     CreateMemberComponent,
     MembersComponent,
     
-    CreateCollectionComponent,
     ViewCollectionComponent,
     EditCollectionComponent,
     CollectionComponent,
