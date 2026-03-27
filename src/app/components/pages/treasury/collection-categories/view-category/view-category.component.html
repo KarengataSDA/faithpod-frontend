@@ -4,13 +4,13 @@
   [active_item]="'Members Contributions'"
 ></app-page-header>
 
-<div class="row">
+<div class="row" *ngIf="category">
     <div class="col-xl-12">
       <div class="card overflow-visible">
         <div class="card-header pb-0">
-            <h6 class="main-content-label mb-1">Name: {{category?.name}}</h6>
+            <h6 class="main-content-label mb-1">Name: {{category.name}}</h6>
           <div class="card-options ">
-            <h6 class="main-content-label">Total: Ksh {{category?.total_contributions}}</h6>
+            <h6 class="main-content-label">Total: Ksh {{category.total_contributions}}</h6>
         </div>
         </div>
         <div class="card-body"></div>
@@ -18,13 +18,13 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="category">
   
   <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
     <div class="card overflow-visible">
       <div class="card-header pb-0">
         <div>
-          <h6 class="main-content-label mb-3"> {{category?.name}}.</h6>
+          <h6 class="main-content-label mb-3"> {{category.name}}.</h6>
           <p class="text-muted card-sub-title">
             List of all Contributions.
           </p>
@@ -52,11 +52,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let cat of category?.contributions; index as i">
+                  <tr *ngFor="let cat of category.contributions; index as i">
                     <th>{{ i + 1 }}</th>
                     <td>{{cat.contribution_date}}</td>
                     <td >{{ cat.user?.first_name }} {{ cat.user?.last_name }}</td> 
-                    <td>{{ cat?.contribution_type?.name }}</td>
+                    <td>{{ cat.contribution_type?.name }}</td>
                     <td>{{ cat.contribution_amount }}</td>
                     
                   </tr>
@@ -71,7 +71,7 @@
   <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
     <div class="card">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 class="card-title">{{category?.name}} Analytics</h3>
+            <h3 class="card-title">{{category.name}} Analytics</h3>
             <div class="button-group">
                 <p [ngClass] = "{'link-active' : selectedCategory === 'weekly', 'link-inactive' : selectedCategory !== 'weekly' }" (click)="updateChartData('weekly')">Weekly</p>
                 <p [ngClass] = "{'link-active' : selectedCategory === 'monthly', 'link-inactive' : selectedCategory !== 'monthly' }" (click)="updateChartData('monthly')">Monthly</p>

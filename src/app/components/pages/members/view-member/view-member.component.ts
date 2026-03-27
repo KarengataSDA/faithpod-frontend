@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CollectionService } from '../../../../shared/services/collection.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Member, MemberStatus, statusBadgeClass, statusLabel } from 'src/app/shared/models/member';
-import { Collection, Contribution } from 'src/app/shared/models/collection';
+import { Collection } from 'src/app/shared/models/collection';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -20,6 +20,28 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   member: Member | null = null;
   collection: Collection;
 
+  // Givings pagination
+  currentPage = 1;
+  readonly contributionPageSize = 10;
+  isLoading: boolean = true
+
+  get paginatedContributions() {
+    const sorted = [...(this.member?.contributions ?? [])].sort((a, b) =>
+      b.contribution_date.localeCompare(a.contribution_date)
+    );
+    const start = (this.currentPage - 1) * this.contributionPageSize;
+    return sorted.slice(start, start + this.contributionPageSize);
+  }
+
+  get contributionTotalPages() {
+    return Math.ceil((this.member?.contributions?.length ?? 0) / this.contributionPageSize);
+  }
+
+  onContributionPageChange(page: number) {
+    if (page < 1 || page > this.contributionTotalPages) return;
+    this.currentPage = page;
+  }
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -34,6 +56,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.params['memberId'];
     this.memberService.getUser(this.id).subscribe((data: Member) => {
       this.member = data;
+      this.isLoading = false;
     });
   }
 
@@ -42,8 +65,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ── Status helpers ────────────────────────────────────────────────────────
-
+ 
   badgeClass(status: MemberStatus | undefined): string {
     return statusBadgeClass(status);
   }
@@ -51,8 +73,6 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   getStatusLabel(status: MemberStatus | undefined): string {
     return statusLabel(status);
   }
-
-  // ── Status actions ────────────────────────────────────────────────────────
 
   verifyMember(): void {
     Swal.fire({
@@ -141,13 +161,7 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
       .subscribe(() => this.toast('success', 'Invite resent successfully'));
   }
 
-  // ── Contributions ─────────────────────────────────────────────────────────
-
-  getRowspan(contributions: Contribution[], date: string): number {
-    return contributions.filter(c => c.contribution_date === date).length;
-  }
-
-  sendMail(id: number): void {
+sendMail(id: number): void {
     this.collectionService.sendMail(id).subscribe(() => {
       window.location.reload();
     });
@@ -159,4 +173,31 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
       showConfirmButton: false, timer: 2500, timerProgressBar: true,
     }).fire({ icon, title });
   }
+
+  getRowspanForDate(index: number): number {
+  const date = this.paginatedContributions[index]?.contribution_date
+  return this.paginatedContributions.filter(c => c.contribution_date === date).length
+}
+
+
+  isFirstRowForDate(index: number): boolean {
+  if (index === 0) return true
+  const currentDate = this.paginatedContributions[index]?.contribution_date
+  const prevDate = this.paginatedContributions[index - 1]?.contribution_date
+  return currentDate !== prevDate
+}
+
+getDateNumber(index: number): number {
+  let dateCount = 0
+  let lastDate: string | null = null
+  for (let i = 0; i <= index; i++) {
+    const currentDate = this.paginatedContributions[i]?.contribution_date
+    if (currentDate !== lastDate) {
+      dateCount++
+      lastDate = currentDate
+    }
+  }
+  return (this.currentPage - 1) * this.contributionPageSize + dateCount
+}
+
 }

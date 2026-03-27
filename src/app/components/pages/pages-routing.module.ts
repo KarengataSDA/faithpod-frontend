@@ -13,7 +13,6 @@ import { EditMemberComponent } from './members/edit-member/edit-member.component
 import { ViewMemberComponent } from './members/view-member/view-member.component';
 import { CreateMemberComponent } from './members/create-member/create-member.component';
 import { CollectionComponent } from './treasury/contributions/collection/collection.component';
-import { CreateCollectionComponent } from './treasury/contributions/create-collection/create-collection.component';
 import { ViewCollectionComponent } from './treasury/view-collection/view-collection.component';
 import { EditCollectionComponent } from './treasury/contributions/edit-collection/edit-collection.component';
 import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
@@ -38,7 +37,7 @@ import { AuthGuard } from 'src/app/shared/guard/auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
-import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
+import { ManualContributionComponent } from './treasury/contributions/manual-contribution/manual-contribution.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
@@ -74,7 +73,7 @@ const routes: Routes = [
 
       {path: 'treasury/collections', title: "Treasury", component: CollectionComponent, canActivate: [AuthGuard], data: { permission: 'view contribution types'}},
       {path: 'treasury/all-collections', title: "All Collections", component: AllContributionsComponent, canActivate: [AuthGuard], data: { permission: 'view contribution types'}},
-      {path: 'treasury/collections/create', title: "Create Collection", component: CreateCollectionComponent, canActivate: [AuthGuard], data: { permission: 'create contribution types'}},
+      {path: 'treasury/contributions/manual', title: "Manual Contribution", component: ManualContributionComponent, canActivate: [AuthGuard], data: { permission: 'create contribution types'}},
       {path: 'treasury/my-collections/create', title: "Create Collection", component: MyCollectionComponent},
       {path: 'treasury/collections/view/:date', title: "View Collection", component: ViewCollectionComponent, canActivate: [AuthGuard], data: { permission: 'view contribution types'}},
       {path: 'treasury/edit-collection', title: "Edit Collection", component: EditCollectionComponent, canActivate: [AuthGuard], data: { permission: 'edit contribution types'}},
@@ -86,7 +85,6 @@ const routes: Routes = [
       {path: 'treasury/collection-categories/edit/:id', title: "Collections", component: EditCategoryComponent, canActivate: [AuthGuard], data: { permission: 'edit contribution types'}},
 
       {path: 'treasury/paybill-transactions', title: "Paybill Transactions", component: PaybillTransactionsComponent},
-      {path: 'treasury/dashboard-monitor', title: "Dashboard Monitor", component: DashboardMonitorComponent},
 
       {path: 'profile', title: "Profile", component: ViewProfileComponent},
       {path: 'edit-profile', title: "Edit Profile", component: EditProfileComponent},

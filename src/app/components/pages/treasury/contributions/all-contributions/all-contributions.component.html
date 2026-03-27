@@ -4,6 +4,12 @@
   [active_item]="'All Collections'"
 ></app-page-header>
 
+<div class="card-footer text-end" *ngIf="authService.hasPermission('create contribution types')">
+  <a class="btn ms-2 btn-primary my-1"
+    routerLink="/pages/treasury/contributions/manual">
+    <i class="fe fe-plus"></i> Manual Entry
+  </a>
+</div>
 <div class="row">
   <div class="col-xl-12">
     <div class="card overflow-visible">
@@ -24,17 +30,47 @@
   <div class="col-xl-12">
     <div class="card overflow-visible">
      <div class="card-header pb-0">
-        <h6 class="main-content-label mb-1">All Collections Made Via App</h6>
-        <div class="card-options">
-          <h6 class="main-content-label">Total: KES {{ totalAmount | number:'1.2-2'}} </h6>
+        <h6 class="main-content-label mb-1">All Collections</h6>
+        <div class="card-options d-flex align-items-center gap-3">
+          <h6 class="main-content-label mb-0">Total: KES {{ totalAmount | number:'1.2-2'}}</h6>
         </div>
       </div>
       <div class="card-body">
         <div class="">
           <form action="" class="ngb-table">
-            <div class="form-group form-inline">
-              Search
-              <input class="form-control ms-2" type="text" [(ngModel)]="searchTerm" name="searchTerm" (input)="filterSearchContributions()" />
+            <!-- All filters in one row -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+              <!-- Left side: Search, Prayercell, Population Group -->
+              <div class="d-flex align-items-center flex-wrap gap-3">
+                <div class="form-group d-flex align-items-center">
+                  <input class="form-control" type="text" placeholder="Search..." [(ngModel)]="searchTerm" name="searchTerm" (ngModelChange)="applyFilters()" />
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                  <select class="form-control" [(ngModel)]="selectedPrayercell" name="selectedPrayercell" (change)="applyFilters()">
+                    <option value="">All Prayercells</option>
+                    <option *ngFor="let pc of prayercells" [value]="pc.id">{{ pc.name }}</option>
+                  </select>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                  <select class="form-control" [(ngModel)]="selectedPopulationGroup" name="selectedPopulationGroup" (change)="applyFilters()">
+                    <option value="">All Groups</option>
+                    <option *ngFor="let pg of populationGroups" [value]="pg.id">{{ pg.name }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Right side: Date Range -->
+              <div class="d-flex align-items-center gap-3">
+                <div class="form-group d-flex align-items-center">
+                  <input class="form-control" type="date" [(ngModel)]="startDate" name="startDate" (change)="applyFilters()" />
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                  <input class="form-control" type="date" [(ngModel)]="endDate" name="endDate" (change)="applyFilters()" />
+                </div>
+              </div>
             </div>
             <div class="table-responsive">
               <table
@@ -44,18 +80,20 @@
                 <thead class="border-top">
                   <tr>
                     <th>NO.</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Name</th>
                     <th>Phone Number</th>
                     <th>Contribution Category</th>
                     <th>Amount</th>
+                    <th>Source</th>
                     <th>Contribution Date</th>
+                    <th>Notes</th>
                   </tr>
                 </thead>
                  <tbody *ngIf="isLoading">
                   <tr *ngFor="let item of [1,2,3,4,5]">
                     <td><div class="skeleton skeleton-text"></div></td>
                     <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-btn"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
                     <td><div class="skeleton skeleton-btn"></div></td>
@@ -77,18 +115,19 @@
                       </div>
                     </td>
                     <td>
-                      <span class="mt-sm-2 d-block">{{
-                        collection.user?.first_name || '-'
-                      }}</span>
+                      <span class="mt-sm-2 d-block">
+                        <ng-container *ngIf="collection.member_id; else walkInName">
+                          {{ (collection.user?.first_name || '') + ' ' + (collection.user?.last_name || '') | titlecase }}
+                        </ng-container>
+                        <ng-template #walkInName>
+                          {{ collection.contributor_name || '-' }}
+                          <span class="badge bg-secondary ms-1" title="Walk-in contributor">Guest</span>
+                        </ng-template>
+                      </span>
                     </td>
-                     <td>
+                    <td>
                       <span class="mt-sm-2 d-block">{{
-                        collection.user?.last_name || '-'
-                      }}</span>
-                    </td>
-                     <td>
-                      <span class="mt-sm-2 d-block">{{
-                        collection.user?.phone_number || '-'
+                        collection.user?.phone_number || collection.contributor_phone || '-'
                       }}</span>
                     </td>
                     <td>
@@ -96,11 +135,40 @@
                         collection.contribution_type?.name || '-'
                       }}</span>
                     </td>
-                     <td>
-                      <span class="mt-sm-2 d-block"> {{ collection.contribution_amount | number:'1.2-2' }}</span>
+                    <td>
+                      <span class="mt-sm-2 d-block">{{ collection.contribution_amount | number:'1.2-2' }}</span>
                     </td>
-                     <td>
+                    <td>
+                      <span class="badge"
+                        [class.bg-success]="collection.source === 'mpesa'"
+                        [class.bg-warning]="collection.source === 'manual'"
+                        [class.text-dark]="collection.source === 'manual'">
+                        {{ collection.source === 'mpesa' ? 'M-Pesa' : 'Manual' }}
+                      </span>
+                    </td>
+                    <td>
                       <span class="mt-sm-2 d-block">{{ collection.contribution_date | date:'mediumDate' }}</span>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="collection.source === 'mpesa'; else manualNotes">
+                        <span
+                          class="fe fe-file-text fs-16 text-success"
+                          style="cursor: default;"
+                          [ngbTooltip]="collection.mpesa_reference || 'M-Pesa transaction'"
+                          tooltipClass="notes-tooltip">
+                        </span>
+                      </ng-container>
+                      <ng-template #manualNotes>
+                        <span *ngIf="collection.notes; else noNotes"
+                          class="fe fe-file-text fs-16 text-muted"
+                          style="cursor: default;"
+                          [ngbTooltip]="collection.notes"
+                          tooltipClass="notes-tooltip">
+                        </span>
+                        <ng-template #noNotes>
+                          <span class="text-muted">—</span>
+                        </ng-template>
+                      </ng-template>
                     </td>
                   </tr>
                 </tbody>

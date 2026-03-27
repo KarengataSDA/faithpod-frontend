@@ -4,14 +4,14 @@
   [active_item]="'Members'"
 ></app-page-header>
 
-<div class="row row-sm">
+<div class="row row-sm" *ngIf="group">
     <div class="col-xl-12">
       <div class="card overflow-visible">
         <div class="card-header pb-0">
-            <h6 class="main-content-label mb-1">Name: {{group?.name}}</h6>
+            <h6 class="main-content-label mb-1">Name: {{group.name}}</h6>
           <div class="card-options ">
-            
-            <p class="text-muted card-sub-title">Total Members: {{group?.members?.length}}</p>
+
+            <p class="text-muted card-sub-title">Total Members: {{group.members.length}}</p>
         </div>
         </div>
         <div class="card-body">
@@ -23,12 +23,12 @@
   </div>
 
 <!-- row opened -->
-<div class="row row-sm">
+<div class="row row-sm" *ngIf="group">
   <div class="col-xl-12">
     <div class="card overflow-visible">
       <div class="card-header pb-0">
         <div>
-          <p class="card-sub-title">List of all {{group?.name}} Members.</p>
+          <p class="card-sub-title">List of all {{group.name}} Members.</p>
         </div>
       </div>
       <div class="card-body">
@@ -45,7 +45,7 @@
                 </tr>
               </thead>
               <tbody *ngIf="group">
-                <tr *ngFor="let member of group?.members; index as i">
+                <tr *ngFor="let member of group.members; index as i">
                     
                   <th>{{ i + 1 }}</th>
                   <th>{{ member.membership_number ? 'KSDA-' + member.membership_number : 'No Number' }}</th>

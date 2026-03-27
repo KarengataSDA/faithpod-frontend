@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Collection, Contribution } from 'src/app/shared/models/collection';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CollectionService } from 'src/app/shared/services/collection.service';
+import { Prayercell } from 'src/app/shared/models/prayercell';
+import { PopulationGroup } from 'src/app/shared/models/population-group';
+import { PrayercellService } from 'src/app/shared/services/prayercell.service';
+import { PopulationGroupService } from 'src/app/shared/services/population-group.service';
 import * as XLSX from 'xlsx'
 import * as FileSaver from 'file-saver'
 
@@ -33,8 +37,15 @@ export class AllContributionsComponent implements OnInit {
 
   startDate: string = ''; 
   endDate: string = '';
+
+   // Dropdown filter data
+  prayercells: Prayercell[] = [];
+  populationGroups: PopulationGroup[] = [];
+  selectedPrayercell: string = '';
+  selectedPopulationGroup: string = '';
   
-  constructor(public collectionService: CollectionService, public authService: AuthService) {}
+  constructor(public collectionService: CollectionService, public authService: AuthService,  private prayercellService: PrayercellService,
+    private populationGroupService: PopulationGroupService) {}
 
   ngOnInit(): void {
     this.collectionService.getAllContributions().subscribe({
@@ -55,24 +66,63 @@ export class AllContributionsComponent implements OnInit {
       }
     })
 
+     // Load dropdown data
+    this.prayercellService.getAll().subscribe({
+      next: (data) => this.prayercells = data,
+      error: (err) => console.log("Error fetching prayercells", err)
+    })
+
+    this.populationGroupService.getAll().subscribe({
+      next: (data) => this.populationGroups = data,
+      error: (err) => console.log("Error fetching population groups", err)
+    })
+
     this.loadLogo()
   }
 
-  filterSearchContributions(): void {
+  applyFilters(): void {
     const term = this.searchTerm.toLowerCase()
-    this.filteredContributions = this.collections.filter(txn =>
-      txn.user?.first_name?.toLowerCase().includes(term) ||
-      txn.user?.last_name?.toLowerCase().includes(term) ||
-      txn.user?.phone_number?.toLowerCase().includes(term) ||
-      txn.contribution_date?.toLowerCase().includes(term) ||
-      txn.contribution_type?.name?.toLocaleLowerCase().includes(term)
+
+    this.filteredContributions = this.collections.filter(txn => {
+      const textMatch = !term ||
+        txn.user?.first_name?.toLowerCase().includes(term) ||
+        txn.user?.last_name?.toLowerCase().includes(term) ||
+        txn.user?.phone_number?.toLowerCase().includes(term) ||
+        txn.contributor_name?.toLowerCase().includes(term) ||
+        txn.contributor_phone?.toLowerCase().includes(term) ||
+        txn.contribution_date?.toLowerCase().includes(term) ||
+        txn.contribution_type?.name?.toLowerCase().includes(term) ||
+        txn.source?.toLowerCase().includes(term)
+
+      // Date range filter (compare date strings to avoid timezone issues)
+      const txnDateStr = txn.contribution_date.slice(0, 10)
+      const inDateRange =
+        (!this.startDate || txnDateStr >= this.startDate) &&
+        (!this.endDate || txnDateStr <= this.endDate)
+
+      // Prayercell filter
+      const prayercellMatch = this.selectedPrayercell
+        ? txn.user?.prayercell?.id === +this.selectedPrayercell
+        : true
+
+      // Population group filter
+      const populationGroupMatch = this.selectedPopulationGroup
+        ? txn.user?.population_group?.id === +this.selectedPopulationGroup
+        : true
+
+      return textMatch && inDateRange && prayercellMatch && populationGroupMatch
+    })
+
+    // Sort by latest first
+    this.filteredContributions.sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-    
+
     this.totalAmount = this.filteredContributions.reduce((sum, txn) => {
       return sum + parseFloat(txn.contribution_amount)
     }, 0)
 
-    this.currentPage = 1 
+    this.currentPage = 1
     this.paginate()
   }
 
@@ -124,11 +174,23 @@ export class AllContributionsComponent implements OnInit {
     return pages;
   }
 
+  private getContributorName(txn: Contribution): string {
+    if (txn.member_id) {
+      return `${txn.user?.first_name || ''} ${txn.user?.last_name || ''}`.trim() || '-'
+    }
+    return txn.contributor_name || '-'
+  }
+
+  private getContributorPhone(txn: Contribution): string {
+    return txn.user?.phone_number || txn.contributor_phone || '-'
+  }
+
   exportToExcel(): void {
     const exportData = this.filteredContributions.map((txn, index) => ({
       'No': index + 1,
-      'First Name': txn.user?.first_name || '-',
-      'Last Name': txn.user?.last_name || '-',
+      'Name': this.getContributorName(txn),
+      'Phone': this.getContributorPhone(txn),
+      'Source': txn.source === 'mpesa' ? 'M-Pesa' : 'Manual',
       'Contribution Category': txn.contribution_type?.name || '-',
       'Amount': parseFloat(txn.contribution_amount),
       'Date' : txn.contribution_date
@@ -182,16 +244,15 @@ export class AllContributionsComponent implements OnInit {
     const doc = new jsPDF()
     const pageWidth = doc.internal.pageSize.getWidth()
 
-    const headers = [['#', 'First Name', 'Last Name', 'Phone Number', 'Category Type', 'Amount', 'Date']]
+    const headers = [['#', 'Name', 'Phone Number', 'Source', 'Category Type', 'Amount', 'Date']]
     const data = this.filteredContributions.map((txn, index) => [
       index + 1,
-      txn.user?.first_name || '-',
-      txn.user?.last_name || '-',
-      txn.user?.phone_number || '-',
+      this.getContributorName(txn),
+      this.getContributorPhone(txn),
+      txn.source === 'mpesa' ? 'M-Pesa' : 'Manual',
       txn.contribution_type?.name || '-',
       txn.contribution_amount,
       txn.contribution_date,
-      this.formatDateTime(txn.contribution_date)
     ])
 
     const totalAmount = this.filteredContributions.reduce((sum, txn) => sum + parseFloat(txn.contribution_amount), 0)

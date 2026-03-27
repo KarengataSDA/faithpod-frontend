@@ -102,6 +102,20 @@ export class MyCollectionComponent implements OnInit{
     this.contributions.removeAt(index);
   }
 
+  getAvailableCategories(index: number): ContributionCategory[] {
+    const usedIds = this.contributions.controls
+      .map((ctrl, i) => i !== index ? ctrl.get('category')?.value : null)
+      .filter(id => id !== null && id !== '');
+    return this.categories.filter(cat => !usedIds.includes(cat.id));
+  }
+
+  get allCategoriesSelected(): boolean {
+    const usedIds = this.contributions.controls
+      .map(ctrl => ctrl.get('category')?.value)
+      .filter(id => id !== null && id !== '');
+    return usedIds.length >= this.categories.length;
+  }
+
   formatFormData(formData: any): any {
     const { user_id, contribution_date, status, contributions } = formData;
 

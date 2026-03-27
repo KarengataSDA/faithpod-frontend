@@ -53,9 +53,8 @@
               <div class="form-group">
                 <label>Select Category</label>
                 <ng-select formControlName="category" class="form-contrdol">
-                  <!-- Dynamically populate these options from your categories API -->
                   <ng-option
-                    *ngFor="let category of categories"
+                    *ngFor="let category of getAvailableCategories(i)"
                     [value]="category.id"
                   >
                     {{ category.name }}
@@ -94,10 +93,11 @@
         <div class="col-lg-3">
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-secondary btn-sm"
             (click)="addContribution()"
+            [disabled]="allCategoriesSelected"
           >
-            Add Contribution
+            + Add Line
           </button>
         </div>
       </div>

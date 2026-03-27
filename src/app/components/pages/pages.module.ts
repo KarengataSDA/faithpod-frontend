@@ -12,7 +12,6 @@ import { CreateMemberComponent } from './members/create-member/create-member.com
 import { MembersComponent } from './members/members/members.component';
 import { PrayercellsComponent } from './prayercell/prayercells/prayercells.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CreateCollectionComponent } from './treasury/contributions/create-collection/create-collection.component';
 import { ViewCollectionComponent } from './treasury/view-collection/view-collection.component';
 import { EditCollectionComponent } from './treasury/contributions/edit-collection/edit-collection.component';
 import { CollectionComponent } from './treasury/contributions/collection/collection.component';
@@ -43,7 +42,7 @@ import { SkeletonLoaderComponent } from "../../shared/skeleton-loader/skeleton-l
 import { ImageUploadComponent } from "../../shared/components/image-upload/image-upload.component";
 import { PaybillTransactionsComponent } from './treasury/paybill-transactions/paybill-transactions.component';
 import { AllContributionsComponent } from './treasury/contributions/all-contributions/all-contributions.component';
-import { DashboardMonitorComponent } from './treasury/dashboard-monitor/dashboard-monitor.component';
+import { ManualContributionComponent } from './treasury/contributions/manual-contribution/manual-contribution.component';
 import { MemberActivityLogComponent } from './settings/member-activity-log/member-activity-log.component';
 import { BrandingComponent } from './settings/branding/branding.component';
 import { AppSettingsComponent } from './settings/app-settings/app-settings.component';
@@ -74,7 +73,6 @@ import { MessagesComponent } from './messages/messages/messages.component';
     CreateMemberComponent,
     MembersComponent,
     
-    CreateCollectionComponent,
     ViewCollectionComponent,
     EditCollectionComponent,
     CollectionComponent,
@@ -85,7 +83,8 @@ import { MessagesComponent } from './messages/messages/messages.component';
     EditProfileComponent,
     CategoriesComponent,
     AllContributionsComponent,
-    
+    ManualContributionComponent,
+
     GroupsComponent,
     CreateGroupComponent,
     EditGroupComponent,
@@ -101,7 +100,6 @@ import { MessagesComponent } from './messages/messages/messages.component';
     MembershipComponent,
     ViewMembershipComponent,
     PaybillTransactionsComponent,
-    DashboardMonitorComponent,
     MemberActivityLogComponent,
     BrandingComponent,
     AppSettingsComponent,

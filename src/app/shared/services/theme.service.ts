@@ -93,7 +93,6 @@ export class ThemeService {
       root.style.setProperty('--info-border', theme.infoColor);
     }
 
-    console.log('[ThemeService] Applied tenant theme:', theme);
   }
 
   /**
@@ -119,7 +118,6 @@ export class ThemeService {
     root.style.setProperty('--primary09', `rgba(${this.DEFAULT_THEME.primaryColor}, 0.9)`);
     root.style.setProperty('--primary005', `rgba(${this.DEFAULT_THEME.primaryColor}, 0.05)`);
 
-    console.log('[ThemeService] Applied default theme');
   }
 
   /**
