@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   public isCollapsed = true;
-  user: User;
+  user: User | null = null;
   bannerUrl: string | null = null;
 
   constructor(

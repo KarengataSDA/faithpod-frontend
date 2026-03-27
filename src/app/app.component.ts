@@ -35,7 +35,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
     if (!tenantId) {
       // No tenant context, use default theme (central admin)
-      console.log('[AppComponent] No tenant context, applying default theme');
       this.themeService.applyDefaultTheme();
       return;
     }
@@ -43,7 +42,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     // Try to use stored theme first for instant application
     const storedTheme = this.themeService.getStoredTheme();
     if (storedTheme) {
-      console.log('[AppComponent] Applying stored tenant theme');
       this.themeService.applyTheme(storedTheme);
     }
 
@@ -52,22 +50,18 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (tenantInfo) => {
-          console.log('[AppComponent] Fetched tenant info:', tenantInfo.name);
 
           // Store tenant name for later use
           this.tenantService.setTenantName(tenantInfo.name);
 
           // Apply tenant theme if available
           if (tenantInfo.theme) {
-            console.log('[AppComponent] Applying tenant theme from API');
             this.themeService.applyTheme(tenantInfo.theme);
           } else {
-            console.log('[AppComponent] No custom theme, applying default');
             this.themeService.applyDefaultTheme();
           }
         },
         error: (err) => {
-          console.error('[AppComponent] Failed to fetch tenant info:', err);
 
           if (err.status === 404 && err.error?.code === 'TENANT_NOT_FOUND') {
             this.router.navigate(['/not-found']);
