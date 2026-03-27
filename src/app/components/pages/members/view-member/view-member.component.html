@@ -16,11 +16,21 @@
                     <div class="d-flex">
                       <div class="media p-5">
                         <div class="media overflow-visible mt-sm-5">
-                          <span style="height:60px;width:60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
-                            <h3 style="margin-top:15px;font-weight:bold;">
-                              {{ (member?.first_name?.charAt(0) || '') + (member?.last_name?.charAt(0) || '') }}
-                            </h3>
-                          </span>
+                          <ng-container *ngIf="member?.avatar_url; else initialsAvatar">
+                            <img
+                              [src]="member!.avatar_url"
+                              alt="Profile"
+                              class="rounded-circle me-3"
+                              style="height: 60px; width: 60px; object-fit: cover;"
+                            />
+                          </ng-container>
+                          <ng-template #initialsAvatar>
+                            <span style="height:60px;width:60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
+                              <h3 style="margin-top:15px;font-weight:bold;">
+                                {{ (member?.first_name?.charAt(0) || '') + (member?.last_name?.charAt(0) || '') }}
+                              </h3>
+                            </span>
+                          </ng-template>
                           <div class="text-dark">
                             <h3 *ngIf="member">{{ member.first_name }} {{ member.last_name }}</h3>
 

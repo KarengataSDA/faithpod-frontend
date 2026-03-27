@@ -21,9 +21,19 @@
                                       />
                                   </div> -->
                                   <div class="media overflow-visible mt-sm-5" >
-                                    <span  style="height: 60px; width: 60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
-                                      <h3 style="margin-top: 15px; margin-left: 0px; font-weight: bold;" >{{ (user?.first_name?.charAt(0) || '') + (user?.last_name?.charAt(0) || '')}}</h3>
-                                    </span>
+                                    <ng-container *ngIf="user?.avatar_url; else initialsAvatar">
+                                      <img
+                                        [src]="user.avatar_url"
+                                        alt="Profile"
+                                        class="rounded-circle me-3"
+                                        style="height: 60px; width: 60px; object-fit: cover;"
+                                      />
+                                    </ng-container>
+                                    <ng-template #initialsAvatar>
+                                      <span style="height: 60px; width: 60px;" class="avatar cover-image avatar-md brround bg-primary me-3">
+                                        <h3 style="margin-top: 15px; margin-left: 0px; font-weight: bold;">{{ (user?.first_name?.charAt(0) || '') + (user?.last_name?.charAt(0) || '') }}</h3>
+                                      </span>
+                                    </ng-template>
                                     <div class="text-dark">
                                       <h3 *ngIf="user"> {{user.first_name }} {{ user.last_name}}</h3>
                                      
@@ -201,22 +211,6 @@
                           </tr>
                         </table>
                       </div>
-                    </div>
-                  </ng-template>
-                </li>
-                <li [ngbNavItem]="3">
-                  <a ngbNavLink>Family Details</a>
-                  <ng-template ngbNavContent>
-                    <div class="tab-pane" id="tab7">
-                      <ul class="p-5">
-                        <li>
-                          <i class="fa fa-check me-3 text-success mb-5"></i
-                          >Family Details
-                        </li>
-                        <li>
-                          <i class="fa fa-check me-3 text-success mb-5"></i>Other Details
-                        </li>
-                      </ul>
                     </div>
                   </ng-template>
                 </li>

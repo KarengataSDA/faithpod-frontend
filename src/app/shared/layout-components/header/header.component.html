@@ -74,9 +74,19 @@
                   class="nav-link leading-none d-flex"
                 >
                 
-                  <span  style="height: 35px; width: 35px;" class="avatar cover-image avatar-md brround bg-primary me-3">
-                    <h6 style="margin-top: 10px; margin-left: 0px; font-weight: bold;" >{{getInitials()}}</h6>
-                  </span>
+                  <ng-container *ngIf="user && user.avatar_url; else initialsAvatar">
+                    <img
+                      [src]="user.avatar_url"
+                      alt="Profile"
+                      class="rounded-circle me-3"
+                      style="height: 35px; width: 35px; object-fit: cover;"
+                    />
+                  </ng-container>
+                  <ng-template #initialsAvatar>
+                    <span style="height: 35px; width: 35px;" class="avatar cover-image avatar-md brround bg-primary me-3">
+                      <h6 style="margin-top: 10px; font-weight: bold;">{{getInitials()}}</h6>
+                    </span>
+                  </ng-template>
                 </a>
                 <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                   <div class="drop-heading">
