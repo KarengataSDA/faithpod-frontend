@@ -11,6 +11,9 @@ interface Tenant {
   id: string;
   name: string;
   email: string;
+  owner_first_name?: string;
+  owner_last_name?: string;
+  owner_phone_number?: string;
   billing_email?: string;
   domains?: Array<{ domain: string }>;
   created_at?: string;
@@ -41,10 +44,13 @@ export class TenantEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.editTenantForm = this.formBuilder.group({
-      name:          ['', Validators.required],
-      email:         ['', [Validators.required, Validators.email]],
-      billing_email: ['', Validators.email],
-      domain:        ['', Validators.required]
+      name:                ['', Validators.required],
+      owner_first_name:    ['', Validators.required],
+      owner_last_name:     ['', Validators.required],
+      owner_phone_number:  ['', Validators.pattern(/^254[17]\d{8}$/)],
+      email:               ['', [Validators.required, Validators.email]],
+      billing_email:       ['', Validators.email],
+      domain:              ['', Validators.required]
     });
 
     this.tenantId = this.route.snapshot.paramMap.get('id');
@@ -83,10 +89,13 @@ export class TenantEditComponent implements OnInit, OnDestroy {
           // Populate form with tenant data
           if (this.tenant) {
             this.editTenantForm.patchValue({
-              name:          this.tenant.name,
-              email:         this.tenant.email,
-              billing_email: this.tenant.billing_email ?? '',
-              domain:        this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : ''
+              name:               this.tenant.name,
+              owner_first_name:   this.tenant.owner_first_name ?? '',
+              owner_last_name:    this.tenant.owner_last_name ?? '',
+              owner_phone_number: this.tenant.owner_phone_number ?? '',
+              email:              this.tenant.email,
+              billing_email:      this.tenant.billing_email ?? '',
+              domain:             this.tenant.domains && this.tenant.domains.length > 0 ? this.tenant.domains[0].domain : ''
             });
           }
         },

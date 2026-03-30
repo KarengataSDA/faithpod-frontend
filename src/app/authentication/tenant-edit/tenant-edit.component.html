@@ -60,6 +60,52 @@
                 </div>
               </div>
 
+              <!-- Owner First Name -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label required">Owner First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="owner_first_name"
+                  placeholder="John"
+                  [class.is-invalid]="editTenantForm.get('owner_first_name')?.invalid && editTenantForm.get('owner_first_name')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="editTenantForm.get('owner_first_name')?.invalid && editTenantForm.get('owner_first_name')?.touched">
+                  Owner first name is required.
+                </div>
+              </div>
+
+              <!-- Owner Last Name -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label required">Owner Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="owner_last_name"
+                  placeholder="Doe"
+                  [class.is-invalid]="editTenantForm.get('owner_last_name')?.invalid && editTenantForm.get('owner_last_name')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="editTenantForm.get('owner_last_name')?.invalid && editTenantForm.get('owner_last_name')?.touched">
+                  Owner last name is required.
+                </div>
+              </div>
+
+              <!-- Owner Phone -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Owner Phone Number <small class="text-muted">(optional)</small></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="owner_phone_number"
+                  placeholder="254712345678"
+                  [class.is-invalid]="editTenantForm.get('owner_phone_number')?.invalid && editTenantForm.get('owner_phone_number')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="editTenantForm.get('owner_phone_number')?.invalid && editTenantForm.get('owner_phone_number')?.touched">
+                  Phone must be in format 254712345678 or 254112345678.
+                </div>
+                <small class="form-hint">Kenyan M-Pesa format e.g. 254712345678</small>
+              </div>
+
               <!-- Email -->
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Email Address</label>
