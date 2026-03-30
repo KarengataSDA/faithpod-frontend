@@ -54,7 +54,50 @@
               </div>
 
               <div class="col-md-6 mb-3">
-                <label class="form-label">Email</label>
+                <label class="form-label">Owner First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="John"
+                  formControlName="owner_first_name"
+                  [class.is-invalid]="createTenantForm.get('owner_first_name')?.invalid && createTenantForm.get('owner_first_name')?.touched"
+                >
+                <div class="invalid-feedback" *ngIf="createTenantForm.get('owner_first_name')?.invalid && createTenantForm.get('owner_first_name')?.touched">
+                  Owner first name is required
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Owner Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Doe"
+                  formControlName="owner_last_name"
+                  [class.is-invalid]="createTenantForm.get('owner_last_name')?.invalid && createTenantForm.get('owner_last_name')?.touched"
+                >
+                <div class="invalid-feedback" *ngIf="createTenantForm.get('owner_last_name')?.invalid && createTenantForm.get('owner_last_name')?.touched">
+                  Owner last name is required
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Owner Phone <small class="text-muted">(optional)</small></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="254712345678"
+                  formControlName="owner_phone_number"
+                  [class.is-invalid]="createTenantForm.get('owner_phone_number')?.invalid && createTenantForm.get('owner_phone_number')?.touched"
+                >
+                <div class="invalid-feedback" *ngIf="createTenantForm.get('owner_phone_number')?.invalid && createTenantForm.get('owner_phone_number')?.touched">
+                  Phone must be in format 254712345678 or 254112345678
+                </div>
+                <small class="form-hint">Kenyan M-Pesa format e.g. 254712345678</small>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Church Email</label>
                 <input
                   type="email"
                   class="form-control"
@@ -142,6 +185,7 @@
               <thead>
                 <tr>
                   <th>Tenant</th>
+                  <th>Owner</th>
                   <th>Plan</th>
                   <th>Status</th>
                   <th class="text-end">Members</th>
@@ -158,6 +202,15 @@
                       <span *ngIf="tenant.domains && tenant.domains.length > 0">{{tenant.domains[0].domain}}</span>
                       <span *ngIf="!tenant.domains || tenant.domains.length === 0">—</span>
                     </small>
+                  </td>
+
+                  <!-- Owner -->
+                  <td>
+                    <div *ngIf="tenant.owner_first_name || tenant.owner_last_name">
+                      {{tenant.owner_first_name}} {{tenant.owner_last_name}}
+                    </div>
+                    <small class="text-muted" *ngIf="tenant.owner_phone_number">{{tenant.owner_phone_number}}</small>
+                    <span *ngIf="!tenant.owner_first_name && !tenant.owner_last_name" class="text-muted">—</span>
                   </td>
 
                   <!-- Plan -->

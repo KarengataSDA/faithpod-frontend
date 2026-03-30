@@ -13,6 +13,9 @@ export interface Tenant {
   id: string;
   name: string;
   email: string;
+  owner_first_name?: string;
+  owner_last_name?: string;
+  owner_phone_number?: string;
   status: TenantStatus;
   is_active: boolean;
   billing_email?: string;
@@ -55,6 +58,9 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createTenantForm = this.formBuilder.group({
       name: ['', Validators.required],
+      owner_first_name: ['', Validators.required],
+      owner_last_name: ['', Validators.required],
+      owner_phone_number: ['', Validators.pattern(/^254[17]\d{8}$/)],
       email: ['', [Validators.required, Validators.email]],
       domain: ['', [Validators.required, Validators.pattern(/^[a-z0-9][a-z0-9-]*\.[a-z0-9.-]+$/i)]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -232,6 +238,8 @@ export class TenantManagementComponent implements OnInit, OnDestroy {
         this.errorMessage = 'Unable to connect to the server. Please check your network connection.';
       } else if (error.status === 401) {
         this.errorMessage = 'Unauthorized. Please login again.';
+      } else if (error.status === 409) {
+        this.errorMessage = error.error.message || 'A tenant with that name already exists.';
       } else if (error.status === 422) {
         if (error.error.errors) {
           const errors = Object.values(error.error.errors).flat();

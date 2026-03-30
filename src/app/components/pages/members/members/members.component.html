@@ -64,7 +64,10 @@
               <tr *ngFor="let member of paginatedMembers; let i = index">
                 <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                 <td>{{ member.membership_number || 'No Number' }}</td>
-                <td>{{ member.first_name }} {{ member.last_name }}</td>
+                <td>
+                  {{ member.first_name }} {{ member.last_name }}
+                  <span *ngIf="member.is_owner" class="badge bg-primary-transparent text-primary ms-1" style="font-size:10px;">Owner</span>
+                </td>
                 <td>{{ member.email }}</td>
                 <td>{{ member.phone_number }}</td>
 
@@ -129,9 +132,9 @@
                       <span class="fe fe-x-circle fs-14"></span>
                     </button>
 
-                    <!-- Suspend (for verified only) -->
+                    <!-- Suspend (for verified only, not the tenant owner) -->
                     <button
-                      *ngIf="authService.hasPermission('edit members') && member.status === 'verified'"
+                      *ngIf="authService.hasPermission('edit members') && member.status === 'verified' && !member.is_owner"
                       class="btn btn-sm text-warning"
                       ngbTooltip="Suspend"
                       (click)="quickSuspend(member)">
@@ -157,9 +160,9 @@
                       <span class="fe fe-mail fs-14"></span>
                     </button>
 
-                    <!-- Delete -->
+                    <!-- Delete (not the tenant owner) -->
                     <button
-                      *ngIf="authService.hasPermission('delete members')"
+                      *ngIf="authService.hasPermission('delete members') && !member.is_owner"
                       class="btn btn-sm text-danger"
                       ngbTooltip="Delete"
                       (click)="deleteMember(member.id)">
