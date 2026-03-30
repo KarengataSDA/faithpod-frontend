@@ -31,6 +31,7 @@ export class TenantEditComponent implements OnInit, OnDestroy {
   editTenantForm: FormGroup;
   isLoading = false;
   isUpdating = false;
+  isArchiving = false;
   errorMessage = '';
   successMessage = '';
   tenantId: string | null = null;
@@ -149,6 +150,66 @@ export class TenantEditComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.isUpdating = false;
+        }
+      });
+  }
+
+  confirmArchive(): void {
+    if (!this.tenant) return;
+    const tenantName = this.tenant.name;
+
+    Swal.fire({
+      title: 'Delete this tenant?',
+      html: `
+        <p>This will <strong>permanently delete</strong> <strong>${tenantName}</strong> and drop its entire database. This action <strong>cannot be undone</strong>.</p>
+        <p>To confirm, type <strong>${tenantName}</strong> below:</p>
+      `,
+      input: 'text',
+      inputPlaceholder: tenantName,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'I understand, delete this tenant',
+      confirmButtonColor: '#d33',
+      cancelButtonText: 'Cancel',
+      inputValidator: (value) => {
+        if (value !== tenantName) {
+          return `Please type the tenant name exactly: ${tenantName}`;
+        }
+        return null;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.archiveTenant();
+      }
+    });
+  }
+
+  archiveTenant(): void {
+    if (!this.tenantId) return;
+    this.isArchiving = true;
+
+    this.http
+      .delete(`${this.apiUrl}/tenants/${this.tenantId}`, {
+        headers: { 'Authorization': `Bearer ${this.authToken}` }
+      })
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(this.handleError.bind(this))
+      )
+      .subscribe({
+        next: () => {
+          this.isArchiving = false;
+          Swal.fire({
+            icon: 'success',
+            title: 'Tenant deleted',
+            text: 'The tenant and its database have been permanently deleted.',
+            timer: 2500,
+            showConfirmButton: false,
+          });
+          setTimeout(() => this.router.navigate(['/tenants']), 2500);
+        },
+        error: () => {
+          this.isArchiving = false;
         }
       });
   }
