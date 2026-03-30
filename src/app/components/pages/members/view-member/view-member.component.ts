@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CollectionService } from '../../../../shared/services/collection.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Member, MemberStatus, statusBadgeClass, statusLabel } from 'src/app/shared/models/member';
-import { Collection } from 'src/app/shared/models/collection';
+import { Collection, Contribution } from 'src/app/shared/models/collection';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -23,7 +23,12 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   // Givings pagination
   currentPage = 1;
   readonly contributionPageSize = 10;
-  isLoading: boolean = true
+  isLoading: boolean = true;
+
+  // Link Contributions tab
+  unlinkedContributions: Contribution[] = [];
+  selectedIds = new Set<number>();
+  isLoadingUnlinked = false;
 
   get paginatedContributions() {
     const sorted = [...(this.member?.contributions ?? [])].sort((a, b) =>
@@ -63,6 +68,76 @@ export class ViewMemberComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onTabChange(nextId: number): void {
+    if (nextId === 3 && this.unlinkedContributions.length === 0 && !this.isLoadingUnlinked) {
+      this.loadUnlinkedContributions();
+    }
+  }
+
+  loadUnlinkedContributions(): void {
+    this.isLoadingUnlinked = true;
+    this.collectionService.getUnlinkedContributions(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => { this.unlinkedContributions = data; this.isLoadingUnlinked = false; },
+        error: () => { this.isLoadingUnlinked = false; }
+      });
+  }
+
+  toggleId(id: number): void {
+    if (this.selectedIds.has(id)) {
+      this.selectedIds.delete(id);
+    } else {
+      this.selectedIds.add(id);
+    }
+  }
+
+  isSelected(id: number): boolean {
+    return this.selectedIds.has(id);
+  }
+
+  get allUnlinkedSelected(): boolean {
+    return this.unlinkedContributions.length > 0 && this.selectedIds.size === this.unlinkedContributions.length;
+  }
+
+  toggleAllUnlinked(checked: boolean): void {
+    if (checked) {
+      this.unlinkedContributions.forEach(c => this.selectedIds.add(c.id));
+    } else {
+      this.selectedIds.clear();
+    }
+  }
+
+  linkSelected(): void {
+    const count = this.selectedIds.size;
+    if (count === 0) return;
+    Swal.fire({
+      title: `Link ${count} contribution${count > 1 ? 's' : ''} to ${this.member?.first_name}?`,
+      text: 'These walk-in records will be permanently assigned to this member.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Link',
+      confirmButtonColor: '#198754',
+    }).then(result => {
+      if (!result.isConfirmed) return;
+      this.collectionService.linkContributions(this.id, [...this.selectedIds])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            this.toast('success', res.message);
+            const linked = new Set(this.selectedIds);
+            this.unlinkedContributions = this.unlinkedContributions.filter(c => !linked.has(c.id));
+            this.selectedIds.clear();
+            // Refresh member so Givings tab reflects the newly linked contributions
+            this.memberService.getUser(this.id)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((data: Member) => { this.member = data; });
+          },
+          error: () => this.toast('error', 'Failed to link contributions'),
+        });
+    });
   }
 
  

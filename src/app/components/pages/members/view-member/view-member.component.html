@@ -142,7 +142,7 @@
         <div class="panel panel-primary">
           <div class="tab-menu-heading">
             <div class="tabs-menu1">
-              <ul ngbNav #nav="ngbNav" [activeId]="1" class="panel-tabs">
+              <ul ngbNav #nav="ngbNav" [activeId]="1" (navChange)="onTabChange($event.nextId)" class="panel-tabs">
 
                 <!-- Tab 1: Member Details -->
                 <li [ngbNavItem]="1">
@@ -233,6 +233,81 @@
                           </li>
                         </ul>
                       </div>
+                    </div>
+                  </ng-template>
+                </li>
+
+                <!-- Tab 3: Link Contributions -->
+                <li [ngbNavItem]="3" *ngIf="authService.hasPermission('edit members')">
+                  <a ngbNavLink>
+                    Link Contributions
+                    <span *ngIf="unlinkedContributions.length > 0" class="badge bg-warning text-dark ms-1">{{ unlinkedContributions.length }}</span>
+                  </a>
+                  <ng-template ngbNavContent>
+                    <div class="tab-pane active pt-4">
+
+                      <p class="text-muted mb-3">
+                        Walk-in contributions recorded with
+                        <strong>{{ member?.email }}</strong>
+                        <ng-container *ngIf="member?.phone_number"> or <strong>{{ member?.phone_number }}</strong></ng-container>
+                        that are not yet linked to any member.
+                      </p>
+
+                      <!-- Loading spinner -->
+                      <div *ngIf="isLoadingUnlinked" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                      </div>
+
+                      <ng-container *ngIf="!isLoadingUnlinked">
+
+                        <!-- Empty state -->
+                        <div *ngIf="unlinkedContributions.length === 0" class="alert alert-info mb-0">
+                          No unlinked walk-in contributions found matching this member's email or phone number.
+                        </div>
+
+                        <!-- Results -->
+                        <ng-container *ngIf="unlinkedContributions.length > 0">
+                          <div class="table-responsive">
+                            <table class="table table-bordered text-nowrap mb-3">
+                              <thead class="border-top">
+                                <tr>
+                                  <th style="width:40px">
+                                    <input type="checkbox" [checked]="allUnlinkedSelected" (change)="toggleAllUnlinked($any($event.target).checked)">
+                                  </th>
+                                  <th>Date</th>
+                                  <th>Name</th>
+                                  <th>Email</th>
+                                  <th>Phone</th>
+                                  <th>Category</th>
+                                  <th>Amount</th>
+                                  <th>Notes</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let c of unlinkedContributions">
+                                  <td>
+                                    <input type="checkbox" [checked]="isSelected(c.id)" (change)="toggleId(c.id)">
+                                  </td>
+                                  <td>{{ c.contribution_date }}</td>
+                                  <td>{{ c.contributor_name || '—' }}</td>
+                                  <td>{{ c.contributor_email || '—' }}</td>
+                                  <td>{{ c.contributor_phone || '—' }}</td>
+                                  <td>{{ c.contribution_type?.name || '—' }}</td>
+                                  <td>{{ c.contribution_amount }}</td>
+                                  <td>{{ c.notes || '—' }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">{{ selectedIds.size }} of {{ unlinkedContributions.length }} selected</span>
+                            <button class="btn btn-success btn-sm" [disabled]="selectedIds.size === 0" (click)="linkSelected()">
+                              <i class="fe fe-link me-1"></i> Link Selected to {{ member?.first_name }}
+                            </button>
+                          </div>
+                        </ng-container>
+
+                      </ng-container>
                     </div>
                   </ng-template>
                 </li>

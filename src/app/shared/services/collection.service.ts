@@ -163,6 +163,18 @@ export class CollectionService {
     );
   }
 
+  getUnlinkedContributions(memberId: number): Observable<Contribution[]> {
+    return this.http.get<Contribution[]>(`${this.baseUrl}/members/${memberId}/unlinked-contributions`);
+  }
+
+  linkContributions(memberId: number, contributionIds: number[]): Observable<{ success: boolean; linked: number; message: string }> {
+    return this.http.post<{ success: boolean; linked: number; message: string }>(
+      `${this.baseUrl}/members/${memberId}/link-contributions`,
+      { contribution_ids: contributionIds },
+      this.httpOptions
+    ).pipe(tap(() => this.invalidateCache()));
+  }
+
   /**
    * Clear all collection-related cache after mutations
    */
