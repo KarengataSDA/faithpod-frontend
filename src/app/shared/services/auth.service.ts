@@ -17,6 +17,10 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null)
   public currentUser$: Observable<User | null>  = this.currentUserSubject.asObservable()
 
+  get currentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
   /**
    * Get dynamic base URL from tenant service
    */

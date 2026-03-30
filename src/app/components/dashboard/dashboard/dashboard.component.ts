@@ -100,9 +100,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.fetchPopulationGroups()
     this.fetchTotalContribution()
 
-   this.fetchContributionCategoriesChart()
    this.selectedCategoryId = 1
-    
+
       // inital data load for chart
    this.loadContributionChartData('weekly'); // -> Default to Weekly
 
@@ -220,6 +219,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
  fetchUserData(): void {
+  // Use cached user immediately if available (e.g. right after login)
+  const cached = this.authService.currentUser;
+  if (cached) {
+    this.user = cached;
+    Auth.userEmitter.emit(this.user);
+    return;
+  }
+
   this.authService.user()
     .pipe(takeUntil(this.destroy$))
     .subscribe(
