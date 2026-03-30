@@ -50,6 +50,7 @@ export interface Member {
 
   // Status lifecycle
   status?: MemberStatus;
+  is_owner?: boolean;
   created_by?: number | null;
   verified_by?: number | null;
   verified_at?: string | null;
