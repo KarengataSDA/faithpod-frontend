@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from '../../../../shared/services/member.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
+import { normalizePhoneNumber, phoneNumberValidator } from 'src/app/shared/utils/phone.utils';
 
 @Component({
     selector: 'app-create-member',
@@ -27,7 +27,7 @@ export class CreateMemberComponent implements OnInit {
       middle_name:  [''],
       last_name:    ['', Validators.required],
       email:        ['', [Validators.required, Validators.email]],
-      phone_number: ['', Validators.required],
+      phone_number: ['', [Validators.required, phoneNumberValidator()]],
     });
   }
 

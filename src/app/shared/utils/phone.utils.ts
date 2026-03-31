@@ -42,3 +42,19 @@ export function isValidMpesaPhone(phone: string): boolean {
   const mpesaRegex = /^254[17]\d{8}$/;
   return mpesaRegex.test(phone);
 }
+
+/**
+ * Angular reactive-form validator for phone numbers.
+ * Normalizes the value first, then checks for exactly 12 digits.
+ * Passes if the field is empty (use Validators.required alongside if mandatory).
+ */
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+export function phoneNumberValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
+    const normalized = normalizePhoneNumber(String(value));
+    return /^\d{12}$/.test(normalized) ? null : { invalidPhone: true };
+  };
+}

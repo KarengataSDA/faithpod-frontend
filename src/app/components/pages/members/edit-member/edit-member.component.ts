@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { phoneNumberValidator } from 'src/app/shared/utils/phone.utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MemberService } from 'src/app/shared/services/member.service';
 import { RoleService } from 'src/app/shared/services/role.service';
@@ -49,7 +50,7 @@ export class EditMemberComponent implements OnInit, OnDestroy {
       middle_name: '',
       last_name: '',
       email: '',
-      phone_number: '',
+      phone_number: ['', phoneNumberValidator()],
       membership_number: '',
       membership_type_id: '',
       role_id: '',

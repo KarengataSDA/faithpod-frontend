@@ -70,7 +70,11 @@
             <div class="form-group">
               <label class="form-label">Phone Number <small class="text-muted">(for SMS acknowledgment)</small></label>
               <input class="form-control" type="tel" formControlName="contributor_phone"
-                     placeholder="e.g. 0712345678" />
+                     placeholder="e.g. 0712345678"
+                     [class.is-invalid]="form.get('contributor_phone')?.invalid && form.get('contributor_phone')?.touched" />
+              <div class="invalid-feedback" *ngIf="form.get('contributor_phone')?.hasError('invalidPhone') && form.get('contributor_phone')?.touched">
+                Phone number must be 12 digits (e.g. 254712345678).
+              </div>
             </div>
           </div>
           <div class="col-lg-4">

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { normalizePhoneNumber } from 'src/app/shared/utils/phone.utils';
+import { normalizePhoneNumber, phoneNumberValidator } from 'src/app/shared/utils/phone.utils';
 import { Member } from 'src/app/shared/models/member';
 import { ContributionCategory } from 'src/app/shared/models/collection';
 import { MemberService } from 'src/app/shared/services/member.service';
@@ -40,7 +40,7 @@ export class ManualContributionComponent implements OnInit {
 
       // Walk-in contributor fields (used when isSystemMember = false)
       contributor_name:  [''],
-      contributor_phone: [''],
+      contributor_phone: ['', phoneNumberValidator()],
       contributor_email: ['', [Validators.email]],
 
       contribution_date: ['', Validators.required],
