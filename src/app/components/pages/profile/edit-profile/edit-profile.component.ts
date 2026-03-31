@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { normalizePhoneNumber, phoneNumberValidator } from 'src/app/shared/utils/phone.utils';
 import { Auth } from 'src/app/components/classes/auth';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MediaConfirmResponse } from 'src/app/shared/services/media.service';
@@ -44,7 +45,7 @@ export class EditProfileComponent implements OnInit {
       middle_name: '',
       last_name: '',
       email: '',
-      phone_number: '',
+      phone_number: ['', phoneNumberValidator()],
       date_of_birth: '',
       gender: ''
     })
@@ -88,7 +89,11 @@ export class EditProfileComponent implements OnInit {
   }
 
   infoSubmit():void {
-    this.authService.updateInfo(this.infoForm.getRawValue()).subscribe(
+    const formData = this.infoForm.getRawValue();
+    if (formData.phone_number) {
+      formData.phone_number = normalizePhoneNumber(String(formData.phone_number));
+    }
+    this.authService.updateInfo(formData).subscribe(
       (user)=> {
         Auth.userEmitter.emit(user)
 

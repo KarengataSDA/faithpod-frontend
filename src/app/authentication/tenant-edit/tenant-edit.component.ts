@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { catchError, throwError, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { normalizePhoneNumber, phoneNumberValidator } from 'src/app/shared/utils/phone.utils';
 
 interface Tenant {
   id: string;
@@ -48,7 +49,7 @@ export class TenantEditComponent implements OnInit, OnDestroy {
       name:                ['', Validators.required],
       owner_first_name:    ['', Validators.required],
       owner_last_name:     ['', Validators.required],
-      owner_phone_number:  ['', Validators.pattern(/^254[17]\d{8}$/)],
+      owner_phone_number:  ['', phoneNumberValidator()],
       email:               ['', [Validators.required, Validators.email]],
       billing_email:       ['', Validators.email],
       domain:              ['', Validators.required]
@@ -121,8 +122,13 @@ export class TenantEditComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.successMessage = '';
 
+    const formData = this.editTenantForm.getRawValue();
+    if (formData.owner_phone_number) {
+      formData.owner_phone_number = normalizePhoneNumber(formData.owner_phone_number);
+    }
+
     this.http
-      .put(`${this.apiUrl}/tenants/${this.tenantId}`, this.editTenantForm.getRawValue(), {
+      .put(`${this.apiUrl}/tenants/${this.tenantId}`, formData, {
         headers: {
           'Authorization': `Bearer ${this.authToken}`
         }
@@ -161,8 +167,8 @@ export class TenantEditComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Delete this tenant?',
       html: `
-        <p>This will <strong>permanently delete</strong> <strong>${tenantName}</strong> and drop its entire database. This action <strong>cannot be undone</strong>.</p>
-        <p>To confirm, type <strong>${tenantName}</strong> below:</p>
+        <p>This will <strong>permanently delete</strong> <strong style="color: #e53e3e;">${tenantName}</strong> and drop its entire database. This action <strong>cannot be undone</strong>.</p>
+        <p>To confirm, type <strong style="color: #e53e3e;">${tenantName}</strong> below:</p>
       `,
       input: 'text',
       inputPlaceholder: tenantName,

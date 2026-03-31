@@ -101,7 +101,7 @@
                   [class.is-invalid]="editTenantForm.get('owner_phone_number')?.invalid && editTenantForm.get('owner_phone_number')?.touched"
                 />
                 <div class="invalid-feedback" *ngIf="editTenantForm.get('owner_phone_number')?.invalid && editTenantForm.get('owner_phone_number')?.touched">
-                  Phone must be in format 254712345678 or 254112345678.
+                  Phone number must be 12 digits (e.g. 254712345678).
                 </div>
                 <small class="form-hint">Kenyan M-Pesa format e.g. 254712345678</small>
               </div>

@@ -54,6 +54,8 @@
             <input type="text" class="form-control" formControlName="phone_number" placeholder="07XX or 01XX" />
             <div *ngIf="form.get('phone_number')?.touched && form.get('phone_number')?.hasError('required')"
                  class="text-danger small mt-1">Phone number is required.</div>
+            <div *ngIf="form.get('phone_number')?.touched && form.get('phone_number')?.hasError('invalidPhone')"
+                 class="text-danger small mt-1">Phone number must be 12 digits (e.g. 254712345678).</div>
           </div>
         </div>
 
