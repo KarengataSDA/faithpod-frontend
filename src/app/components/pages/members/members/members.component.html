@@ -190,10 +190,17 @@
               <li class="page-item" [class.disabled]="currentPage === 1">
                 <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
               </li>
-              <li *ngFor="let _ of [].constructor(totalPages); let idx = index"
-                  class="page-item" [class.active]="currentPage === idx + 1">
-                <a class="page-link" (click)="onPageChange(idx + 1)">{{ idx + 1 }}</a>
+              
+
+               <!-- Pages with ellipsis -->
+              <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
+                [class.disabled]="page === '...'">
+
+                <a class="page-link" (click)="page !== '...' && onPageChange(page)">
+                  {{ page }}
+                </a>
               </li>
+
               <li class="page-item" [class.disabled]="currentPage === totalPages">
                 <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
               </li>

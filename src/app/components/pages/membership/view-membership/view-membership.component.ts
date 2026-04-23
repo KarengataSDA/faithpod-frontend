@@ -42,7 +42,7 @@ export class ViewMembershipComponent implements OnInit {
     });
   }
 
-  // ✅ Ellipsis pagination
+  //  Ellipsis pagination
   getDisplayedPages(): (number | '...')[] {
     const pages: (number | '...')[] = [];
 
@@ -75,7 +75,7 @@ export class ViewMembershipComponent implements OnInit {
     return pages;
   }
 
-  // ✅ Single source of truth
+  //  Single source of truth
   updatePaginatedMembers(): void {
     if (this.currentPage < 1) this.currentPage = 1;
     if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
@@ -86,7 +86,7 @@ export class ViewMembershipComponent implements OnInit {
     this.paginatedMembers = this.members.slice(startIndex, endIndex);
   }
 
-  // ✅ Safe page change
+  //  Safe page change
   onPageChange(page: number): void {
     if (page < 1 || page > this.totalPages) return;
 

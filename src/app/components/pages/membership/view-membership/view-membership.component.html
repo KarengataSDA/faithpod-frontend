@@ -67,7 +67,6 @@
                 <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
               </li>
 
-              <!-- Pages with ellipsis -->
               <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
                 [class.disabled]="page === '...'">
 
@@ -76,7 +75,6 @@
                 </a>
               </li>
 
-              <!-- Next -->
               <li class="page-item" [class.disabled]="currentPage === totalPages">
                 <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
               </li>
