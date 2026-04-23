@@ -14,29 +14,73 @@ export class CollectionComponent implements OnInit {
   total: number;
   isLoading: boolean = true
 
+  paginatedCollections: Collection[] = [] 
+
+  currentPage = 1;
+  pageSize = 20;
+  totalLength = 0;
+  totalPages = 0;
+
   constructor(public collectionService: CollectionService, public authService: AuthService) {}
 
   ngOnInit(): void {
     this.collectionService.getAll().subscribe((data: Collection[]) => {
-    // setTimeout(() => {
       this.collections = data;
+      this.totalLength = data.length; 
+      this.totalPages = Math.ceil(this.totalLength / this.pageSize);
+      this.currentPage = 1; 
+      this.updatePaginatedCollections();
       this.isLoading = false
-    // }, 5000)
+   
     });
   }
 
-  sendMail(id) {
-    this.collectionService.sendMail(id).subscribe((res) => {
-      id = this.collections.find((item) => item.id == id)?.id;
-      window.location.reload();
+  getDisplayedPages(): (number | '...')[] {
+    const pages: (number | '...')[] = [];
+
+    if (this.totalPages <= 7) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    pages.push(1);
+
+    if (this.currentPage > 4) {
+      pages.push('...');
+    }
+
+    const start = Math.max(2, this.currentPage - 2);
+    const end = Math.min(this.totalPages - 1, this.currentPage + 2);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (this.currentPage < this.totalPages - 3) {
+      pages.push('...');
+    }
+
+    pages.push(this.totalPages);
+
+    return pages;
+  }
+
+  onPageChange(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+
+    this.currentPage = page;
+    this.updatePaginatedCollections();
+  }
+
+   updatePaginatedCollections(): void {
+     if (this.currentPage < 1) this.currentPage = 1;
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
     
-    });
-  }
-
-  deleteContribution(id: any) {
-    this.collectionService.delete(id).subscribe((res) => {
-      this.collections = this.collections.filter((item) => item.id !== id);
-     
-    });
+    this.paginatedCollections = this.collections.slice(startIndex, endIndex);
   }
 }
