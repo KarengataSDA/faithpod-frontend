@@ -1,26 +1,22 @@
-<app-page-header
-  [title]="'Membership'"
-  [items]="['Membership']"
-  [active_item]="'Members'"
-></app-page-header>
+<app-page-header [title]="'Membership'" [items]="['Membership']" [active_item]="'Members'"></app-page-header>
 
 <div class="row row-sm" *ngIf="membership">
-    <div class="col-xl-12">
-      <div class="card overflow-visible">
-        <div class="card-header pb-0">
-            <h6 class="main-content-label mb-1">Name: {{membership.name}}</h6>
-          <div class="card-options ">
+  <div class="col-xl-12">
+    <div class="card overflow-visible">
+      <div class="card-header pb-0">
+        <h6 class="main-content-label mb-1">Name: {{membership.name}}</h6>
+        <div class="card-options ">
 
-            <p class="text-muted card-sub-title">Total Members: {{membership.members.length}}</p>
+          <p class="text-muted card-sub-title">Total Members: {{membership.members.length}}</p>
         </div>
-        </div>
-        <div class="card-body">
+      </div>
+      <div class="card-body">
 
 
-        </div>
       </div>
     </div>
   </div>
+</div>
 
 <!-- row opened -->
 <div class="row row-sm" *ngIf="membership">
@@ -33,35 +29,62 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped border">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Member No</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Email Address</th>
-                  <th>Phone Number</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="membership">
-                <tr *ngFor="let member of membership.members; index as i">
-                    
-                  <th>{{ i + 1 }}</th>
-                  <th>{{member.membership_number}}</th>
-                  <td>{{member.first_name}}</td>
-                  <td>{{ member.last_name }}</td>
-                  <td>{{ member.email }}</td>
-                  <td>{{ member.phone_number }}</td>
-                </tr>
-              </tbody>
-            </table>
+          <table class="table table-striped border">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Member No</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="membership">
+              <tr *ngFor="let member of paginatedMembers; index as i">
+
+                <th>{{ i + 1 }}</th>
+                <th>{{member.membership_number}}</th>
+                <td>{{member.first_name}}</td>
+                <td>{{ member.last_name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.phone_number }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!--Pagination-->
+          <div class="d-flex justify-content-between align-items-center pt-3">
+            <p class="mb-0">
+              Showing {{ (currentPage - 1) * pageSize + 1}} -
+              {{ (currentPage - 1 ) * pageSize + paginatedMembers.length }}
+              of {{ totalLength}} members
+            </p>
+            <ul class="pagination mb-0">
+
+              <!-- Prev -->
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+              </li>
+
+              <!-- Pages with ellipsis -->
+              <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
+                [class.disabled]="page === '...'">
+
+                <a class="page-link" (click)="page !== '...' && onPageChange(page)">
+                  {{ page }}
+                </a>
+              </li>
+
+              <!-- Next -->
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+              </li>
+
+            </ul>
           </div>
-     
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-
-

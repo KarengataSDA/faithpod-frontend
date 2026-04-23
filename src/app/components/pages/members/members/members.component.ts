@@ -57,8 +57,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
+ 
   badgeClass(status: MemberStatus | undefined): string {
     return statusBadgeClass(status);
   }
@@ -71,8 +70,6 @@ export class MembersComponent implements OnInit, OnDestroy {
     if (tab === 'all') return this.members.length;
     return this.members.filter(m => m.status === tab).length;
   }
-
-  // ── Filtering / pagination ────────────────────────────────────────────────
 
   setTab(tab: StatusTab): void {
     this.activeTab = tab;
@@ -117,7 +114,6 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.updatePaginatedMembers();
   }
 
-  // ── Status actions ────────────────────────────────────────────────────────
 
   deleteMember(id: number): void {
     Swal.fire({
