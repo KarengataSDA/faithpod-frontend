@@ -55,7 +55,7 @@ export class AllContributionsComponent implements OnInit {
 
         this.filteredContributions = [...this.collections]
         this.totalAmount = this.filteredContributions.reduce((sum, transaction) => {
-          return sum + parseFloat(transaction.contribution_amount)
+          return sum + transaction.contribution_amount
         }, 0)
         this.paginate()
         this.isLoading = false 
@@ -119,7 +119,7 @@ export class AllContributionsComponent implements OnInit {
     )
 
     this.totalAmount = this.filteredContributions.reduce((sum, txn) => {
-      return sum + parseFloat(txn.contribution_amount)
+      return sum + txn.contribution_amount
     }, 0)
 
     this.currentPage = 1
@@ -192,7 +192,7 @@ export class AllContributionsComponent implements OnInit {
       'Phone': this.getContributorPhone(txn),
       'Source': txn.source === 'mpesa' ? 'M-Pesa' : 'Manual',
       'Contribution Category': txn.contribution_type?.name || '-',
-      'Amount': parseFloat(txn.contribution_amount),
+      'Amount': txn.contribution_amount,
       'Date' : txn.contribution_date
     }))
 
@@ -255,7 +255,7 @@ export class AllContributionsComponent implements OnInit {
       txn.contribution_date,
     ])
 
-    const totalAmount = this.filteredContributions.reduce((sum, txn) => sum + parseFloat(txn.contribution_amount), 0)
+    const totalAmount = this.filteredContributions.reduce((sum, txn) => sum + txn.contribution_amount, 0)
     const formattedTotal = `${totalAmount.toLocaleString('en-KE', { minimumFractionDigits: 2 })}`
     data.push(['', '', '', '', 'Total Amount: Ksh. ', formattedTotal, '']);
 

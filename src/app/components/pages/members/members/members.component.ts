@@ -57,8 +57,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
+ 
   badgeClass(status: MemberStatus | undefined): string {
     return statusBadgeClass(status);
   }
@@ -71,8 +70,6 @@ export class MembersComponent implements OnInit, OnDestroy {
     if (tab === 'all') return this.members.length;
     return this.members.filter(m => m.status === tab).length;
   }
-
-  // ── Filtering / pagination ────────────────────────────────────────────────
 
   setTab(tab: StatusTab): void {
     this.activeTab = tab;
@@ -108,16 +105,54 @@ export class MembersComponent implements OnInit, OnDestroy {
   }
 
   updatePaginatedMembers(): void {
-    const start = (this.currentPage - 1) * this.pageSize;
-    this.paginatedMembers = this.filteredMembers.slice(start, start + this.pageSize);
+     if (this.currentPage < 1) this.currentPage = 1;
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    
+    this.paginatedMembers = this.filteredMembers.slice(startIndex, endIndex);
+  }
+
+  getDisplayedPages(): (number | '...')[] {
+    const pages: (number | '...')[] = [];
+
+    if (this.totalPages <= 7) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    pages.push(1);
+
+    if (this.currentPage > 4) {
+      pages.push('...');
+    }
+
+    const start = Math.max(2, this.currentPage - 2);
+    const end = Math.min(this.totalPages - 1, this.currentPage + 2);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (this.currentPage < this.totalPages - 3) {
+      pages.push('...');
+    }
+
+    pages.push(this.totalPages);
+
+    return pages;
   }
 
   onPageChange(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+
     this.currentPage = page;
     this.updatePaginatedMembers();
   }
 
-  // ── Status actions ────────────────────────────────────────────────────────
 
   deleteMember(id: number): void {
     Swal.fire({

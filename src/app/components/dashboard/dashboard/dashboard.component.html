@@ -31,7 +31,7 @@
             <div class="card-body">
                 <div class="d-flex">
                     <div class="text-white">
-                        <h2 class="mb-0 number-font">Ksh. {{totalCollection?.total_amount_collected ?? 0}}</h2>
+                        <h2 class="mb-0 number-font">Ksh. {{totalCollection?.total_amount_collected ?? 0 | number: '1.2-2'}}</h2>
                         <p class="text-white mb-0">Total App Collection</p>
                     </div>
                     <div class="ms-auto"> <i class="fa fa-bank text-white fs-30 me-2 mt-2"></i> </div>

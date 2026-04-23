@@ -10,7 +10,7 @@
         <div class="card-header pb-0">
             <h6 class="main-content-label mb-1">Name: {{category.name}}</h6>
           <div class="card-options ">
-            <h6 class="main-content-label">Total: Ksh {{category.total_contributions}}</h6>
+            <h6 class="main-content-label">Total: Ksh {{category.total_contributions | number: '1.2-2' }}</h6>
         </div>
         </div>
         <div class="card-body"></div>
@@ -57,7 +57,7 @@
                     <td>{{cat.contribution_date}}</td>
                     <td >{{ cat.user?.first_name }} {{ cat.user?.last_name }}</td> 
                     <td>{{ cat.contribution_type?.name }}</td>
-                    <td>{{ cat.contribution_amount }}</td>
+                    <td>{{ cat.contribution_amount | number: '1.2-2' }}</td>
                     
                   </tr>
                 </tbody>

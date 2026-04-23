@@ -15,7 +15,7 @@ export interface ContributionCategory {
 export interface Collection {
     id: number
     contribution_date: string;
-    total_amount: string;
+    total_amount: number;
     status: number;
     contributions: Contribution[]
     
@@ -29,7 +29,7 @@ export interface Contribution {
         id: number
         member_id: number | null
         contributiontype_id: number
-        contribution_amount: string
+        contribution_amount: number
         contribution_date: string
         created_at: string
         status: number | string
