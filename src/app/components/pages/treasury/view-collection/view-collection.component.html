@@ -11,7 +11,7 @@
             <h6 class="main-content-label mb-1">Date: {{collection.contribution_date}}</h6>
           <div class="card-options ">
 
-            <p class="text-muted card-sub-title">Total Amount {{collection.total_amount}}</p>
+            <h6 class="main-content-label mb-1">Total: KES {{ collection.total_amount | number: '1.2-2' }}</h6>
         </div>
         </div>
         <div class="card-body">
@@ -59,7 +59,7 @@
                         {{ category.user ? (category.user.first_name + ' ' + category.user.last_name) : (category.contributor_name || '-') }}
                       </td>
                       <td>{{ category.contribution_type?.name || '-' }}</td>
-                      <td>{{ category.contribution_amount }}</td>
+                      <td>{{ category.contribution_amount | number: '1.2-2' }}</td>
                     </tr>
                   </tbody>
                 </table>
