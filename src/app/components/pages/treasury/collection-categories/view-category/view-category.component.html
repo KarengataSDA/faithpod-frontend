@@ -52,7 +52,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let cat of category.contributions; index as i">
+                  <tr *ngFor="let cat of paginatedContributions; index as i">
                     <th>{{ i + 1 }}</th>
                     <td>{{cat.contribution_date}}</td>
                     <td >{{ cat.user?.first_name }} {{ cat.user?.last_name }}</td> 
@@ -62,6 +62,31 @@
                   </tr>
                 </tbody>
               </table>
+               <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px;">
+              <div>
+                <p>showing {{(currentPage - 1 ) * pageSize + 1}} to {{(currentPage - 1) * pageSize +
+                  paginatedContributions.length}} of {{totalLength}} members</p>
+              </div>
+
+              <div>
+                <ul class="pagination">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+                  </li>
+
+                  <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
+                    [class.disabled]="page === '...'">
+                    <a class="page-link" (click)="page !== '...' && onPageChange(page)">{{ page }}</a>
+                  </li>
+
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+              
             </div>
           </form>
         </div>
