@@ -4,14 +4,6 @@
   [active_item]="'All Collections'"
 ></app-page-header>
 
-
-<!-- <div class="card-footer text-end" *ngIf="authService.hasPermission('create contribution types')">
-  <a class="btn ms-2 btn-primary my-1"
-    routerLink="/pages/treasury/collections/create">
-    <i class="fe fe-plus"></i> Add Collection
-  </a>
-</div> -->
-
 <div class="row row-sm">
   <div class="col-xl-12">
     <div class="card overflow-visible">
@@ -35,7 +27,7 @@
               >
                 <thead class="border-top">
                   <tr>
-                    <th>NO.</th>
+                    <th>NO no no.</th>
                     <th>Contribution Date</th>
                     <th>Total</th>
                     <th *ngIf="authService.hasPermission('view contribution types')">Action</th>
@@ -53,7 +45,7 @@
                 <tbody *ngIf="!isLoading">
                   <tr
                     class="border-bottom"
-                    *ngFor="let collection of collections; index as i"
+                    *ngFor="let collection of paginatedCollections; index as i"
                   >
                     <td>
                       <div class="d-flex">
@@ -87,6 +79,34 @@
                   </tr>
                 </tbody>
               </table>
+
+                 <!-- Pagination -->
+          <div class="d-flex justify-content-between align-items-center pt-3">
+            <p class="mb-0">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} –
+              {{ (currentPage - 1) * pageSize + paginatedCollections.length }}
+              of {{ totalLength }} members
+            </p>
+            <ul class="pagination mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="onPageChange(currentPage - 1)">Prev</a>
+              </li>
+              
+
+               <!-- Pages with ellipsis -->
+              <li *ngFor="let page of getDisplayedPages()" class="page-item" [class.active]="page === currentPage"
+                [class.disabled]="page === '...'">
+
+                <a class="page-link" (click)="page !== '...' && onPageChange(page)">
+                  {{ page }}
+                </a>
+              </li>
+
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+              </li>
+            </ul>
+          </div>
             </div>
           </form>
         </div>

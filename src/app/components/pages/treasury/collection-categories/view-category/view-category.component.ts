@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContributionCategory } from '../../../../../shared/models/collection';
+import { Contribution, ContributionCategory } from '../../../../../shared/models/collection';
 import { ContributionCategoryService } from 'src/app/shared/services/contribution-category.service';
 import { ThemeService } from 'src/app/shared/services/theme.service';
 import { ActivatedRoute } from '@angular/router';
@@ -22,24 +22,27 @@ export class ViewCategoryComponent implements OnInit {
   solidCategoryType: ChartType = 'bar'
   selectedCategory: string = 'weekly'
 
+  paginatedContributions: Contribution[] = []
+
+  currentPage = 1;
+  pageSize = 10;
+  totalLength = 0;
+  totalPages = 0;
+
   constructor(
     private contributionCategoryService: ContributionCategoryService,
     private themeService: ThemeService,
     private route: ActivatedRoute
   ) {}
 
-  /**
-   * Get the primary color from tenant theme for charts
-   */
+  
   getChartColor(): string {
     const theme = this.themeService.getStoredTheme();
     const primaryColor = theme?.primaryColor || '23, 83, 81';
     return `rgb(${primaryColor})`;
   }
 
-  /**
-   * Get the primary color with opacity for chart hover effects
-   */
+  
   getChartHoverColor(opacity: number = 0.8): string {
     const theme = this.themeService.getStoredTheme();
     const primaryColor = theme?.primaryColor || '23, 83, 81';
@@ -51,11 +54,64 @@ export class ViewCategoryComponent implements OnInit {
 
       this.contributionCategoryService.find(this.id).subscribe((data: ContributionCategory)=> {
         this.category = data; 
+        this.totalLength = data.contributions.length;
+        this.totalPages = Math.ceil(this.totalLength / this.pageSize);
+        this.currentPage = 1;
+        this.updatePaginatedContributions()
       })
 
-          // inital data load for chart
-    this.loadChartData('weekly'); // -> Default to Weekly
+    this.loadChartData('weekly'); 
+    
 
+  }
+
+  getDisplayedPages(): (number | '...')[] {
+    const pages: (number | '...')[] = [];
+
+    if (this.totalPages <= 7) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    pages.push(1);
+
+    if (this.currentPage > 4) {
+      pages.push('...');
+    }
+
+    const start = Math.max(2, this.currentPage - 2);
+    const end = Math.min(this.totalPages - 1, this.currentPage + 2);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (this.currentPage < this.totalPages - 3) {
+      pages.push('...');
+    }
+
+    pages.push(this.totalPages);
+
+    return pages;
+  }
+
+  onPageChange(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+
+    this.currentPage = page;
+    this.updatePaginatedContributions();
+  }
+
+   updatePaginatedContributions(): void {
+     if (this.currentPage < 1) this.currentPage = 1;
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    
+    this.paginatedContributions = this.category.contributions.slice(startIndex, endIndex);
   }
 
   loadChartData(category: string): void {
@@ -137,4 +193,6 @@ export class ViewCategoryComponent implements OnInit {
     this.selectedCategory = category
     this.loadChartData(category)
   }
+
+
 }
