@@ -102,7 +102,7 @@
                   <td>{{paybill.first_name}}</td>
                   <td>{{paybill.phone_number}}</td>
                   <td>{{paybill.account}}</td>
-                  <td>{{paybill.amount}}</td>
+                  <td>{{paybill.amount | number: '1.2-2'}}</td>
                   <td>{{formatDateTime(paybill.created_at)}}</td>
                 </tr>
               </tbody>
